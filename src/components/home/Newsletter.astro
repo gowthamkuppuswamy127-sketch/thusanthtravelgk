@@ -3,7 +3,7 @@ import Mail from '@lucide/astro/icons/mail';
 import Photo from '../Photo.astro';
 ---
 
-<section class="relative isolate overflow-hidden py-24 sm:py-32" aria-labelledby="newsletter-title">
+<section class="on-dark relative isolate overflow-hidden py-24 sm:py-32" aria-labelledby="newsletter-title">
   <Photo
     photo="roadTrip"
     alt=""
@@ -18,14 +18,14 @@ import Photo from '../Photo.astro';
     <div class="glass-strong mx-auto max-w-3xl rounded-[2rem] p-7 text-center sm:p-12" data-reveal>
       <p class="eyebrow justify-center">Weekend ideas</p>
       <h2 id="newsletter-title" class="mt-4 text-3xl font-semibold sm:text-5xl">Weekend plans, sorted.</h2>
-      <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-sand-100/75">
+      <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-fg/75">
         Get getaway ideas from Bengaluru, long-weekend reminders and seasonal offers in your inbox. We only write when
         there's something worth planning.
       </p>
       <form class="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row" novalidate data-newsletter>
         <label for="newsletter-email" class="sr-only">Email address</label>
         <div class="relative flex-1">
-          <Mail size={18} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sand-100/50" />
+          <Mail size={18} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-fg/50" />
           <input
             id="newsletter-email"
             name="email"
@@ -37,7 +37,7 @@ import Photo from '../Photo.astro';
             aria-describedby="newsletter-status"
           />
         </div>
-        <button type="submit" class="btn btn-gold">Subscribe</button>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
       </form>
       <p id="newsletter-status" class="newsletter-status mt-4 min-h-6 text-sm" role="status" data-newsletter-status></p>
     </div>
@@ -46,9 +46,9 @@ import Photo from '../Photo.astro';
 
 <style>
   .newsletter-status[data-tone='ok'] {
-    color: var(--color-gold-200);
+    color: var(--color-accent);
   }
   .newsletter-status[data-tone='error'] {
-    color: #f7b59f;
+    color: var(--field-error);
   }
 </style>

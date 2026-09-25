@@ -43,7 +43,7 @@ const custom = [
         <div class="grid grid-cols-2 gap-3 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <div class="relative col-span-2 md:col-span-1">
             <label for="tour-search" class="sr-only">Search packages</label>
-            <Search size={18} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sand-100/50" />
+            <Search size={18} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-fg/50" />
             <input
               id="tour-search"
               type="search"
@@ -95,12 +95,12 @@ const custom = [
       </div>
 
       <div class="mt-8 flex items-center justify-between gap-4">
-        <p class="text-sm text-sand-100/70" aria-live="polite" data-result-count>
+        <p class="text-sm text-fg/70" aria-live="polite" data-result-count>
           Showing {tours.length} packages
         </p>
         <button
           type="button"
-          class="inline-flex items-center gap-2 text-sm text-gold-200 hover:underline"
+          class="inline-flex items-center gap-2 text-sm text-accent hover:underline"
           hidden
           data-reset-filters
         >
@@ -113,29 +113,29 @@ const custom = [
       </div>
 
       <div class="glass mx-auto mt-6 max-w-xl rounded-3xl p-8 text-center" hidden data-empty>
-        <Compass size={32} class="mx-auto text-gold-300" />
+        <Compass size={32} class="mx-auto text-accent" />
         <h3 class="mt-4 text-xl font-semibold">No packages match these filters</h3>
-        <p class="mt-2 text-sm text-sand-100/70">
+        <p class="mt-2 text-sm text-fg/70">
           Try a different budget or duration, or tell us what you have in mind and we'll plan it.
         </p>
         <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
-          <button type="button" class="btn btn-glass" data-reset-filters>Clear filters</button>
-          <a href="/contact?service=Custom%20package#enquiry" class="btn btn-gold" data-enquire data-service="Custom package">
+          <button type="button" class="btn btn-ghost" data-reset-filters>Clear filters</button>
+          <a href="/contact?service=Custom%20package#enquiry" class="btn btn-primary" data-enquire data-service="Custom package">
             Plan a custom trip
           </a>
         </div>
       </div>
 
-      <p class="mt-10 text-xs leading-relaxed text-sand-100/55">
+      <p class="mt-10 text-xs leading-relaxed text-fg/55">
         Prices are indicative starting prices per person on twin sharing, from Bengaluru. Flights, visas and optional
         activities are quoted separately where they apply. Final prices depend on dates, hotel category and vehicle.
       </p>
     </div>
   </section>
 
-  <section class="relative overflow-hidden bg-ink-900 py-20 sm:py-28" aria-labelledby="custom-title">
+  <section class="relative overflow-hidden bg-ocean-50 py-20 sm:py-28" aria-labelledby="custom-title">
     <div
-      class="pointer-events-none absolute -top-32 right-0 size-[30rem] rounded-full bg-gold-400/10 blur-3xl"
+      class="pointer-events-none absolute -top-32 right-0 size-[30rem] rounded-full bg-ocean-200/40 blur-3xl"
       aria-hidden="true"
     >
     </div>
@@ -157,12 +157,12 @@ const custom = [
                 data-service="Custom package"
                 data-package={`Custom: ${c.title}`}
               >
-                <span class="grid size-11 place-items-center rounded-2xl bg-gold-300 text-ink-900">
+                <span class="grid size-11 place-items-center rounded-2xl bg-ocean-500 text-white">
                   <c.Icon size={20} />
                 </span>
                 <h3 class="mt-5 text-lg font-semibold">{c.title}</h3>
-                <p class="mt-2 flex-1 text-sm leading-relaxed text-sand-100/70">{c.text}</p>
-                <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-gold-200 transition group-hover:gap-2.5">
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-fg/70">{c.text}</p>
+                <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition group-hover:gap-2.5">
                   Plan this trip <ArrowRight size={16} />
                 </span>
               </a>
@@ -182,21 +182,21 @@ const custom = [
     font-size: 0.85rem;
     font-weight: 500;
     white-space: nowrap;
-    color: rgb(246 239 226 / 0.8);
-    background: rgb(255 255 255 / 0.05);
-    border: 1px solid rgb(255 255 255 / 0.14);
+    color: rgb(15 29 51 / 0.8);
+    background: #ffffff;
+    border: 1px solid var(--color-line);
     transition:
       background 0.2s ease,
       color 0.2s ease,
       border-color 0.2s ease;
   }
   .chip:hover {
-    color: var(--color-sand-50);
-    border-color: rgb(255 255 255 / 0.3);
+    color: var(--color-ocean-600);
+    border-color: var(--color-ocean-200);
   }
   .chip[aria-pressed='true'] {
-    color: var(--color-ink-900);
-    background: linear-gradient(180deg, var(--color-gold-200), var(--color-gold-300));
+    color: #ffffff;
+    background: var(--color-ocean-500);
     border-color: transparent;
   }
 </style>

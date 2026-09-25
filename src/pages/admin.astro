@@ -16,12 +16,12 @@ import { enquiryStatuses } from '../lib/enquiries';
 ---
 
 <BaseLayout title="Enquiries admin" noindex bare>
-  <div class="admin min-h-dvh bg-ink-900">
+  <div class="admin on-dark min-h-dvh bg-ink-900">
     <section class="grid min-h-dvh place-items-center p-4" data-gate>
       <form class="glass-strong w-full max-w-sm rounded-3xl p-7 sm:p-8" novalidate data-gate-form>
         <Image src={logo} alt="Tushanth Tours and Travels" height={56} densities={[1, 2]} class="h-14 w-auto" />
-        <h1 class="mt-6 flex items-center gap-2 text-2xl font-semibold"><Lock size={20} class="text-gold-300" /> Admin</h1>
-        <p class="mt-2 text-sm text-sand-100/70">Enter the passcode to see enquiries and newsletter sign-ups.</p>
+        <h1 class="mt-6 flex items-center gap-2 text-2xl font-semibold"><Lock size={20} class="text-accent" /> Admin</h1>
+        <p class="mt-2 text-sm text-fg/70">Enter the passcode to see enquiries and newsletter sign-ups.</p>
         <label for="passcode" class="field-label mt-6">Passcode</label>
         <input
           id="passcode"
@@ -33,25 +33,25 @@ import { enquiryStatuses } from '../lib/enquiries';
           required
         />
         <p id="passcode-error" class="field-error" hidden data-gate-error>That passcode is not right. Try again.</p>
-        <button type="submit" class="btn btn-gold mt-5 w-full">Unlock</button>
-        <p class="mt-5 text-xs leading-relaxed text-sand-100/55">
-          Demo passcode: <code class="text-gold-200">tushanth-demo</code> (change it with PUBLIC_ADMIN_PASSCODE).
+        <button type="submit" class="btn btn-primary mt-5 w-full">Unlock</button>
+        <p class="mt-5 text-xs leading-relaxed text-fg/55">
+          Demo passcode: <code class="text-accent">tushanth-demo</code> (change it with PUBLIC_ADMIN_PASSCODE).
         </p>
       </form>
     </section>
 
     <div hidden data-app>
-      <header class="sticky top-0 z-30 border-b border-white/10 bg-ink-900/80 backdrop-blur-xl">
+      <header class="sticky top-0 z-30 border-b border-line bg-ink-900/80 backdrop-blur-xl">
         <div class="wrap flex items-center justify-between gap-4 py-3">
           <div class="flex items-center gap-4">
             <a href="/" aria-label="View the website"><Image src={logo} alt="" height={40} densities={[1, 2]} class="h-10 w-auto" /></a>
-            <span class="hidden rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-sand-100/80 sm:inline">
+            <span class="hidden rounded-full border border-fg/15 px-3 py-1 text-xs font-medium text-fg/80 sm:inline">
               Admin
             </span>
           </div>
           <div class="flex items-center gap-2">
-            <a href="/" class="btn btn-glass btn-sm"><ExternalLink size={15} /> <span class="hidden sm:inline">View site</span></a>
-            <button type="button" class="btn btn-glass btn-sm" data-lock><LogOut size={15} /> Lock</button>
+            <a href="/" class="btn btn-ghost btn-sm"><ExternalLink size={15} /> <span class="hidden sm:inline">View site</span></a>
+            <button type="button" class="btn btn-ghost btn-sm" data-lock><LogOut size={15} /> Lock</button>
           </div>
         </div>
       </header>
@@ -62,13 +62,13 @@ import { enquiryStatuses } from '../lib/enquiries';
             <p class="eyebrow">Dashboard</p>
             <h1 class="mt-2 text-3xl font-semibold sm:text-4xl">Enquiries</h1>
           </div>
-          <p class="text-sm text-sand-100/60" data-updated></p>
+          <p class="text-sm text-fg/60" data-updated></p>
         </div>
 
-        <div class="mt-6 flex gap-3 rounded-2xl border border-gold-300/25 bg-gold-300/8 p-4 text-sm leading-relaxed text-sand-100/80">
-          <Info size={18} class="mt-0.5 shrink-0 text-gold-300" />
+        <div class="mt-6 flex gap-3 rounded-2xl border border-accent/25 bg-accent/8 p-4 text-sm leading-relaxed text-fg/80">
+          <Info size={18} class="mt-0.5 shrink-0 text-accent" />
           <p>
-            <strong class="font-semibold text-sand-50">Demo mode.</strong> Enquiries are stored in this browser, so you see
+            <strong class="font-semibold text-fg">Demo mode.</strong> Enquiries are stored in this browser, so you see
             the ones sent from this device. Connect a database (see the README) to collect enquiries from every visitor.
           </p>
         </div>
@@ -90,7 +90,7 @@ import { enquiryStatuses } from '../lib/enquiries';
           }
         </ul>
 
-        <div class="mt-8 flex gap-1 border-b border-white/10" role="tablist" aria-label="Data">
+        <div class="mt-8 flex gap-1 border-b border-line" role="tablist" aria-label="Data">
           <button type="button" role="tab" class="tab" aria-selected="true" aria-controls="panel-enquiries" id="tab-enquiries" data-tab="enquiries">
             Enquiries <span class="tab-count" data-count="enquiries">0</span>
           </button>
@@ -104,7 +104,7 @@ import { enquiryStatuses } from '../lib/enquiries';
             <div class="grid gap-3 sm:grid-cols-[1fr_12rem] lg:w-[36rem]">
               <div class="relative">
                 <label for="admin-search" class="sr-only">Search enquiries</label>
-                <Search size={17} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sand-100/50" />
+                <Search size={17} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-fg/50" />
                 <input id="admin-search" type="search" class="field pl-11" placeholder="Search name, phone, reference, place" data-search />
               </div>
               <div>
@@ -116,9 +116,9 @@ import { enquiryStatuses } from '../lib/enquiries';
               </div>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" class="btn btn-glass btn-sm" data-export="enquiries"><Download size={15} /> Export CSV</button>
-              <button type="button" class="btn btn-glass btn-sm" data-seed><Sparkles size={15} /> Add demo enquiries</button>
-              <button type="button" class="btn btn-glass btn-sm text-[#f7b59f]" data-clear><Trash size={15} /> Delete all</button>
+              <button type="button" class="btn btn-ghost btn-sm" data-export="enquiries"><Download size={15} /> Export CSV</button>
+              <button type="button" class="btn btn-ghost btn-sm" data-seed><Sparkles size={15} /> Add demo enquiries</button>
+              <button type="button" class="btn btn-ghost btn-sm text-[#f7b59f]" data-clear><Trash size={15} /> Delete all</button>
             </div>
           </div>
 
@@ -139,21 +139,21 @@ import { enquiryStatuses } from '../lib/enquiries';
           </div>
 
           <div class="glass mt-5 rounded-3xl p-10 text-center" hidden data-empty>
-            <Inbox size={34} class="mx-auto text-gold-300" />
+            <Inbox size={34} class="mx-auto text-accent" />
             <h2 class="mt-4 text-xl font-semibold" data-empty-title>No enquiries yet</h2>
-            <p class="mx-auto mt-2 max-w-md text-sm text-sand-100/70" data-empty-text>
+            <p class="mx-auto mt-2 max-w-md text-sm text-fg/70" data-empty-text>
               Send one from the Contact page or the Book now button, or add demo enquiries to see how this page works.
             </p>
             <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row" data-empty-actions>
-              <a href="/contact#enquiry" class="btn btn-glass">Open the Contact page</a>
-              <button type="button" class="btn btn-gold" data-seed><Sparkles size={16} /> Add demo enquiries</button>
+              <a href="/contact#enquiry" class="btn btn-ghost">Open the Contact page</a>
+              <button type="button" class="btn btn-primary" data-seed><Sparkles size={16} /> Add demo enquiries</button>
             </div>
           </div>
         </section>
 
         <section id="panel-subscribers" role="tabpanel" aria-labelledby="tab-subscribers" class="pt-6" hidden data-panel="subscribers">
           <div class="flex justify-end">
-            <button type="button" class="btn btn-glass btn-sm" data-export="subscribers"><Download size={15} /> Export CSV</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-export="subscribers"><Download size={15} /> Export CSV</button>
           </div>
           <div class="glass mt-5 overflow-x-auto rounded-3xl">
             <table class="admin-table w-full min-w-[32rem] text-left text-sm">
@@ -167,7 +167,7 @@ import { enquiryStatuses } from '../lib/enquiries';
               <tbody data-subscriber-rows></tbody>
             </table>
           </div>
-          <p class="mt-5 text-center text-sm text-sand-100/60" hidden data-subscribers-empty>
+          <p class="mt-5 text-center text-sm text-fg/60" hidden data-subscribers-empty>
             No sign-ups yet. The newsletter form is at the bottom of the home page.
           </p>
         </section>
@@ -178,11 +178,11 @@ import { enquiryStatuses } from '../lib/enquiries';
       <div class="glass-strong rounded-3xl p-6 sm:p-8">
         <div class="flex items-start justify-between gap-4">
           <div>
-            <p class="text-xs font-medium tracking-[0.18em] text-gold-300 uppercase" data-detail-ref></p>
+            <p class="text-xs font-medium tracking-[0.18em] text-accent uppercase" data-detail-ref></p>
             <h2 id="detail-title" class="mt-2 text-2xl font-semibold" data-detail-name></h2>
-            <p class="mt-1 text-sm text-sand-100/65" data-detail-received></p>
+            <p class="mt-1 text-sm text-fg/65" data-detail-received></p>
           </div>
-          <button type="button" class="grid size-10 shrink-0 place-items-center rounded-full border border-white/15 hover:bg-white/10" data-detail-close>
+          <button type="button" class="grid size-10 shrink-0 place-items-center rounded-full border border-fg/15 hover:bg-fg/10" data-detail-close>
             <X size={18} /><span class="sr-only">Close</span>
           </button>
         </div>
@@ -202,12 +202,12 @@ import { enquiryStatuses } from '../lib/enquiries';
         <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
           <div class="flex flex-wrap gap-2">
             <a class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener" data-detail-whatsapp>WhatsApp customer</a>
-            <a class="btn btn-glass btn-sm" data-detail-call>Call</a>
-            <button type="button" class="btn btn-glass btn-sm text-[#f7b59f]" data-detail-delete><Trash size={15} /> Delete</button>
+            <a class="btn btn-ghost btn-sm" data-detail-call>Call</a>
+            <button type="button" class="btn btn-ghost btn-sm text-[#f7b59f]" data-detail-delete><Trash size={15} /> Delete</button>
           </div>
-          <button type="button" class="btn btn-gold btn-sm" data-detail-save>Save changes</button>
+          <button type="button" class="btn btn-primary btn-sm" data-detail-save>Save changes</button>
         </div>
-        <p class="mt-3 min-h-5 text-right text-xs text-gold-200" role="status" data-detail-status-msg></p>
+        <p class="mt-3 min-h-5 text-right text-xs text-accent" role="status" data-detail-status-msg></p>
       </div>
     </dialog>
   </div>
@@ -241,7 +241,7 @@ import { enquiryStatuses } from '../lib/enquiries';
     flex-shrink: 0;
   }
   .admin :global(.dot-new) { background: var(--color-gold-300); }
-  .admin :global(.dot-contacted) { background: var(--color-lagoon-300); }
+  .admin :global(.dot-contacted) { background: var(--color-ocean-300); }
   .admin :global(.dot-confirmed) { background: #7ddc9a; }
   .admin :global(.dot-closed) { background: rgb(246 239 226 / 0.35); }
 
@@ -498,7 +498,7 @@ import { enquiryStatuses } from '../lib/enquiries';
         {},
         el('span', { className: 'font-medium', textContent: e.name }),
         e.status === 'new' && el('span', { className: 'new-badge', textContent: 'New' }),
-        el('a', { className: 'muted hover:text-gold-200', href: `tel:+91${e.phone}`, textContent: formatMobile(e.phone) }),
+        el('a', { className: 'muted hover:text-accent', href: `tel:+91${e.phone}`, textContent: formatMobile(e.phone) }),
       ),
       el('td', {}, e.service, e.packageName && el('span', { className: 'muted', textContent: e.packageName })),
       el('td', {}, ...(tripBits.length ? tripBits.map((t, i) => (i === 0 ? t : el('span', { className: 'muted', textContent: t }))) : [el('span', { className: 'muted', textContent: 'No trip details' })])),

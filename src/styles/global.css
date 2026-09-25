@@ -1,22 +1,31 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens: deep teal ("ink" + "lagoon"), sand gold ("gold"), cream
-   ("sand"). Gold is tuned to sit beside the gold of the Tushanth logo.
+   Design tokens: "Coastal Blue". A white page, ocean blue for actions and
+   accents, deep navy ("ink") for text and dark bands, and the logo's gold
+   kept for stars and kilometre stones.
+
+   `fg` and `accent` are theme-aware: they are dark-on-light by default and
+   flip to light-on-dark inside `.on-dark` (hero, footer, photo overlays).
 --------------------------------------------------------------------------- */
 @theme {
   --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --color-ink-950: #031517;
-  --color-ink-900: #041c1e;
-  --color-ink-800: #062a2e;
-  --color-ink-700: #0b3b3e;
-  --color-ink-600: #0f4c4f;
-  --color-ink-500: #135e60;
+  --color-ink-950: #070f1d;
+  --color-ink-900: #0b1629;
+  --color-ink-800: #0f1d33;
+  --color-ink-700: #16284a;
+  --color-ink-600: #1e3560;
+  --color-ink-500: #294678;
 
-  --color-lagoon-500: #1f8a8a;
-  --color-lagoon-400: #3fafa8;
-  --color-lagoon-300: #7fd1c7;
+  --color-ocean-50: #f3f7fc;
+  --color-ocean-100: #e6effb;
+  --color-ocean-200: #cfe0f6;
+  --color-ocean-300: #9cc0ee;
+  --color-ocean-400: #4b86d9;
+  --color-ocean-500: #1f5fbf;
+  --color-ocean-600: #174a96;
+  --color-ocean-700: #123a78;
 
   --color-gold-100: #f7ecd0;
   --color-gold-200: #f1dca5;
@@ -31,9 +40,61 @@
   --color-sand-200: #efe4cf;
   --color-sand-300: #e3d3b5;
 
+  --color-line: #e1e9f3;
+  --color-star: #e0a526;
+  --color-fg: #0f1d33;
+  --color-accent: #1f5fbf;
+
   --color-whatsapp: #25d366;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Theme-aware surfaces (light by default). */
+:root {
+  --muted: rgb(15 29 51 / 0.68);
+  --glass-bg: #ffffff;
+  --glass-border: var(--color-line);
+  --glass-inset: rgb(255 255 255 / 0);
+  --glass-shadow: 0 24px 48px -30px rgb(15 29 51 / 0.35);
+  --glass-blur: none;
+  --glass-strong-bg: #ffffff;
+  --btn-ghost-bg: #ffffff;
+  --btn-ghost-hover: var(--color-ocean-50);
+  --btn-ghost-border: var(--color-line);
+  --btn-ghost-border-hover: var(--color-ocean-200);
+  --field-bg: #ffffff;
+  --field-bg-focus: #ffffff;
+  --field-border: #cfdbea;
+  --field-border-hover: #a9bfdc;
+  --field-error: #c2410c;
+  --field-scheme: light;
+  --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230f1d33' stroke-opacity='.6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.on-dark {
+  --color-fg: #f3f7fc;
+  --color-accent: #a9cdfc;
+  --color-line: rgb(255 255 255 / 0.14);
+  --muted: rgb(243 247 252 / 0.75);
+  --glass-bg: linear-gradient(140deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.05));
+  --glass-border: rgb(255 255 255 / 0.15);
+  --glass-inset: rgb(255 255 255 / 0.14);
+  --glass-shadow: 0 24px 48px -28px rgb(0 0 0 / 0.6);
+  --glass-blur: blur(18px) saturate(150%);
+  --glass-strong-bg: linear-gradient(140deg, rgb(22 40 74 / 0.8), rgb(11 22 41 / 0.74));
+  --btn-ghost-bg: rgb(255 255 255 / 0.08);
+  --btn-ghost-hover: rgb(255 255 255 / 0.16);
+  --btn-ghost-border: rgb(255 255 255 / 0.2);
+  --btn-ghost-border-hover: rgb(255 255 255 / 0.32);
+  --field-bg: rgb(7 15 29 / 0.35);
+  --field-bg-focus: rgb(7 15 29 / 0.5);
+  --field-border: rgb(255 255 255 / 0.16);
+  --field-border-hover: rgb(255 255 255 / 0.28);
+  --field-error: #f7b59f;
+  --field-scheme: dark;
+  --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f3f7fc' stroke-opacity='.7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  color: var(--color-fg);
 }
 
 @layer base {
@@ -44,8 +105,8 @@
   }
 
   body {
-    background-color: var(--color-ink-800);
-    color: var(--color-sand-100);
+    background-color: #ffffff;
+    color: var(--color-fg);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -62,12 +123,12 @@
   }
 
   ::selection {
-    background: var(--color-gold-300);
+    background: var(--color-ocean-200);
     color: var(--color-ink-900);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-gold-300);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
   }
 
@@ -88,42 +149,38 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Glass surfaces
+   Card surfaces: plain white cards on the light page, frosted glass inside
+   `.on-dark`.
 --------------------------------------------------------------------------- */
 @utility glass {
-  background: linear-gradient(140deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.05));
-  border: 1px solid rgb(255 255 255 / 0.15);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.14),
-    0 24px 48px -28px rgb(0 0 0 / 0.6);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  backdrop-filter: blur(18px) saturate(150%);
+    inset 0 1px 0 var(--glass-inset),
+    var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 @utility glass-strong {
-  background: linear-gradient(140deg, rgb(11 59 62 / 0.78), rgb(4 28 30 / 0.72));
-  border: 1px solid rgb(255 255 255 / 0.13);
+  background: var(--glass-strong-bg);
+  border: 1px solid var(--glass-border);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.1),
-    0 30px 60px -30px rgb(0 0 0 / 0.7);
+    inset 0 1px 0 var(--glass-inset),
+    0 30px 60px -30px rgb(15 29 51 / 0.55);
   -webkit-backdrop-filter: blur(22px) saturate(160%);
   backdrop-filter: blur(22px) saturate(160%);
 }
 
 @utility glass-light {
-  background: linear-gradient(140deg, rgb(255 255 255 / 0.78), rgb(255 255 255 / 0.5));
-  border: 1px solid rgb(255 255 255 / 0.85);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.9),
-    0 22px 44px -28px rgb(6 42 46 / 0.45);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
+  background: #ffffff;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 22px 44px -30px rgb(15 29 51 / 0.35);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass { background: rgb(11 59 62 / 0.94); }
-  .glass-strong { background: rgb(6 42 46 / 0.97); }
-  .glass-light { background: rgb(255 255 255 / 0.94); }
+  .on-dark .glass { background: rgb(22 40 74 / 0.94); }
+  .on-dark .glass-strong { background: rgb(15 29 51 / 0.97); }
 }
 
 /* ---------------------------------------------------------------------------
@@ -151,7 +208,7 @@
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--color-gold-300);
+    color: var(--color-accent);
   }
   .eyebrow::before {
     content: "";
@@ -159,9 +216,6 @@
     height: 1px;
     background: currentColor;
     opacity: 0.7;
-  }
-  .on-light .eyebrow {
-    color: var(--color-gold-700);
   }
 
   .btn {
@@ -187,32 +241,32 @@
   .btn:active {
     transform: translateY(1px);
   }
-  .btn-gold {
-    color: var(--color-ink-900);
-    background: linear-gradient(180deg, var(--color-gold-300), var(--color-gold-400));
+  .btn-primary {
+    color: #ffffff;
+    background: var(--color-ocean-500);
     box-shadow:
-      0 12px 30px -14px rgb(224 182 82 / 0.85),
-      inset 0 1px 0 rgb(255 255 255 / 0.5);
+      0 12px 26px -14px rgb(31 95 191 / 0.85),
+      inset 0 1px 0 rgb(255 255 255 / 0.18);
   }
-  .btn-gold:hover {
-    background: linear-gradient(180deg, var(--color-gold-200), var(--color-gold-300));
+  .btn-primary:hover {
+    background: var(--color-ocean-600);
     transform: translateY(-1px);
   }
-  .btn-glass {
-    color: var(--color-sand-100);
-    background: rgb(255 255 255 / 0.08);
-    border: 1px solid rgb(255 255 255 / 0.2);
+  .btn-ghost {
+    color: var(--color-fg);
+    background: var(--btn-ghost-bg);
+    border: 1px solid var(--btn-ghost-border);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
   }
-  .btn-glass:hover {
-    background: rgb(255 255 255 / 0.16);
-    border-color: rgb(255 255 255 / 0.32);
+  .btn-ghost:hover {
+    background: var(--btn-ghost-hover);
+    border-color: var(--btn-ghost-border-hover);
   }
   .btn-ink {
-    color: var(--color-sand-100);
+    color: #ffffff;
     background: var(--color-ink-800);
-    box-shadow: 0 12px 26px -16px rgb(6 42 46 / 0.9);
+    box-shadow: 0 12px 26px -16px rgb(15 29 51 / 0.9);
   }
   .btn-ink:hover {
     background: var(--color-ink-700);
@@ -233,13 +287,13 @@
     font-size: 0.85rem;
   }
 
-  /* Form fields on dark glass */
+  /* Form fields (theme-aware) */
   .field-label {
     display: block;
     margin-bottom: 0.4rem;
     font-size: 0.78rem;
     font-weight: 500;
-    color: rgb(246 239 226 / 0.78);
+    color: var(--muted);
   }
   .field {
     width: 100%;
@@ -247,40 +301,40 @@
     padding: 0.65rem 0.9rem;
     border-radius: 0.8rem;
     font-size: 0.95rem;
-    color: var(--color-sand-100);
-    background: rgb(3 21 23 / 0.35);
-    border: 1px solid rgb(255 255 255 / 0.16);
+    color: var(--color-fg);
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
     transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   }
   .field::placeholder {
-    color: rgb(246 239 226 / 0.45);
+    color: color-mix(in srgb, var(--color-fg) 45%, transparent);
   }
   .field:hover {
-    border-color: rgb(255 255 255 / 0.28);
+    border-color: var(--field-border-hover);
   }
   .field:focus {
     outline: none;
-    border-color: var(--color-gold-300);
-    background: rgb(3 21 23 / 0.5);
-    box-shadow: 0 0 0 3px rgb(233 201 124 / 0.22);
+    border-color: var(--color-ocean-400);
+    background: var(--field-bg-focus);
+    box-shadow: 0 0 0 3px rgb(75 134 217 / 0.22);
   }
   .field[aria-invalid="true"] {
-    border-color: #f2a38a;
+    border-color: var(--field-error);
     box-shadow: 0 0 0 3px rgb(242 163 138 / 0.18);
   }
   select.field {
     appearance: none;
     padding-right: 2.4rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f6efe2' stroke-opacity='.7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: var(--select-arrow);
     background-repeat: no-repeat;
     background-position: right 0.85rem center;
   }
   select.field option {
     color: var(--color-ink-900);
-    background: var(--color-sand-50);
+    background: #ffffff;
   }
   input.field[type="date"] {
-    color-scheme: dark;
+    color-scheme: var(--field-scheme);
     padding-inline: 0.75rem 0.6rem;
   }
   textarea.field {
@@ -290,7 +344,7 @@
   .field-error {
     margin-top: 0.35rem;
     font-size: 0.78rem;
-    color: #f7b59f;
+    color: var(--field-error);
   }
 
   /* -------------------------------------------------------------------------
@@ -310,11 +364,12 @@
     background: linear-gradient(180deg, #fdfaf3 0%, #efe6d4 100%);
     color: var(--color-ink-800);
     text-align: center;
+    border: 1px solid rgb(15 29 51 / 0.08);
     overflow: hidden;
     box-shadow:
-      inset 0 -5px 0 rgb(6 42 46 / 0.09),
+      inset 0 -5px 0 rgb(15 29 51 / 0.09),
       inset 0 0 0 1px rgb(255 255 255 / 0.6),
-      0 14px 26px -14px rgb(0 0 0 / 0.75);
+      0 14px 26px -14px rgb(15 29 51 / 0.55);
   }
   .milestone-cap {
     position: absolute;
@@ -379,12 +434,12 @@
     }
   }
 
-  /* Image frame: a teal field shows while photos load or if one fails. */
+  /* Image frame: a blue field shows while photos load or if one fails. */
   .photo {
     position: relative;
     overflow: hidden;
     background:
-      radial-gradient(120% 90% at 80% 10%, rgb(224 182 82 / 0.22), transparent 60%),
+      radial-gradient(120% 90% at 80% 10%, rgb(75 134 217 / 0.35), transparent 60%),
       linear-gradient(160deg, var(--color-ink-600), var(--color-ink-900));
   }
   .photo > img {

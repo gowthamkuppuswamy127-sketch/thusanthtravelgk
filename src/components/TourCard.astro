@@ -44,16 +44,16 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
     />
     <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-900/50 to-transparent">
     </div>
-    <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+    <div class="on-dark absolute top-3 left-3 flex flex-wrap gap-1.5">
       {
         labels.map((label) => (
-          <span class="rounded-full border border-white/20 bg-ink-900/45 px-2.5 py-1 text-[0.7rem] font-medium text-sand-50 backdrop-blur-md">
+          <span class="rounded-full border border-fg/20 bg-ink-900/45 px-2.5 py-1 text-[0.7rem] font-medium text-fg backdrop-blur-md">
             {label}
           </span>
         ))
       }
     </div>
-    <span class="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-ink-900/45 px-2.5 py-1 text-[0.72rem] font-medium text-sand-50 backdrop-blur-md">
+    <span class="on-dark absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-fg/20 bg-ink-900/45 px-2.5 py-1 text-[0.72rem] font-medium text-fg backdrop-blur-md">
       <Clock size={13} />
       {durationText(tour)}
     </span>
@@ -71,16 +71,16 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
   </div>
 
   <div class="flex flex-1 flex-col p-5 sm:p-6">
-    <p class:list={['text-xs font-medium tracking-wide text-gold-300', tour.milestone && 'pr-20']}>{tour.places}</p>
+    <p class:list={['text-xs font-medium tracking-wide text-accent', tour.milestone && 'pr-20']}>{tour.places}</p>
     <h3 class="mt-2 text-xl leading-snug font-semibold">{tour.name}</h3>
-    <p class="mt-2 text-sm leading-relaxed text-sand-100/70">{tour.summary}</p>
+    <p class="mt-2 text-sm leading-relaxed text-fg/70">{tour.summary}</p>
 
     {
       showHighlights && (
-        <ul class="mt-4 grid gap-1.5 text-[0.82rem] text-sand-100/80">
+        <ul class="mt-4 grid gap-1.5 text-[0.82rem] text-fg/80">
           {tour.highlights.map((h) => (
             <li class="flex gap-2">
-              <Check size={15} class="mt-0.5 shrink-0 text-gold-300" />
+              <Check size={15} class="mt-0.5 shrink-0 text-accent" />
               {h}
             </li>
           ))}
@@ -89,25 +89,25 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
     }
 
     <div class="mt-auto pt-5">
-      <div class="flex items-center justify-between gap-3 border-t border-white/10 pt-4">
+      <div class="flex items-center justify-between gap-3 border-t border-line pt-4">
         {
           tour.priceFrom ? (
             <p class="min-w-0">
-              <span class="block text-[0.68rem] font-medium tracking-[0.12em] text-sand-100/55 uppercase">
+              <span class="block text-[0.68rem] font-medium tracking-[0.12em] text-fg/55 uppercase">
                 From · per person
               </span>
-              <span class="text-xl font-semibold tracking-tight text-sand-50">{formatINR(tour.priceFrom)}</span>
+              <span class="text-xl font-semibold tracking-tight text-fg">{formatINR(tour.priceFrom)}</span>
             </p>
           ) : (
             <p class="min-w-0">
-              <span class="block text-[0.68rem] font-medium tracking-[0.12em] text-sand-100/55 uppercase">Price</span>
-              <span class="text-lg font-semibold text-sand-50">On request</span>
+              <span class="block text-[0.68rem] font-medium tracking-[0.12em] text-fg/55 uppercase">Price</span>
+              <span class="text-lg font-semibold text-fg">On request</span>
             </p>
           )
         }
         <a
           href={`/contact?service=${encodeURIComponent(enquiryService)}&package=${encodeURIComponent(tour.name)}#enquiry`}
-          class="btn btn-gold btn-sm shrink-0"
+          class="btn btn-primary btn-sm shrink-0"
           data-enquire
           data-service={enquiryService}
           data-package={tour.name}

@@ -12,7 +12,7 @@ interface Props {
 const { eyebrow, title, intro, photo } = Astro.props;
 ---
 
-<section class="relative isolate overflow-hidden pt-36 pb-16 sm:pt-44 sm:pb-24">
+<section class="on-dark relative isolate overflow-hidden pt-36 pb-16 sm:pt-44 sm:pb-24">
   <Photo photo={photo} alt="" eager widths={[800, 1280, 1920]} sizes="100vw" class="absolute inset-0 -z-20" />
   <div class="page-hero-scrim absolute inset-0 -z-10" aria-hidden="true"></div>
   <div class="wrap">
@@ -25,7 +25,7 @@ const { eyebrow, title, intro, photo } = Astro.props;
     </h1>
     {
       intro && (
-        <p class="rise mt-5 max-w-2xl text-base leading-relaxed text-sand-100/80 sm:text-lg" style="--d: 0.2s">
+        <p class="rise mt-5 max-w-2xl text-base leading-relaxed text-fg/80 sm:text-lg" style="--d: 0.2s">
           {intro}
         </p>
       )
@@ -37,8 +37,8 @@ const { eyebrow, title, intro, photo } = Astro.props;
 <style>
   .page-hero-scrim {
     background:
-      linear-gradient(180deg, rgb(4 28 30 / 0.75) 0%, rgb(4 28 30 / 0.5) 45%, var(--color-ink-800) 100%),
-      linear-gradient(90deg, rgb(4 28 30 / 0.8) 0%, rgb(4 28 30 / 0.2) 100%),
-      radial-gradient(50% 60% at 90% 20%, rgb(224 182 82 / 0.18), transparent 70%);
+      linear-gradient(180deg, rgb(11 22 41 / 0.75) 0%, rgb(11 22 41 / 0.5) 45%, rgb(11 22 41 / 0.82) 100%),
+      linear-gradient(90deg, rgb(11 22 41 / 0.8) 0%, rgb(11 22 41 / 0.2) 100%),
+      radial-gradient(50% 60% at 90% 20%, rgb(75 134 217 / 0.25), transparent 70%);
   }
 </style>

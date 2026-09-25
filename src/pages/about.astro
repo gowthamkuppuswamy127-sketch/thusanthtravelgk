@@ -54,7 +54,7 @@ const stats = [
     <div class="wrap grid gap-12 lg:grid-cols-2 lg:gap-20">
       <div>
         <SectionHeading id="story-title" eyebrow="What we do" title="A travel desk that also drives you there" />
-        <div class="mt-6 grid gap-4 text-base leading-relaxed text-sand-100/75" data-reveal>
+        <div class="mt-6 grid gap-4 text-base leading-relaxed text-fg/75" data-reveal>
           <p>
             Most of our work starts with a phone call from someone in Bengaluru: an early flight to catch, a family
             wedding in Mysuru, a college trip that needs two buses. We sort out the vehicle, the route and the stays, so
@@ -75,11 +75,11 @@ const stats = [
         {
           stats.map((s, i) => (
             <li class="glass rounded-3xl p-6" data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
-              <p class:list={['font-semibold tracking-tight text-sand-50', s.small ? 'text-2xl' : 'text-4xl sm:text-5xl']}>
+              <p class:list={['font-semibold tracking-tight text-fg', s.small ? 'text-2xl' : 'text-4xl sm:text-5xl']}>
                 {s.value}
               </p>
               {s.stars && <Stars rating={site.rating} size={14} class="mt-2" />}
-              <p class="mt-2 text-sm text-sand-100/65">{s.label}</p>
+              <p class="mt-2 text-sm text-fg/65">{s.label}</p>
             </li>
           ))
         }
@@ -87,9 +87,9 @@ const stats = [
     </div>
   </section>
 
-  <section class="relative overflow-hidden bg-ink-900 py-20 sm:py-28" aria-labelledby="fleet-title">
+  <section class="relative overflow-hidden bg-ocean-50 py-20 sm:py-28" aria-labelledby="fleet-title">
     <div
-      class="pointer-events-none absolute -bottom-40 left-1/3 size-[32rem] rounded-full bg-lagoon-500/15 blur-3xl"
+      class="pointer-events-none absolute -bottom-40 left-1/3 size-[32rem] rounded-full bg-ocean-500/15 blur-3xl"
       aria-hidden="true"
     >
     </div>
@@ -101,7 +101,7 @@ const stats = [
           title="The right vehicle for the group"
           intro="Every vehicle is air-conditioned and comes with a driver. For groups over 17 we arrange buses."
         />
-        <a href="/contact#enquiry" class="btn btn-gold shrink-0 self-start lg:self-auto" data-enquire data-reveal>
+        <a href="/contact#enquiry" class="btn btn-primary shrink-0 self-start lg:self-auto" data-enquire data-reveal>
           Check availability <ArrowRight size={17} />
         </a>
       </div>
@@ -114,24 +114,24 @@ const stats = [
             return (
               <li class="glass flex flex-col rounded-3xl p-6" data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
                 <div class="flex items-start justify-between">
-                  <span class="grid size-12 place-items-center rounded-2xl bg-gold-300/12 text-gold-300 ring-1 ring-gold-300/30">
+                  <span class="grid size-12 place-items-center rounded-2xl bg-accent/12 text-accent ring-1 ring-ocean-200">
                     <Icon size={24} />
                   </span>
-                  <span class="rounded-full bg-white/8 px-3 py-1 text-xs font-medium text-sand-100/80">
+                  <span class="rounded-full bg-fg/8 px-3 py-1 text-xs font-medium text-fg/80">
                     <Snowflake size={12} class="mr-1 inline -translate-y-px" />
                     AC
                   </span>
                 </div>
                 <h3 class="mt-6 text-xl font-semibold">{v.name}</h3>
-                <p class="mt-1 text-sm text-sand-100/60">{v.examples}</p>
-                <p class="mt-5 flex items-baseline gap-2 border-t border-white/10 pt-5">
-                  <span class="text-2xl font-semibold text-gold-200">{v.passengers}</span>
-                  <span class="text-sm text-sand-100/65">passengers</span>
+                <p class="mt-1 text-sm text-fg/60">{v.examples}</p>
+                <p class="mt-5 flex items-baseline gap-2 border-t border-line pt-5">
+                  <span class="text-2xl font-semibold text-accent">{v.passengers}</span>
+                  <span class="text-sm text-fg/65">passengers</span>
                 </p>
-                <p class="mt-2 flex-1 text-sm leading-relaxed text-sand-100/70">{v.bestFor}</p>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-fg/70">{v.bestFor}</p>
                 <a
                   href={`/contact?service=${encodeURIComponent(service)}#enquiry`}
-                  class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-gold-200 transition hover:gap-2.5"
+                  class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition hover:gap-2.5"
                   data-enquire
                   data-service={service}
                 >
@@ -158,10 +158,10 @@ const stats = [
           travellers.map((t, i) => (
             <li data-reveal style={`--reveal-delay: ${i * 0.06}s`}>
               <a href={t.href} class="glass group flex h-full flex-col rounded-3xl p-6 transition hover:-translate-y-1">
-                <t.Icon size={24} class="text-gold-300" />
+                <t.Icon size={24} class="text-accent" />
                 <h3 class="mt-5 text-lg font-semibold">{t.title}</h3>
-                <p class="mt-2 flex-1 text-sm leading-relaxed text-sand-100/70">{t.text}</p>
-                <ArrowRight size={18} class="mt-5 text-gold-200 transition group-hover:translate-x-1" />
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-fg/70">{t.text}</p>
+                <ArrowRight size={18} class="mt-5 text-accent transition group-hover:translate-x-1" />
               </a>
             </li>
           ))
@@ -170,9 +170,9 @@ const stats = [
     </div>
   </section>
 
-  <section class="on-light relative overflow-hidden bg-sand-100 py-20 text-ink-800 sm:py-28" aria-labelledby="visit-title">
+  <section class="relative overflow-hidden bg-ocean-50 py-20 text-ink-800 sm:py-28" aria-labelledby="visit-title">
     <div
-      class="pointer-events-none absolute -top-20 -right-20 size-[26rem] rounded-full bg-gold-300/35 blur-3xl"
+      class="pointer-events-none absolute -top-20 -right-20 size-[26rem] rounded-full bg-ocean-200/50 blur-3xl"
       aria-hidden="true"
     >
     </div>
@@ -185,17 +185,17 @@ const stats = [
           intro="Drop by to plan a trip in person, or call ahead and we'll have options ready."
         />
         <address class="mt-8 flex gap-3 text-base leading-relaxed text-ink-800/80 not-italic" data-reveal>
-          <MapPin size={22} class="mt-0.5 shrink-0 text-gold-600" />
+          <MapPin size={22} class="mt-0.5 shrink-0 text-accent" />
           <span>{site.addressOneLine}</span>
         </address>
         <div class="mt-8 flex flex-wrap gap-3" data-reveal>
           <a href={site.directionsUrl} target="_blank" rel="noopener" class="btn btn-ink">
             <Navigation size={17} /> Get directions
           </a>
-          <a href={telHref} class="btn btn-gold"><Phone size={17} /> {site.phoneDisplay}</a>
+          <a href={telHref} class="btn btn-primary"><Phone size={17} /> {site.phoneDisplay}</a>
         </div>
         <div class="mt-10" data-reveal>
-          <p class="text-[0.68rem] font-semibold tracking-[0.2em] text-gold-700 uppercase">
+          <p class="text-[0.68rem] font-semibold tracking-[0.2em] text-accent uppercase">
             From our door, approx. road km
           </p>
           <div class="mt-4 flex flex-wrap gap-4">

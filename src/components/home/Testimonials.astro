@@ -9,9 +9,9 @@ import { testimonials } from '../../data/testimonials';
 import { site } from '../../data/site';
 ---
 
-<section class="relative overflow-hidden bg-ink-900 py-20 sm:py-28" aria-labelledby="reviews-title" data-carousel>
+<section class="relative overflow-hidden bg-ocean-50 py-20 sm:py-28" aria-labelledby="reviews-title" data-carousel>
   <div
-    class="pointer-events-none absolute top-0 left-1/2 h-72 w-[60rem] -translate-x-1/2 rounded-full bg-gold-400/10 blur-3xl"
+    class="pointer-events-none absolute top-0 left-1/2 h-72 w-[60rem] -translate-x-1/2 rounded-full bg-ocean-200/40 blur-3xl"
     aria-hidden="true"
   >
   </div>
@@ -28,7 +28,7 @@ import { site } from '../../data/site';
           href={site.reviewsUrl}
           target="_blank"
           rel="noopener"
-          class="btn btn-glass btn-sm"
+          class="btn btn-ghost btn-sm"
         >
           Read reviews on Google <ArrowUpRight size={16} />
         </a>
@@ -52,18 +52,18 @@ import { site } from '../../data/site';
           <li class="glass flex w-[86%] shrink-0 snap-start flex-col rounded-3xl p-6 sm:w-[46%] sm:p-7 lg:w-[calc((100%-2.5rem)/3)]">
             <div class="flex items-center justify-between">
               <Stars rating={t.rating} size={16} />
-              <Quote size={30} class="text-gold-300/40" />
+              <Quote size={30} class="text-accent/40" />
             </div>
-            <blockquote class="mt-5 flex-1 text-[0.98rem] leading-relaxed text-sand-100/90">
+            <blockquote class="mt-5 flex-1 text-[0.98rem] leading-relaxed text-fg/90">
               <p>{t.quote}</p>
             </blockquote>
-            <div class="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
-              <span class="grid size-11 place-items-center rounded-full bg-gradient-to-br from-gold-200 to-gold-500 font-semibold text-ink-900">
+            <div class="mt-6 flex items-center gap-3 border-t border-line pt-5">
+              <span class="grid size-11 place-items-center rounded-full bg-gradient-to-br from-ocean-400 to-ocean-600 font-semibold text-white">
                 {t.name.charAt(0)}
               </span>
               <div>
                 <p class="font-medium">{t.name}</p>
-                <p class="text-xs text-sand-100/60">{t.trip}</p>
+                <p class="text-xs text-fg/60">{t.trip}</p>
               </div>
             </div>
           </li>
@@ -80,14 +80,15 @@ import { site } from '../../data/site';
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 999px;
-    border: 1px solid rgb(255 255 255 / 0.18);
-    background: rgb(255 255 255 / 0.06);
+    border: 1px solid var(--color-line);
+    background: #ffffff;
+    color: var(--color-fg);
     transition:
       background 0.2s ease,
       opacity 0.2s ease;
   }
   .carousel-btn:hover {
-    background: rgb(255 255 255 / 0.14);
+    background: var(--color-ocean-100);
   }
   .carousel-btn:disabled {
     opacity: 0.35;

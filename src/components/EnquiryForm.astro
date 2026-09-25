@@ -28,10 +28,10 @@ const id = (name: string) => `${uid}-${name}`;
   >
     <div class="package-chip col-span-2" hidden data-package-chip>
       <span class="inline-flex min-w-0 items-center gap-2">
-        <Tag size={15} class="shrink-0 text-gold-300" />
+        <Tag size={15} class="shrink-0 text-accent" />
         <span class="truncate">Package: <strong class="font-semibold" data-package-name></strong></span>
       </span>
-      <button type="button" class="grid size-7 shrink-0 place-items-center rounded-full hover:bg-white/10" data-package-clear>
+      <button type="button" class="grid size-7 shrink-0 place-items-center rounded-full hover:bg-fg/10" data-package-clear>
         <X size={15} />
         <span class="sr-only">Remove package</span>
       </button>
@@ -39,7 +39,7 @@ const id = (name: string) => `${uid}-${name}`;
     </div>
 
     <div class="col-span-2">
-      <label class="field-label" for={id('service')}>What do you need? <span class="text-gold-300">*</span></label>
+      <label class="field-label" for={id('service')}>What do you need? <span class="text-accent">*</span></label>
       <select class="field" id={id('service')} name="service" required aria-describedby={id('service-error')}>
         <option value="">Choose a service</option>
         {serviceOptions.map((s) => <option value={s}>{s}</option>)}
@@ -48,7 +48,7 @@ const id = (name: string) => `${uid}-${name}`;
     </div>
 
     <div class="col-span-2 sm:col-span-1">
-      <label class="field-label" for={id('name')}>Your name <span class="text-gold-300">*</span></label>
+      <label class="field-label" for={id('name')}>Your name <span class="text-accent">*</span></label>
       <input
         class="field"
         id={id('name')}
@@ -61,7 +61,7 @@ const id = (name: string) => `${uid}-${name}`;
     </div>
 
     <div class="col-span-2 sm:col-span-1">
-      <label class="field-label" for={id('phone')}>Mobile number <span class="text-gold-300">*</span></label>
+      <label class="field-label" for={id('phone')}>Mobile number <span class="text-accent">*</span></label>
       <input
         class="field"
         id={id('phone')}
@@ -149,10 +149,10 @@ const id = (name: string) => `${uid}-${name}`;
     </div>
 
     <div class="col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <p class="text-xs leading-relaxed text-sand-100/60">
+      <p class="text-xs leading-relaxed text-fg/60">
         We use these details only to plan and quote your trip.
       </p>
-      <button type="submit" class="btn btn-gold w-full sm:w-auto" data-submit>
+      <button type="submit" class="btn btn-primary w-full sm:w-auto" data-submit>
         <Send size={17} />
         <span data-submit-label>Send enquiry</span>
       </button>
@@ -160,15 +160,15 @@ const id = (name: string) => `${uid}-${name}`;
   </form>
 
   <div class="py-4 text-center" hidden data-success tabindex="-1">
-    <div class="mx-auto grid size-16 place-items-center rounded-full bg-gold-300/15 text-gold-300">
+    <div class="mx-auto grid size-16 place-items-center rounded-full bg-accent/15 text-accent">
       <CircleCheck size={34} />
     </div>
     <h3 class="mt-5 text-2xl font-semibold" data-success-title>Enquiry saved</h3>
-    <p class="mt-2 text-sand-100/80">
+    <p class="mt-2 text-fg/80">
       Thanks, <span data-success-name></span>. Your reference is
-      <strong class="font-semibold text-gold-200" data-success-ref></strong>.
+      <strong class="font-semibold text-accent" data-success-ref></strong>.
     </p>
-    <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-sand-100/65" data-success-note>
+    <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-fg/65" data-success-note>
       One last step: send it to us on WhatsApp so our team sees it right away. Your trip details are already
       filled in.
     </p>
@@ -176,11 +176,11 @@ const id = (name: string) => `${uid}-${name}`;
       <a class="btn btn-whatsapp" target="_blank" rel="noopener" data-success-whatsapp>
         <WhatsAppIcon size={18} /> Send on WhatsApp
       </a>
-      <a href={telHref} class="btn btn-glass"><Phone size={17} /> Call {site.phoneDisplay}</a>
+      <a href={telHref} class="btn btn-ghost"><Phone size={17} /> Call {site.phoneDisplay}</a>
     </div>
     <button
       type="button"
-      class="mt-5 text-sm text-sand-100/70 underline decoration-white/30 underline-offset-4 hover:text-sand-50"
+      class="mt-5 text-sm text-fg/70 underline decoration-fg/30 underline-offset-4 hover:text-fg"
       data-reset
     >
       Send another enquiry
@@ -197,8 +197,8 @@ const id = (name: string) => `${uid}-${name}`;
     padding: 0.55rem 0.55rem 0.55rem 0.9rem;
     border-radius: 0.9rem;
     font-size: 0.88rem;
-    background: rgb(233 201 124 / 0.1);
-    border: 1px solid rgb(233 201 124 / 0.3);
+    background: var(--color-ocean-50);
+    border: 1px solid var(--color-ocean-200);
   }
   .package-chip[hidden] {
     display: none;

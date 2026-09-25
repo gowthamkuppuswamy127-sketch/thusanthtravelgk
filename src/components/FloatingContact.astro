@@ -7,7 +7,7 @@ import { site, telHref, whatsappHref } from '../data/site';
 <div class="fixed right-4 bottom-4 z-40 flex flex-col gap-3 sm:right-6 sm:bottom-6" data-floating-contact>
   <a
     href={telHref}
-    class="fab grid size-13 place-items-center rounded-full text-sand-50 sm:hidden"
+    class="fab grid size-13 place-items-center rounded-full text-white sm:hidden"
     aria-label={`Call ${site.phoneDisplay}`}
   >
     <Phone size={22} />
@@ -25,9 +25,9 @@ import { site, telHref, whatsappHref } from '../data/site';
 
 <style>
   .fab {
-    background: rgb(6 42 46 / 0.72);
-    border: 1px solid rgb(255 255 255 / 0.18);
-    box-shadow: 0 16px 34px -14px rgb(0 0 0 / 0.7);
+    background: var(--color-ocean-500);
+    border: 1px solid rgb(255 255 255 / 0.25);
+    box-shadow: 0 16px 34px -14px rgb(15 29 51 / 0.6);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
     transition: transform 0.25s var(--ease-out-soft);
