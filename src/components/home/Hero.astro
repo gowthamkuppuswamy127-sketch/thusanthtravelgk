@@ -1,12 +1,9 @@
 ---
-import Phone from '@lucide/astro/icons/phone';
 import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Plane from '@lucide/astro/icons/plane';
 import CarFront from '@lucide/astro/icons/car-front';
 import BusFront from '@lucide/astro/icons/bus-front';
 import Compass from '@lucide/astro/icons/compass';
-import Stars from '../Stars.astro';
-import { site, telHref } from '../../data/site';
 
 const tabs = [
   {
@@ -41,7 +38,7 @@ const tabs = [
 ---
 
 <section
-  class="hero on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden pt-28 pb-16 sm:pb-20 lg:items-center lg:pt-32 lg:pb-24"
+  class="hero on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden pt-28 pb-16 sm:pb-20 lg:pt-32 lg:pb-24"
   aria-labelledby="hero-title"
 >
   <video
@@ -70,28 +67,6 @@ const tabs = [
         <span class="rise block font-light" style="--d: 0.18s">Bengaluru</span>
         <span class="rise block" style="--d: 0.3s">to anywhere<span class="text-gold-300">.</span></span>
       </h1>
-      <p class="rise mt-6 max-w-xl text-base leading-relaxed text-fg/80 sm:text-lg" style="--d: 0.42s">
-        Airport transfers, outstation cabs, Tempo Traveller and bus hire, and holidays across India and abroad.
-        Planned and driven by a Banashankari team rated {site.rating} on Google.
-      </p>
-      <div class="rise mt-8 flex flex-wrap items-center gap-3" style="--d: 0.52s">
-        <a href="/contact#enquiry" class="btn btn-primary" data-enquire>
-          Book now <ArrowRight size={18} />
-        </a>
-        <a href={telHref} class="btn btn-ghost">
-          <Phone size={17} /> Call {site.phoneDisplay}
-        </a>
-      </div>
-      <a
-        href={site.reviewsUrl}
-        target="_blank"
-        rel="noopener"
-        class="rise mt-6 inline-flex items-center gap-2.5 text-sm text-fg/75 transition hover:text-fg"
-        style="--d: 0.6s"
-      >
-        <Stars rating={site.rating} size={15} />
-        <span><strong class="font-semibold text-fg">{site.rating}</strong> from {site.reviewCount} Google reviews</span>
-      </a>
     </div>
 
     <div class="lg:col-span-5">
