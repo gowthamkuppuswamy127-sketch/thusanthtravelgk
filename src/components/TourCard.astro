@@ -1,6 +1,7 @@
 ---
 import Clock from '@lucide/astro/icons/clock';
 import Check from '@lucide/astro/icons/check';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Photo from './Photo.astro';
 import { durationText, formatINR, tourCategories, type Tour } from '../data/tours';
 
@@ -22,7 +23,7 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
 ---
 
 <article
-  class:list={['tour-card glass group flex h-full flex-col overflow-hidden rounded-3xl', className]}
+  class:list={['tour-card glass group relative flex h-full flex-col overflow-hidden rounded-3xl', className]}
   data-reveal
   style={`--reveal-delay: ${delay}s`}
   data-tour
@@ -60,7 +61,7 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
 
   <div class="flex flex-1 flex-col p-5 sm:p-6">
     <p class="text-xs font-medium tracking-wide text-accent">{tour.places}</p>
-    <h3 class="mt-2 text-xl leading-snug font-semibold">{tour.name}</h3>
+    <h3 class="mt-2 text-xl leading-snug font-semibold transition-colors group-hover:text-accent">{tour.name}</h3>
     <p class="mt-2 text-sm leading-relaxed text-fg/70">{tour.summary}</p>
 
     {
@@ -75,6 +76,14 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
         </ul>
       )
     }
+
+    <a
+      href={`/tours/${tour.slug}`}
+      class="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-medium text-accent transition-[gap] after:absolute after:inset-0 after:content-[''] hover:gap-2.5"
+    >
+      View details <ArrowRight size={16} />
+      <span class="sr-only">of {tour.name}</span>
+    </a>
 
     <div class="mt-auto pt-5">
       <div class="flex items-center justify-between gap-3 border-t border-line pt-4">
@@ -95,7 +104,7 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
         }
         <a
           href={`/contact?service=${encodeURIComponent(enquiryService)}&package=${encodeURIComponent(tour.name)}#enquiry`}
-          class="btn btn-primary btn-sm shrink-0"
+          class="btn btn-primary btn-sm relative z-10 shrink-0"
           data-enquire
           data-service={enquiryService}
           data-package={tour.name}

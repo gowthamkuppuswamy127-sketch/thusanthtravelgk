@@ -1,0 +1,165 @@
+---
+import ArrowLeft from '@lucide/astro/icons/arrow-left';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Check from '@lucide/astro/icons/check';
+import Clock from '@lucide/astro/icons/clock';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Tag from '@lucide/astro/icons/tag';
+import IndianRupee from '@lucide/astro/icons/indian-rupee';
+import Phone from '@lucide/astro/icons/phone';
+import SlidersHorizontal from '@lucide/astro/icons/sliders-horizontal';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import TourCard from '../../components/TourCard.astro';
+import WhatsAppIcon from '../../components/WhatsAppIcon.astro';
+import { site, telHref, whatsappHref } from '../../data/site';
+import { durationText, formatINR, tourCategories, tours, type Tour } from '../../data/tours';
+
+export function getStaticPaths() {
+  return tours.map((tour) => ({ params: { slug: tour.slug }, props: { tour } }));
+}
+
+interface Props {
+  tour: Tour;
+}
+
+const { tour } = Astro.props;
+
+const enquiryService = tour.priceFrom === null ? 'Custom package' : 'Tour package';
+const labels = tour.categories
+  .map((id) => tourCategories.find((c) => c.id === id)?.label)
+  .filter((l): l is NonNullable<typeof l> => Boolean(l));
+const price = tour.priceFrom ? formatINR(tour.priceFrom) : 'On request';
+const quoteHref = `/contact?service=${encodeURIComponent(enquiryService)}&package=${encodeURIComponent(tour.name)}#enquiry`;
+const whatsappMessage = `Hello ${site.name}, I'd like a quote for the "${tour.name}" package.`;
+
+// Other trips that share a category, most popular first.
+const related = tours
+  .filter((t) => t.slug !== tour.slug)
+  .map((t) => ({ t, shared: t.categories.filter((c) => tour.categories.includes(c)).length }))
+  .sort((a, b) => b.shared - a.shared || b.t.popularity - a.t.popularity)
+  .slice(0, 3)
+  .map(({ t }) => t);
+
+const facts = [
+  { label: 'Duration', value: durationText(tour), Icon: Clock },
+  { label: tour.priceFrom ? 'Starting price' : 'Price', value: tour.priceFrom ? `${price} per person` : 'On request', Icon: IndianRupee },
+  { label: 'Places', value: tour.places, Icon: MapPin },
+  { label: 'Trip type', value: labels.join(', '), Icon: Tag },
+];
+---
+
+<BaseLayout title={tour.name} description={`${tour.name} from Bengaluru: ${tour.summary}`}>
+  <PageHero eyebrow={tour.places} title={tour.name} intro={tour.summary} photo={tour.photo}>
+    <div class="rise mt-7 flex flex-wrap items-center gap-2.5" style="--d: 0.3s">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-fg/20 bg-ink-900/45 px-3.5 py-1.5 text-sm font-medium backdrop-blur-md">
+        <Clock size={15} />
+        {durationText(tour)}
+      </span>
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-fg/20 bg-ink-900/45 px-3.5 py-1.5 text-sm font-medium backdrop-blur-md">
+        {tour.priceFrom ? `From ${price} per person` : 'Price on request'}
+      </span>
+    </div>
+    <div class="rise mt-7 flex flex-wrap gap-3" style="--d: 0.38s">
+      <a href={quoteHref} class="btn btn-primary" data-enquire data-service={enquiryService} data-package={tour.name}>
+        Get a quote <ArrowRight size={18} />
+      </a>
+      <a href="/tours" class="btn btn-ghost">
+        <ArrowLeft size={18} /> All packages
+      </a>
+    </div>
+  </PageHero>
+
+  <section class="relative py-16 sm:py-20" aria-labelledby="trip-title">
+    <div class="wrap grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <div class="lg:col-span-7">
+        <SectionHeading id="trip-title" eyebrow="The trip" title="What this package covers" />
+
+        <ul class="mt-8 grid gap-3 sm:grid-cols-2" data-reveal>
+          {
+            tour.highlights.map((h) => (
+              <li class="glass flex gap-3 rounded-2xl p-4 text-[0.95rem] leading-snug">
+                <span class="grid size-7 shrink-0 place-items-center rounded-full bg-ocean-100 text-ocean-600">
+                  <Check size={16} />
+                </span>
+                {h}
+              </li>
+            ))
+          }
+        </ul>
+
+        <dl class="mt-10 grid gap-4 sm:grid-cols-2" data-reveal>
+          {
+            facts.map(({ label, value, Icon }) => (
+              <div class="flex gap-3 border-t border-line pt-4">
+                <Icon size={20} class="mt-0.5 shrink-0 text-accent" />
+                <div>
+                  <dt class="text-xs font-medium tracking-[0.12em] text-fg/55 uppercase">{label}</dt>
+                  <dd class="mt-1 font-medium">{value}</dd>
+                </div>
+              </div>
+            ))
+          }
+        </dl>
+
+        <div class="mt-10 flex gap-4 rounded-3xl bg-ocean-50 p-6" data-reveal>
+          <SlidersHorizontal size={22} class="mt-0.5 shrink-0 text-accent" />
+          <div>
+            <h3 class="font-semibold">Make it yours</h3>
+            <p class="mt-1.5 text-[0.95rem] leading-relaxed text-fg/70">
+              Every package can be changed to fit your dates and budget: add a day, swap a stay or pick a bigger
+              vehicle for the group. Tell us what you have in mind when you ask for a quote.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-5" aria-label="Get a quote">
+        <div class="glass-strong rounded-3xl p-6 sm:p-7 lg:sticky lg:top-28" data-reveal>
+          <p class="text-xs font-medium tracking-[0.12em] text-fg/55 uppercase">
+            {tour.priceFrom ? 'From · per person' : 'Price'}
+          </p>
+          <p class="mt-1 text-3xl font-semibold tracking-tight">{price}</p>
+          <p class="mt-2 flex items-center gap-1.5 text-sm text-fg/70">
+            <Clock size={15} />
+            {durationText(tour)}
+          </p>
+
+          <a
+            href={quoteHref}
+            class="btn btn-primary mt-6 w-full"
+            data-enquire
+            data-service={enquiryService}
+            data-package={tour.name}
+          >
+            Get a quote <ArrowRight size={18} />
+          </a>
+          <div class="mt-3 grid grid-cols-2 gap-3">
+            <a href={whatsappHref(whatsappMessage)} target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+              <WhatsAppIcon size={17} /> WhatsApp
+            </a>
+            <a href={telHref} class="btn btn-ghost btn-sm">
+              <Phone size={16} /> Call us
+            </a>
+          </div>
+          <p class="mt-4 text-center text-xs text-fg/55">Quotes are free. Nothing to pay until you confirm.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="relative bg-ocean-50 py-16 sm:py-20" aria-labelledby="related-title">
+    <div class="wrap">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <SectionHeading id="related-title" eyebrow="Keep exploring" title="More trips you might like" />
+        <a href="/tours" class="btn btn-ghost btn-sm self-start sm:self-auto" data-reveal>
+          All packages <ArrowRight size={16} />
+        </a>
+      </div>
+      <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {related.map((t, i) => <TourCard tour={t} delay={i * 0.08} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
