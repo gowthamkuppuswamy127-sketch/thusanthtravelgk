@@ -3,7 +3,7 @@
 Website for **Tushanth Tours and Travels**, Banashankari, Bengaluru: cab and Tempo Traveller hire, airport transfers, domestic and international tour packages, custom packages (family, honeymoon, MICE, education, industrial visits) and hotel bookings.
 
 - **Stack:** [Astro 7](https://astro.build) (static output) · Tailwind CSS 4 · TypeScript · Poppins (self-hosted via Fontsource) · Lucide icons
-- **Look:** "Coastal Blue": a white page with ocean-blue buttons and accents, deep navy text, and a full-screen photo hero with frosted panels. The logo gold is kept for stars and the signature **kilometre stone**, the Indian highway milestone, used to show real distances from the Banashankari office.
+- **Look:** "Coastal Blue": a white page with ocean-blue buttons and accents, deep navy text, and a full-screen photo hero with frosted panels. The logo gold is kept for stars.
 - **Pages:** Home, Tours & packages (with filters), About us, Contact, plus a hidden `/admin` page for enquiries.
 
 ## Getting started
@@ -22,7 +22,7 @@ npm run preview   # serve the built site
 ```
 src/
   data/            All editable content (see below)
-  components/      Navbar, Footer, EnquiryForm, EnquiryModal, TourCard, Milestone...
+  components/      Navbar, Footer, EnquiryForm, EnquiryModal, TourCard...
   components/home/ The home page sections, in page order
   layouts/         BaseLayout (SEO tags, fonts, nav, footer, enquiry popup)
   lib/enquiries.ts Enquiry + newsletter storage (swap this for a database)

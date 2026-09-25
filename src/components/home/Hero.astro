@@ -6,9 +6,8 @@ import CarFront from '@lucide/astro/icons/car-front';
 import BusFront from '@lucide/astro/icons/bus-front';
 import Compass from '@lucide/astro/icons/compass';
 import Photo from '../Photo.astro';
-import Milestone from '../Milestone.astro';
 import Stars from '../Stars.astro';
-import { heroMilestones, site, telHref } from '../../data/site';
+import { site, telHref } from '../../data/site';
 
 const tabs = [
   {
@@ -89,25 +88,6 @@ const tabs = [
         <Stars rating={site.rating} size={15} />
         <span><strong class="font-semibold text-fg">{site.rating}</strong> from {site.reviewCount} Google reviews</span>
       </a>
-
-      <div class="mt-12">
-        <p class="rise text-[0.68rem] font-medium tracking-[0.2em] text-fg/60 uppercase" style="--d: 0.7s">
-          Road distance from our Banashankari office, in km
-        </p>
-        <div class="stones mt-4 flex items-end gap-4 sm:gap-6">
-          {
-            heroMilestones.map((m, i) => (
-              <Milestone
-                place={m.place}
-                km={m.km}
-                from="Banashankari"
-                class="rise"
-                style={`--d: ${0.8 + i * 0.12}s`}
-              />
-            ))
-          }
-        </div>
-      </div>
     </div>
 
     <div class="lg:col-span-5">
@@ -233,29 +213,6 @@ const tabs = [
       linear-gradient(180deg, rgb(11 22 41 / 0.7) 0%, rgb(11 22 41 / 0.2) 28%, rgb(11 22 41 / 0.5) 62%, rgb(11 22 41 / 0.85) 100%),
       linear-gradient(90deg, rgb(11 22 41 / 0.85) 0%, rgb(11 22 41 / 0.45) 55%, rgb(11 22 41 / 0.15) 100%),
       radial-gradient(60% 50% at 85% 15%, rgb(75 134 217 / 0.25), transparent 70%);
-  }
-  .stones {
-    position: relative;
-    padding-inline: 0.25rem;
-  }
-  .stones::after {
-    content: '';
-    position: absolute;
-    left: -2rem;
-    right: -1rem;
-    bottom: -2px;
-    height: 2px;
-    background: repeating-linear-gradient(90deg, rgb(169 205 252 / 0.6) 0 16px, transparent 16px 28px);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 70%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 70%, transparent);
-  }
-  .stones :global(.milestone) {
-    --w: 3.7rem;
-  }
-  @media (min-width: 640px) {
-    .stones :global(.milestone) {
-      --w: 4.6rem;
-    }
   }
   .tab {
     display: flex;

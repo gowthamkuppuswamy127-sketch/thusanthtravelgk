@@ -3,7 +3,7 @@
 /* ---------------------------------------------------------------------------
    Design tokens: "Coastal Blue". A white page, ocean blue for actions and
    accents, deep navy ("ink") for text and dark bands, and the logo's gold
-   kept for stars and kilometre stones.
+   kept for stars.
 
    `fg` and `accent` are theme-aware: they are dark-on-light by default and
    flip to light-on-dark inside `.on-dark` (hero, footer, photo overlays).
@@ -346,64 +346,6 @@
     font-size: 0.78rem;
     color: var(--field-error);
   }
-
-  /* -------------------------------------------------------------------------
-     Kilometre stone: the Indian highway milestone, gold cap over a cream
-     stone. Used to show real distances from Banashankari.
-  ------------------------------------------------------------------------- */
-  .milestone {
-    --w: 4.4rem;
-    position: relative;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    width: var(--w);
-    padding: calc(var(--w) * 0.5) 0.3rem 0.55rem;
-    border-radius: calc(var(--w) / 2) calc(var(--w) / 2) 0.5rem 0.5rem;
-    background: linear-gradient(180deg, #fdfaf3 0%, #efe6d4 100%);
-    color: var(--color-ink-800);
-    text-align: center;
-    border: 1px solid rgb(15 29 51 / 0.08);
-    overflow: hidden;
-    box-shadow:
-      inset 0 -5px 0 rgb(15 29 51 / 0.09),
-      inset 0 0 0 1px rgb(255 255 255 / 0.6),
-      0 14px 26px -14px rgb(15 29 51 / 0.55);
-  }
-  .milestone-cap {
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: calc(var(--w) * 0.44);
-    display: grid;
-    place-items: end center;
-    padding-bottom: 0.2rem;
-    background: linear-gradient(180deg, var(--color-gold-300), var(--color-gold-500));
-    color: var(--color-ink-800);
-    font-size: calc(var(--w) * 0.125);
-    font-weight: 700;
-    letter-spacing: 0.14em;
-  }
-  .milestone-place {
-    margin-top: 0.3rem;
-    max-width: 100%;
-    font-size: calc(var(--w) * 0.12);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    line-height: 1.15;
-    text-transform: uppercase;
-    overflow-wrap: anywhere;
-  }
-  .milestone-km {
-    margin-top: 0.15rem;
-    font-size: calc(var(--w) * 0.27);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
-  }
-  .milestone-sm { --w: 3.6rem; }
-  .milestone-lg { --w: 5rem; }
 
   /* Scroll reveal. Content stays visible when JavaScript is off. */
   .js [data-reveal] {

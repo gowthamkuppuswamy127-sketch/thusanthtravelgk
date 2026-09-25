@@ -30,8 +30,6 @@ export interface Tour {
   categories: TourCategory[];
   photo: PhotoKey;
   highlights: string[];
-  /** Approximate distance from Bengaluru, shown on the kilometre stone. */
-  milestone?: { place: string; km: number; mode: 'road' | 'air' };
   featured?: boolean;
   /** Higher numbers sort first under "Most popular". */
   popularity: number;
@@ -54,7 +52,6 @@ export const tours: Tour[] = [
       "Abbey Falls and Raja's Seat",
       'Stay near the coffee estates',
     ],
-    milestone: { place: 'Coorg', km: 250, mode: 'road' },
     featured: true,
     popularity: 100,
   },
@@ -74,7 +71,6 @@ export const tours: Tour[] = [
       'Tea factory visit in Coonoor',
       'Boating on Pykara Lake',
     ],
-    milestone: { place: 'Ooty', km: 270, mode: 'road' },
     featured: true,
     popularity: 95,
   },
@@ -94,7 +90,6 @@ export const tours: Tour[] = [
       'Overnight houseboat in Alleppey',
       'Kathakali show (optional)',
     ],
-    milestone: { place: 'Munnar', km: 470, mode: 'road' },
     popularity: 90,
   },
   {
@@ -113,7 +108,6 @@ export const tours: Tour[] = [
       'Sunset cruise on the Mandovi',
       "South Goa's quieter beaches",
     ],
-    milestone: { place: 'Goa', km: 560, mode: 'road' },
     popularity: 85,
   },
   {
@@ -132,7 +126,6 @@ export const tours: Tour[] = [
       'Qutub Minar and India Gate',
       'AC vehicle with driver throughout',
     ],
-    milestone: { place: 'Delhi', km: 1740, mode: 'air' },
     featured: true,
     popularity: 80,
   },
@@ -152,7 +145,6 @@ export const tours: Tour[] = [
       'Dhow cruise at Dubai Marina',
       'Abu Dhabi day trip',
     ],
-    milestone: { place: 'Dubai', km: 2700, mode: 'air' },
     popularity: 75,
   },
   {
@@ -171,7 +163,6 @@ export const tours: Tour[] = [
       'Kintamani volcano viewpoint',
       'Sunset at Tanah Lot',
     ],
-    milestone: { place: 'Bali', km: 4800, mode: 'air' },
     featured: true,
     popularity: 78,
   },
@@ -191,7 +182,6 @@ export const tours: Tour[] = [
       'Snorkelling on the house reef',
       'Meal plans to suit your budget',
     ],
-    milestone: { place: 'Maldives', km: 1100, mode: 'air' },
     popularity: 70,
   },
   {
@@ -210,7 +200,6 @@ export const tours: Tour[] = [
       'Phuket Old Town walk',
       'Airport and hotel transfers',
     ],
-    milestone: { place: 'Phuket', km: 2300, mode: 'air' },
     popularity: 72,
   },
   {

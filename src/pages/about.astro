@@ -17,9 +17,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Stars from '../components/Stars.astro';
-import Milestone from '../components/Milestone.astro';
 import { fleet } from '../data/services';
-import { heroMilestones, site, telHref } from '../data/site';
+import { site, telHref } from '../data/site';
 
 const fleetIcons = { car: Car, 'car-front': CarFront, 'bus-front': BusFront, bus: Bus };
 
@@ -193,14 +192,6 @@ const stats = [
             <Navigation size={17} /> Get directions
           </a>
           <a href={telHref} class="btn btn-primary"><Phone size={17} /> {site.phoneDisplay}</a>
-        </div>
-        <div class="mt-10" data-reveal>
-          <p class="text-[0.68rem] font-semibold tracking-[0.2em] text-accent uppercase">
-            From our door, approx. road km
-          </p>
-          <div class="mt-4 flex flex-wrap gap-4">
-            {heroMilestones.map((m) => <Milestone place={m.place} km={m.km} from="Banashankari" size="sm" />)}
-          </div>
         </div>
       </div>
       <div class="glass-light overflow-hidden rounded-[2rem] p-2" data-reveal>

@@ -2,7 +2,6 @@
 import Clock from '@lucide/astro/icons/clock';
 import Check from '@lucide/astro/icons/check';
 import Photo from './Photo.astro';
-import Milestone from './Milestone.astro';
 import { durationText, formatINR, tourCategories, type Tour } from '../data/tours';
 
 interface Props {
@@ -57,21 +56,10 @@ const searchText = [tour.name, tour.places, tour.summary, ...tour.highlights, ..
       <Clock size={13} />
       {durationText(tour)}
     </span>
-    {
-      tour.milestone && (
-        <Milestone
-          place={tour.milestone.place}
-          km={tour.milestone.km}
-          mode={tour.milestone.mode}
-          size="sm"
-          class="absolute right-4 bottom-0 z-10 translate-y-1/2"
-        />
-      )
-    }
   </div>
 
   <div class="flex flex-1 flex-col p-5 sm:p-6">
-    <p class:list={['text-xs font-medium tracking-wide text-accent', tour.milestone && 'pr-20']}>{tour.places}</p>
+    <p class="text-xs font-medium tracking-wide text-accent">{tour.places}</p>
     <h3 class="mt-2 text-xl leading-snug font-semibold">{tour.name}</h3>
     <p class="mt-2 text-sm leading-relaxed text-fg/70">{tour.summary}</p>
 

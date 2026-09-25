@@ -47,11 +47,3 @@ export const nav = [
   { href: '/contact', label: 'Contact' },
 ] as const;
 
-// Approximate road distances from the Banashankari office, shown on the
-// kilometre stones in the home page hero.
-export const heroMilestones = [
-  { place: 'Airport', km: 45, label: 'Kempegowda International Airport' },
-  { place: 'Mysuru', km: 140, label: 'Mysuru' },
-  { place: 'Coorg', km: 250, label: 'Coorg (Madikeri)' },
-  { place: 'Ooty', km: 270, label: 'Ooty' },
-] as const;
