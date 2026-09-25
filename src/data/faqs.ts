@@ -21,7 +21,7 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Which vehicles can I choose from?',
-    a: 'Sedans for up to 4 passengers, Maruti Ertiga for up to 6, Toyota Innova Crysta for up to 7, and Tempo Travellers for 12 to 17. For larger groups we arrange buses.',
+    a: 'Sedans for up to 4 passengers, Maruti Ertiga for up to 6, Toyota Innova Crysta for up to 7, Tempo Travellers for 12 to 17, buses for 21 to 49, and AC sleeper buses for overnight trips. The Our Fleet page lists every vehicle with its rates.',
   },
   {
     q: 'Can you change a tour package or plan one from scratch?',

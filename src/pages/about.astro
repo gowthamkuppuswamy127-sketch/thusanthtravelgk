@@ -17,7 +17,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Stars from '../components/Stars.astro';
-import { fleet } from '../data/services';
+import { fleetCategories, fleetVehicleCount } from '../data/fleet';
 import { site, telHref } from '../data/site';
 
 const fleetIcons = { car: Car, 'car-front': CarFront, 'bus-front': BusFront, bus: Bus };
@@ -33,7 +33,7 @@ const travellers = [
 const stats = [
   { value: String(site.rating), label: 'Google rating', stars: true },
   { value: String(site.reviewCount), label: 'Google reviews' },
-  { value: '4', label: 'Vehicle types, sedan to Tempo Traveller' },
+  { value: String(fleetVehicleCount), label: 'Vehicles, sedan to sleeper bus' },
   { value: 'India + abroad', label: 'Tour packages', small: true },
 ];
 ---
@@ -98,43 +98,36 @@ const stats = [
           id="fleet-title"
           eyebrow="Our fleet"
           title="The right vehicle for the group"
-          intro="Every vehicle is air-conditioned and comes with a driver. For groups over 17 we arrange buses."
+          intro="Every vehicle is air-conditioned and comes with a driver, from airport sedans to overnight sleeper buses."
         />
-        <a href="/contact#enquiry" class="btn btn-primary shrink-0 self-start lg:self-auto" data-enquire data-reveal>
-          Check availability <ArrowRight size={17} />
+        <a href="/fleet" class="btn btn-primary shrink-0 self-start lg:self-auto" data-reveal>
+          View full fleet & rates <ArrowRight size={17} />
         </a>
       </div>
 
       <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {
-          fleet.map((v, i) => {
-            const Icon = fleetIcons[v.icon];
-            const service = v.name === 'Tempo Traveller' ? 'Tempo Traveller / bus hire' : 'Outstation cab';
+          fleetCategories.map((c, i) => {
+            const Icon = fleetIcons[c.icon];
+            const models = c.vehicles.map((v) => v.name).join(', ');
             return (
-              <li class="glass flex flex-col rounded-3xl p-6" data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
-                <div class="flex items-start justify-between">
-                  <span class="grid size-12 place-items-center rounded-2xl bg-accent/12 text-accent ring-1 ring-ocean-200">
-                    <Icon size={24} />
+              <li data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
+                <a href={`/fleet#${c.id}`} class="glass group flex h-full flex-col rounded-3xl p-6 transition hover:-translate-y-1">
+                  <div class="flex items-start justify-between">
+                    <span class="grid size-12 place-items-center rounded-2xl bg-accent/12 text-accent ring-1 ring-ocean-200">
+                      <Icon size={24} />
+                    </span>
+                    <span class="rounded-full bg-fg/8 px-3 py-1 text-xs font-medium text-fg/80">
+                      <Snowflake size={12} class="mr-1 inline -translate-y-px" />
+                      AC
+                    </span>
+                  </div>
+                  <h3 class="mt-6 text-xl font-semibold">{c.label}</h3>
+                  <p class="mt-1 text-sm text-fg/60">{models}</p>
+                  <p class="mt-5 flex-1 border-t border-line pt-5 text-lg font-semibold text-accent">{c.capacity}</p>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition group-hover:gap-2.5">
+                    See vehicles and rates <ArrowRight size={15} />
                   </span>
-                  <span class="rounded-full bg-fg/8 px-3 py-1 text-xs font-medium text-fg/80">
-                    <Snowflake size={12} class="mr-1 inline -translate-y-px" />
-                    AC
-                  </span>
-                </div>
-                <h3 class="mt-6 text-xl font-semibold">{v.name}</h3>
-                <p class="mt-1 text-sm text-fg/60">{v.examples}</p>
-                <p class="mt-5 flex items-baseline gap-2 border-t border-line pt-5">
-                  <span class="text-2xl font-semibold text-accent">{v.passengers}</span>
-                  <span class="text-sm text-fg/65">passengers</span>
-                </p>
-                <p class="mt-2 flex-1 text-sm leading-relaxed text-fg/70">{v.bestFor}</p>
-                <a
-                  href={`/contact?service=${encodeURIComponent(service)}#enquiry`}
-                  class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition hover:gap-2.5"
-                  data-enquire
-                  data-service={service}
-                >
-                  Book a {v.name} <ArrowRight size={15} />
                 </a>
               </li>
             );

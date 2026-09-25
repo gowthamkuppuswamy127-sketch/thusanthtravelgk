@@ -1,0 +1,355 @@
+---
+import Car from '@lucide/astro/icons/car';
+import CarFront from '@lucide/astro/icons/car-front';
+import BusFront from '@lucide/astro/icons/bus-front';
+import Bus from '@lucide/astro/icons/bus';
+import Snowflake from '@lucide/astro/icons/snowflake';
+import UserRound from '@lucide/astro/icons/user-round';
+import BadgeCheck from '@lucide/astro/icons/badge-check';
+import Clock from '@lucide/astro/icons/clock';
+import Route from '@lucide/astro/icons/route';
+import PlaneLanding from '@lucide/astro/icons/plane-landing';
+import CirclePlus from '@lucide/astro/icons/circle-plus';
+import CircleMinus from '@lucide/astro/icons/circle-minus';
+import Phone from '@lucide/astro/icons/phone';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import FleetCard from '../components/FleetCard.astro';
+import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import { fleetCategories, fleetVehicleCount } from '../data/fleet';
+import { site, telHref, whatsappHref } from '../data/site';
+
+const icons = { car: Car, 'car-front': CarFront, 'bus-front': BusFront, bus: Bus };
+
+const promises = [
+  { label: 'Every vehicle AC', Icon: Snowflake },
+  { label: 'Driver included', Icon: UserRound },
+  { label: 'Clean, checked before each trip', Icon: BadgeCheck },
+];
+
+const billing = [
+  {
+    title: 'Local hourly hire',
+    text: 'Charged by the hour within Bengaluru, with a minimum of 4 hours for cars and 8 hours for Tempo Travellers and buses. Each hour includes 10 km.',
+    Icon: Clock,
+  },
+  {
+    title: 'Outstation trips',
+    text: 'Charged per km, counted from our garage and back, with a daily minimum. Driver bata is added for each day on the road.',
+    Icon: Route,
+  },
+  {
+    title: 'Airport transfers',
+    text: 'A fixed one-way fare to or from Kempegowda Airport from south Bengaluru. We track your flight, so a late landing costs you nothing.',
+    Icon: PlaneLanding,
+  },
+];
+
+const included = ['Vehicle and fuel', 'Professional driver', 'AC throughout', 'Flight tracking on airport pickups'];
+const extra = [
+  'Tolls and parking',
+  'Interstate permits',
+  'Driver bata on outstation days',
+  'Night charge for driving between 10 p.m. and 6 a.m.',
+];
+---
+
+<BaseLayout
+  title="Our fleet"
+  description="Sedans, Ertiga and Innova Crysta for airport transfers, 12 and 17-seat Tempo Travellers, buses and AC sleeper buses for hire in Bengaluru, with hourly, per-km and airport rates."
+>
+  <PageHero
+    eyebrow="Our fleet"
+    title="The right vehicle for every group."
+    intro={`${fleetVehicleCount} vehicles from 4-seat sedans to 49-seat coaches and overnight sleeper buses. Every one is air-conditioned and comes with a driver.`}
+    photo="coach"
+  >
+    <ul class="rise mt-8 flex flex-wrap gap-2" style="--d: 0.3s">
+      {
+        promises.map((p) => (
+          <li class="inline-flex items-center gap-2 rounded-full border border-fg/20 bg-ink-900/40 px-3.5 py-2 text-sm backdrop-blur-md">
+            <p.Icon size={15} class="text-accent" />
+            {p.label}
+          </li>
+        ))
+      }
+    </ul>
+  </PageHero>
+
+  <nav class="fleet-tabs sticky z-30 border-b border-line bg-white/95 backdrop-blur-md" aria-label="Vehicle types" data-fleet-tabs>
+    <div class="wrap">
+      <ul class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 py-3 sm:mx-0 sm:px-0 lg:justify-center">
+        {
+          fleetCategories.map((c) => {
+            const Icon = icons[c.icon];
+            return (
+              <li class="shrink-0">
+                <a href={`#${c.id}`} class="fleet-tab" data-tab={c.id}>
+                  <Icon size={17} />
+                  <span>{c.label}</span>
+                  <span class="hidden text-xs opacity-60 md:inline">· {c.capacity}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </nav>
+
+  {
+    fleetCategories.map((c, ci) => {
+      const Icon = icons[c.icon];
+      return (
+        <section
+          id={c.id}
+          class:list={['fleet-section relative py-14 sm:py-20', ci % 2 === 1 && 'bg-ocean-50']}
+          aria-labelledby={`${c.id}-title`}
+          data-fleet-section
+        >
+          <div class="wrap">
+            <div class="on-dark relative isolate overflow-hidden rounded-3xl" data-reveal>
+              <Photo
+                photo={c.photo}
+                alt=""
+                ratio={0.4}
+                widths={[640, 1024, 1440]}
+                sizes="(min-width: 1280px) 76rem, 94vw"
+                class="absolute inset-0 -z-20"
+              />
+              <div class="banner-scrim absolute inset-0 -z-10" aria-hidden="true" />
+              <div class="flex min-h-[15rem] flex-col justify-end gap-4 p-6 sm:min-h-[17rem] sm:p-9 lg:flex-row lg:items-end lg:justify-between">
+                <div class="max-w-2xl">
+                  <p class="eyebrow">
+                    {String(ci + 1).padStart(2, '0')} · {c.eyebrow}
+                  </p>
+                  <h2 id={`${c.id}-title`} class="mt-3 text-2xl leading-tight font-semibold sm:text-4xl">
+                    {c.title}
+                  </h2>
+                  <p class="mt-3 text-sm leading-relaxed text-fg/80 sm:text-base">{c.intro}</p>
+                </div>
+                <p class="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-fg/20 bg-ink-900/45 px-4 py-2 text-sm font-medium backdrop-blur-md lg:self-auto">
+                  <Icon size={16} class="text-accent" />
+                  {c.capacity}
+                </p>
+              </div>
+            </div>
+
+            <ul
+              class:list={[
+                'mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2',
+                c.vehicles.length === 2 ? 'lg:mx-auto lg:max-w-5xl' : 'lg:grid-cols-3',
+              ]}
+            >
+              {c.vehicles.map((v, i) => (
+                <li data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
+                  <FleetCard vehicle={v} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <section class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="rates-title">
+    <div class="wrap">
+      <SectionHeading
+        id="rates-title"
+        eyebrow="How pricing works"
+        title="Clear rates, no surprises"
+        intro="The rates above are starting prices. Your quote lists every charge before you confirm, and the final fare depends on dates, route and vehicle availability."
+      />
+
+      <ul class="mt-12 grid gap-5 md:grid-cols-3">
+        {
+          billing.map((b, i) => (
+            <li class="glass rounded-3xl p-6" data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
+              <span class="grid size-11 place-items-center rounded-2xl bg-ocean-500 text-white">
+                <b.Icon size={20} />
+              </span>
+              <h3 class="mt-5 text-lg font-semibold">{b.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-fg/70">{b.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-5 grid gap-5 md:grid-cols-2">
+        <div class="glass rounded-3xl p-6" data-reveal>
+          <h3 class="flex items-center gap-2 text-lg font-semibold">
+            <CirclePlus size={20} class="text-accent" /> Included in the rate
+          </h3>
+          <ul class="mt-4 grid gap-2.5 text-sm text-fg/75">
+            {included.map((item) => <li class="check-item">{item}</li>)}
+          </ul>
+        </div>
+        <div class="glass rounded-3xl p-6" data-reveal style="--reveal-delay: 0.07s">
+          <h3 class="flex items-center gap-2 text-lg font-semibold">
+            <CircleMinus size={20} class="text-fg/55" /> Charged at actuals
+          </h3>
+          <ul class="mt-4 grid gap-2.5 text-sm text-fg/75">
+            {extra.map((item) => <li class="dash-item">{item}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative pb-20 sm:pb-28" aria-labelledby="help-title">
+    <div class="wrap">
+      <div class="on-dark relative overflow-hidden rounded-3xl bg-ink-900 p-8 sm:p-12" data-reveal>
+        <div
+          class="pointer-events-none absolute -top-24 -right-24 size-[26rem] rounded-full bg-ocean-500/30 blur-3xl"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+          <div class="max-w-xl">
+            <h2 id="help-title" class="text-2xl font-semibold sm:text-3xl">Not sure which vehicle you need?</h2>
+            <p class="mt-3 text-fg/75">
+              Tell us how many people are travelling, where to and how much luggage you have. We'll suggest the right
+              vehicle and send a quote, usually within the hour.
+            </p>
+          </div>
+          <div class="grid gap-2 sm:grid-cols-3 lg:shrink-0">
+            <a href="/contact#enquiry" class="btn btn-primary" data-enquire>
+              Get a quote <ArrowRight size={17} />
+            </a>
+            <a href={telHref} class="btn btn-ghost">
+              <Phone size={17} /> {site.phoneDisplay}
+            </a>
+            <a href={whatsappHref()} class="btn btn-ghost" target="_blank" rel="noopener">
+              <WhatsAppIcon size={17} /> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Sits just under the fixed header. */
+  .fleet-tabs {
+    top: 4.9rem;
+  }
+  @media (min-width: 640px) {
+    .fleet-tabs {
+      top: 5.75rem;
+    }
+  }
+  .fleet-section {
+    scroll-margin-top: 9.5rem;
+  }
+  @media (min-width: 640px) {
+    .fleet-section {
+      scroll-margin-top: 10.5rem;
+    }
+  }
+  .fleet-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.6rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: rgb(15 29 51 / 0.8);
+    background: #ffffff;
+    border: 1px solid var(--color-line);
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .fleet-tab:hover {
+    color: var(--color-ocean-600);
+    border-color: var(--color-ocean-200);
+  }
+  .fleet-tab[aria-current='true'] {
+    color: #ffffff;
+    background: var(--color-ocean-500);
+    border-color: transparent;
+  }
+  .banner-scrim {
+    background:
+      linear-gradient(0deg, rgb(11 22 41 / 0.92) 0%, rgb(11 22 41 / 0.55) 55%, rgb(11 22 41 / 0.25) 100%),
+      linear-gradient(90deg, rgb(11 22 41 / 0.6) 0%, transparent 70%);
+  }
+  .check-item,
+  .dash-item {
+    position: relative;
+    padding-left: 1.6rem;
+  }
+  .check-item::before,
+  .dash-item::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 600;
+  }
+  .check-item::before {
+    content: '✓';
+    color: var(--color-accent);
+  }
+  .dash-item::before {
+    content: '+';
+    color: rgb(15 29 51 / 0.45);
+  }
+</style>
+
+<script>
+  // Highlight the tab for the section in view, and keep it visible in the
+  // sideways-scrolling tab row on phones.
+  const tabs = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-fleet-tabs] [data-tab]'));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-fleet-section]'));
+
+  function setActive(id: string | null) {
+    for (const tab of tabs) {
+      const active = tab.dataset.tab === id;
+      if (active && tab.getAttribute('aria-current') !== 'true') {
+        const row = tab.closest('ul');
+        if (row && row.scrollWidth > row.clientWidth) {
+          row.scrollTo({ left: tab.offsetLeft - (row.clientWidth - tab.offsetWidth) / 2, behavior: 'smooth' });
+        }
+      }
+      if (active) tab.setAttribute('aria-current', 'true');
+      else tab.removeAttribute('aria-current');
+    }
+  }
+
+  function update() {
+    const line = Math.min(window.innerHeight * 0.45, 320);
+    let current: string | null = null;
+    for (const s of sections) {
+      const r = s.getBoundingClientRect();
+      if (r.top <= line && r.bottom > line) current = s.id;
+    }
+    setActive(current);
+  }
+
+  if (tabs.length && sections.length) {
+    let ticking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>

@@ -4,7 +4,7 @@ Website for **Tushanth Tours and Travels**, Banashankari, Bengaluru: cab and Tem
 
 - **Stack:** [Astro 7](https://astro.build) (static output) · Tailwind CSS 4 · TypeScript · Poppins (self-hosted via Fontsource) · Lucide icons
 - **Look:** "Coastal Blue": a white page with ocean-blue buttons and accents, deep navy text, and a full-screen photo hero with frosted panels. The logo gold is kept for stars.
-- **Pages:** Home, Tours & packages (with filters), About us, Contact, plus a hidden `/admin` page for enquiries.
+- **Pages:** Home, Tours & packages (with filters), Our fleet, About us, Contact, plus a hidden `/admin` page for enquiries.
 
 ## Getting started
 
@@ -27,7 +27,7 @@ src/
   layouts/         BaseLayout (SEO tags, fonts, nav, footer, enquiry popup)
   lib/enquiries.ts Enquiry + newsletter storage (swap this for a database)
   scripts/         Browser scripts: enquiry form, popup, newsletter, nav
-  pages/           index, tours, about, contact, admin
+  pages/           index, tours, fleet, about, contact, admin
   styles/global.css Colour tokens, glass utilities, buttons, form fields
   assets/brand/    Logo files (original + generated transparent versions)
 public/            Favicons and the social share image
@@ -42,7 +42,8 @@ Everything the business will want to change lives in `src/data/`:
 | --- | --- |
 | `site.ts` | Name, phone, WhatsApp number, address, Google rating, map links, hero distances |
 | `tours.ts` | Tour packages, categories, prices, filters. `featured: true` puts a package on the home page |
-| `services.ts` | The four service cards, vehicle list, and the options in the enquiry form |
+| `services.ts` | The four service cards and the options in the enquiry form |
+| `fleet.ts` | Every vehicle on the Our fleet page, grouped into cars, Tempo Travellers, buses and sleeper buses, with seats, luggage, features and rates (per hour, per km, airport fare, driver bata) |
 | `testimonials.ts` | **Placeholder reviews**: replace with real ones before launch |
 | `faqs.ts` | FAQ questions and answers |
 | `images.ts` | Every photo on the site (see below) |
@@ -121,6 +122,7 @@ It's a static site, so any static host works. On Netlify, Vercel or Cloudflare P
 
 - [ ] Replace the sample testimonials in `src/data/testimonials.ts` with real reviews (with the customers' permission)
 - [ ] Check package prices, durations and inclusions in `src/data/tours.ts`
+- [ ] Check the vehicles and rates in `src/data/fleet.ts` against your current rate card (the sleeper buses, bus sizes and all rates are estimates)
 - [ ] Check the FAQ answers and the claims in the "Why book with us" and About sections against how the business works
 - [ ] Swap stock photos for your own
 - [ ] Set `SITE_URL` and change `PUBLIC_ADMIN_PASSCODE`

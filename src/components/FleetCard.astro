@@ -1,0 +1,152 @@
+---
+import Car from '@lucide/astro/icons/car';
+import CarFront from '@lucide/astro/icons/car-front';
+import BusFront from '@lucide/astro/icons/bus-front';
+import Bus from '@lucide/astro/icons/bus';
+import Users from '@lucide/astro/icons/users';
+import BedDouble from '@lucide/astro/icons/bed-double';
+import Luggage from '@lucide/astro/icons/luggage';
+import Check from '@lucide/astro/icons/check';
+import Sparkles from '@lucide/astro/icons/sparkles';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import { formatINR } from '../data/tours';
+import { whatsappHref } from '../data/site';
+import type { FleetVehicle } from '../data/fleet';
+
+interface Props {
+  vehicle: FleetVehicle;
+}
+
+const { vehicle: v } = Astro.props;
+
+const icons = { car: Car, 'car-front': CarFront, 'bus-front': BusFront, bus: Bus };
+const Icon = icons[v.icon];
+const CapacityIcon = v.capacityText?.includes('berth') ? BedDouble : Users;
+const capacity = v.capacityText ?? `${v.seats} seats`;
+
+// The headline rate is hourly where the vehicle is hired by the hour,
+// otherwise per km (sleeper coaches only run outstation).
+const headline = v.perHour
+  ? { amount: v.perHour, unit: 'hour', note: `Local hire, minimum ${v.minHours} hours` }
+  : { amount: v.perKm, unit: 'km', note: `Outstation, minimum ${v.minKmPerDay} km a day` };
+
+const rates = [
+  v.perHour && { label: 'Outstation', value: `${formatINR(v.perKm)}/km`, note: `min ${v.minKmPerDay} km/day` },
+  v.airportFrom && { label: 'Airport drop', value: formatINR(v.airportFrom), note: 'one way, from' },
+  { label: 'Driver bata', value: `${formatINR(v.driverBata)}/day`, note: 'outstation only' },
+].filter(Boolean) as { label: string; value: string; note: string }[];
+
+const whatsappText = `Hi, I'd like a quote for the ${v.name}. Date: , Pickup: , Drop: , Travellers: `;
+---
+
+<article
+  class:list={[
+    'fleet-card glass relative flex h-full flex-col rounded-3xl p-5 sm:p-6',
+    v.popular && 'is-popular',
+  ]}
+  aria-labelledby={`vehicle-${v.id}`}
+>
+  <div class="flex items-start gap-4">
+    <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-ocean-50 text-accent ring-1 ring-ocean-200">
+      <Icon size={28} strokeWidth={1.6} />
+    </span>
+    <div class="min-w-0 flex-1">
+      {
+        v.popular && (
+          <span class="mb-1.5 inline-flex items-center gap-1 rounded-full bg-gold-100 px-2.5 py-0.5 text-[0.7rem] font-semibold text-gold-700">
+            <Sparkles size={12} /> Most booked
+          </span>
+        )
+      }
+      <h3 id={`vehicle-${v.id}`} class="text-lg leading-snug font-semibold sm:text-xl">{v.name}</h3>
+      <p class="mt-0.5 text-sm text-fg/60">{v.models}</p>
+    </div>
+  </div>
+
+  <ul class="mt-5 flex flex-wrap gap-2 text-[0.8rem] font-medium text-fg/80" aria-label="Capacity">
+    <li class="spec"><CapacityIcon size={14} /> {capacity}</li>
+    <li class="spec"><Luggage size={14} /> {v.bags}</li>
+  </ul>
+
+  <div class="mt-5 rounded-2xl bg-ocean-50 p-4 ring-1 ring-ocean-100">
+    <p class="flex items-baseline gap-1">
+      <span class="text-[0.7rem] font-medium tracking-[0.12em] text-fg/55 uppercase">From</span>
+      <span class="ml-1 text-3xl font-semibold tracking-tight text-fg">{formatINR(headline.amount)}</span>
+      <span class="text-sm font-medium text-fg/60">/{headline.unit}</span>
+    </p>
+    <p class="mt-1 text-xs text-fg/60">{headline.note}</p>
+
+    <dl class="mt-4 grid gap-2.5 border-t border-ocean-200/70 pt-4 text-sm">
+      {
+        rates.map((r) => (
+          <div class="flex items-baseline justify-between gap-3">
+            <dt class="text-fg/65">
+              {r.label}
+              <span class="block text-[0.72rem] text-fg/45">{r.note}</span>
+            </dt>
+            <dd class="shrink-0 font-semibold text-fg">{r.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+
+  <p class="mt-5 text-sm leading-relaxed text-fg/70">{v.bestFor}</p>
+  <ul class="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[0.8rem] text-fg/75">
+    {
+      v.features.map((f) => (
+        <li class="flex gap-1.5">
+          <Check size={14} class="mt-0.5 shrink-0 text-accent" />
+          {f}
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-auto grid grid-cols-[1fr_auto] gap-2 pt-6">
+    <a
+      href={`/contact?service=${encodeURIComponent(v.service)}&vehicle=${encodeURIComponent(v.vehicle)}#enquiry`}
+      class="btn btn-primary"
+      data-enquire
+      data-service={v.service}
+      data-vehicle={v.vehicle}
+    >
+      Book now<span class="sr-only"> the {v.name}</span>
+    </a>
+    <a
+      href={whatsappHref(whatsappText)}
+      class="btn btn-ghost px-3.5"
+      target="_blank"
+      rel="noopener"
+      aria-label={`Ask about the ${v.name} on WhatsApp`}
+    >
+      <WhatsAppIcon size={18} />
+    </a>
+  </div>
+</article>
+
+<style>
+  .fleet-card {
+    transition:
+      transform 0.35s var(--ease-out-soft),
+      box-shadow 0.35s ease;
+  }
+  @media (hover: hover) {
+    .fleet-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 30px 60px -32px rgb(15 29 51 / 0.45);
+    }
+  }
+  .fleet-card.is-popular {
+    border-color: var(--color-ocean-300);
+  }
+  .spec {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid var(--color-line);
+  }
+</style>

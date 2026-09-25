@@ -246,6 +246,7 @@ export function openEnquiry(prefill: EnquiryPrefill = {}) {
     const params = new URLSearchParams();
     if (prefill.service) params.set('service', prefill.service);
     if (prefill.packageName) params.set('package', prefill.packageName);
+    if (prefill.vehicle) params.set('vehicle', prefill.vehicle);
     const query = params.toString();
     location.href = `/contact${query ? `?${query}` : ''}#enquiry`;
     return;
@@ -276,6 +277,7 @@ export function initEnquiryDialog() {
       service: trigger.dataset.service,
       packageName: trigger.dataset.package,
       destination: trigger.dataset.destination,
+      vehicle: trigger.dataset.vehicle,
     });
   });
 }

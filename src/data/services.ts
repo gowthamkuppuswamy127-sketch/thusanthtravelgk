@@ -20,7 +20,10 @@ export const vehicleOptions = [
   'Toyota Innova Crysta (up to 7)',
   'Tempo Traveller (12 to 17)',
   'Bus (20+)',
+  'Sleeper bus',
 ] as const;
+
+export type VehicleOption = (typeof vehicleOptions)[number];
 
 export interface Service {
   id: string;
@@ -74,44 +77,5 @@ export const services: Service[] = [
     photo: 'resort',
     icon: 'hotel',
     enquiry: 'Hotel / resort booking',
-  },
-];
-
-export interface Vehicle {
-  name: string;
-  examples: string;
-  passengers: string;
-  bestFor: string;
-  icon: 'car' | 'car-front' | 'bus-front' | 'bus';
-}
-
-export const fleet: Vehicle[] = [
-  {
-    name: 'Sedan',
-    examples: 'Swift Dzire, Toyota Etios or similar',
-    passengers: 'Up to 4',
-    bestFor: 'Airport runs, city trips and couples heading out of town.',
-    icon: 'car',
-  },
-  {
-    name: 'Maruti Ertiga',
-    examples: 'Seven-seat MUV',
-    passengers: 'Up to 6',
-    bestFor: 'Small families and friends on weekend getaways.',
-    icon: 'car-front',
-  },
-  {
-    name: 'Toyota Innova Crysta',
-    examples: 'Premium MUV',
-    passengers: 'Up to 7',
-    bestFor: 'Long outstation drives where comfort matters.',
-    icon: 'car-front',
-  },
-  {
-    name: 'Tempo Traveller',
-    examples: 'Air-conditioned group van',
-    passengers: '12 to 17',
-    bestFor: 'Groups, pilgrimages, weddings and office offsites.',
-    icon: 'bus-front',
   },
 ];
