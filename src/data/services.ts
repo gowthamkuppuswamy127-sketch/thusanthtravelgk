@@ -25,7 +25,15 @@ export const vehicleOptions = [
 export interface Service {
   id: string;
   title: string;
+  /** Big two-line headline printed over the card photo. */
+  headline: [string, string];
+  /** Caption under the card, e.g. the service area or vehicle range. */
+  caption: string;
+  /** Short facts shown after the caption, separated by dots. */
+  meta: string[];
   blurb: string;
+  /** Where "More information" leads. */
+  moreHref: string;
   points: string[];
   photo: PhotoKey;
   icon: 'plane' | 'bus' | 'compass' | 'hotel';
@@ -35,6 +43,10 @@ export interface Service {
 export const services: Service[] = [
   {
     id: 'cabs',
+    headline: ['Airport runs', 'on time'],
+    caption: 'Cabs & airport transfers',
+    meta: ['Sedan to Innova', 'One-way or round trip', 'Hourly rentals'],
+    moreHref: '/about#fleet',
     title: 'Cabs & airport transfers',
     blurb: 'Sedan, Ertiga and Innova Crysta for airport runs, city errands and outstation trips.',
     points: ['Kempegowda Airport pickup and drop', 'One-way and round trips', 'Hourly local rentals'],
@@ -44,6 +56,10 @@ export const services: Service[] = [
   },
   {
     id: 'coaches',
+    headline: ['One coach,', 'every seat'],
+    caption: 'Tempo Traveller & bus hire',
+    meta: ['12 seats to full buses', 'Weddings & pilgrimages', 'Outstation'],
+    moreHref: '/about#fleet',
     title: 'Tempo Traveller & bus hire',
     blurb: 'Room for the whole group: weddings, pilgrimages, office outings and school trips.',
     points: ['12 to 17 seat Tempo Travellers', 'Buses for larger groups', 'Drivers used to long highway runs'],
@@ -53,6 +69,10 @@ export const services: Service[] = [
   },
   {
     id: 'tours',
+    headline: ['Trips planned', 'end to end'],
+    caption: 'Tour packages',
+    meta: ['India & abroad', 'Family & honeymoon', 'Stays included'],
+    moreHref: '/tours',
     title: 'Tour packages',
     blurb: 'Ready-made and custom trips across India and abroad, with stays and sightseeing sorted.',
     points: ['Domestic and international', 'Family and honeymoon trips', 'MICE, education and industrial visits'],
@@ -62,6 +82,10 @@ export const services: Service[] = [
   },
   {
     id: 'hotels',
+    headline: ['Stays that', 'fit the plan'],
+    caption: 'Hotels & resorts',
+    meta: ['Hills, beaches, cities', 'Group room blocks'],
+    moreHref: '/about',
     title: 'Hotels & resorts',
     blurb: 'Rooms matched to your plan and budget, from hill homestays to beach resorts.',
     points: ['Hill, beach and city stays', 'Group and wedding room blocks', 'Booked with or without a cab'],

@@ -1,18 +1,13 @@
 ---
-import Plane from '@lucide/astro/icons/plane';
-import Bus from '@lucide/astro/icons/bus';
-import Compass from '@lucide/astro/icons/compass';
-import Hotel from '@lucide/astro/icons/hotel';
-import Check from '@lucide/astro/icons/check';
-import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ChevronsRight from '@lucide/astro/icons/chevrons-right';
+import ChevronLeft from '@lucide/astro/icons/chevron-left';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
 import Photo from '../Photo.astro';
 import SectionHeading from '../SectionHeading.astro';
 import { services } from '../../data/services';
-
-const icons = { plane: Plane, bus: Bus, compass: Compass, hotel: Hotel };
 ---
 
-<section class="relative py-20 sm:py-28" aria-labelledby="services-title">
+<section class="relative py-20 sm:py-28" aria-labelledby="services-title" data-carousel>
   <div class="wrap">
     <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <SectionHeading
@@ -26,59 +21,138 @@ const icons = { plane: Plane, bus: Bus, compass: Compass, hotel: Hotel };
     </div>
 
     <ul
-      class="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-2 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-4"
+      class="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory scroll-px-4 gap-5 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:mx-0 lg:scroll-px-0 lg:px-0"
+      data-track
+      tabindex="0"
+      aria-label="Our services, scroll sideways for more"
     >
       {
-        services.map((s, i) => {
-          const Icon = icons[s.icon];
-          return (
-            <li
-              class="service-card on-dark group relative w-[84%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[60%] md:w-auto"
-              data-reveal
-              style={`--reveal-delay: ${i * 0.08}s`}
-            >
+        services.map((s, i) => (
+          <li
+            class="service-card group w-[86%] shrink-0 snap-start sm:w-[58%] md:w-[44%] lg:w-[calc((100%-2.5rem)/3)]"
+            data-reveal
+            style={`--reveal-delay: ${i * 0.08}s`}
+          >
+            <div class="on-dark relative aspect-[4/5] overflow-hidden rounded-[1.75rem] sm:aspect-[3/4]">
               <Photo
                 photo={s.photo}
                 alt=""
-                ratio={1.35}
+                ratio={1.33}
                 widths={[480, 720, 960]}
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 84vw"
+                sizes="(min-width: 1024px) 30vw, (min-width: 768px) 44vw, 86vw"
                 class="absolute inset-0"
                 imgClass="transition duration-700 ease-out group-hover:scale-105"
               />
-              <div class="absolute inset-0 bg-gradient-to-b from-ink-900/10 via-ink-900/10 to-ink-900/85" />
-              <div class="relative flex h-full min-h-[27rem] flex-col justify-end p-3 sm:min-h-[29rem]">
-                <div class="glass rounded-2xl p-5">
-                  <div class="flex items-center gap-3">
-                    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-ocean-500 text-white">
-                      <Icon size={20} />
-                    </span>
-                    <h3 class="text-lg leading-tight font-semibold">{s.title}</h3>
+              <div class="absolute inset-0 bg-gradient-to-b from-ink-900/75 via-ink-900/5 to-ink-900/80" />
+              <div class="service-shade absolute inset-0 bg-ink-900/40" />
+
+              <div class="relative flex h-full flex-col justify-between p-6 sm:p-8">
+                <p class="text-[2rem] leading-[0.95] font-bold tracking-tight uppercase sm:text-[2.35rem]">
+                  {s.headline[0]}
+                  <br />
+                  {s.headline[1]}
+                </p>
+
+                <div class="grid">
+                  <p class="service-blurb text-[0.95rem] leading-relaxed text-fg/90 [grid-area:1/1] self-end">
+                    {s.blurb}
+                  </p>
+                  <div class="service-actions grid gap-3 [grid-area:1/1] self-end">
+                    <a
+                      href={`/contact?service=${encodeURIComponent(s.enquiry)}#enquiry`}
+                      class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gold-400 px-6 text-sm font-semibold tracking-wide text-ink-900 uppercase transition hover:bg-gold-300"
+                      data-enquire
+                      data-service={s.enquiry}
+                    >
+                      Get a quote <ChevronsRight size={18} />
+                      <span class="sr-only">for {s.title.toLowerCase()}</span>
+                    </a>
+                    <a
+                      href={s.moreHref}
+                      class="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-white/15 px-6 text-sm font-medium tracking-wide uppercase backdrop-blur-md transition hover:bg-white/25"
+                    >
+                      More information
+                      <span class="sr-only">about {s.title.toLowerCase()}</span>
+                    </a>
                   </div>
-                  <p class="mt-3 text-sm leading-relaxed text-fg/80">{s.blurb}</p>
-                  <ul class="mt-3 grid gap-1.5 text-[0.82rem] text-fg/85">
-                    {s.points.map((p) => (
-                      <li class="flex gap-2">
-                        <Check size={15} class="mt-0.5 shrink-0 text-accent" />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href={`/contact?service=${encodeURIComponent(s.enquiry)}#enquiry`}
-                    class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition hover:gap-2.5"
-                    data-enquire
-                    data-service={s.enquiry}
-                  >
-                    Get a quote <ArrowRight size={16} />
-                    <span class="sr-only">for {s.title.toLowerCase()}</span>
-                  </a>
                 </div>
               </div>
-            </li>
-          );
-        })
+            </div>
+
+            <h3 class="mt-5 text-lg leading-tight font-bold tracking-tight uppercase sm:text-xl">{s.caption}</h3>
+            <ul class="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.78rem] tracking-wide text-fg/70 uppercase sm:text-sm">
+              {
+                s.meta.map((m, j) => (
+                  <li class="flex items-center gap-2.5">
+                    {j > 0 && <span class="size-1 rounded-full bg-fg/50" aria-hidden="true" />}
+                    {m}
+                  </li>
+                ))
+              }
+            </ul>
+          </li>
+        ))
       }
     </ul>
+
+    <div class="mt-8 flex justify-end gap-3" data-reveal>
+      <button type="button" class="carousel-btn" data-prev aria-label="Previous services">
+        <ChevronLeft size={20} />
+      </button>
+      <button type="button" class="carousel-btn" data-next aria-label="Next services">
+        <ChevronRight size={20} />
+      </button>
+    </div>
   </div>
 </section>
+
+<style>
+  /* Touch screens: text and buttons are always visible. */
+  .service-shade {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .service-blurb {
+    margin-bottom: 8.5rem;
+  }
+
+  /* Mouse and trackpad: the blurb sits at the bottom and the buttons slide in on hover or keyboard focus, as in the reference. */
+  @media (hover: hover) and (pointer: fine) {
+    .service-blurb,
+    .service-actions {
+      transition:
+        opacity 0.35s ease,
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        margin 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .service-blurb {
+      margin-bottom: 0;
+    }
+    .service-actions {
+      opacity: 0;
+      transform: translateY(1.25rem);
+      pointer-events: none;
+    }
+    .service-card:hover .service-shade,
+    .service-card:focus-within .service-shade {
+      opacity: 1;
+    }
+    .service-card:hover .service-blurb,
+    .service-card:focus-within .service-blurb {
+      margin-bottom: 8.5rem;
+    }
+    .service-card:hover .service-actions,
+    .service-card:focus-within .service-actions {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-blurb,
+    .service-actions {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>
