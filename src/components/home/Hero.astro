@@ -58,7 +58,7 @@ const tabs = [
   <div class="hero-scrim absolute inset-0 -z-10" aria-hidden="true"></div>
 
   <div class="wrap grid items-end gap-12 lg:grid-cols-12 lg:gap-12">
-    <div class="lg:col-span-7">
+    <div class="hero-copy lg:col-span-7">
       <p class="eyebrow rise" style="--d: 0.1s">Cabs&nbsp;· Tempo&nbsp;Travellers&nbsp;· Tours&nbsp;· Hotels</p>
       <h1
         id="hero-title"
@@ -186,10 +186,15 @@ const tabs = [
     object-position: 30% 50%;
   }
   .hero-scrim {
+    /* Neutral shade only where text sits, so the video keeps its own colour and light. */
     background:
-      linear-gradient(180deg, rgb(11 22 41 / 0.7) 0%, rgb(11 22 41 / 0.2) 28%, rgb(11 22 41 / 0.5) 62%, rgb(11 22 41 / 0.85) 100%),
-      linear-gradient(90deg, rgb(11 22 41 / 0.85) 0%, rgb(11 22 41 / 0.45) 55%, rgb(11 22 41 / 0.15) 100%),
-      radial-gradient(60% 50% at 85% 15%, rgb(75 134 217 / 0.25), transparent 70%);
+      linear-gradient(180deg, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0) 22%, rgb(0 0 0 / 0) 55%, rgb(0 0 0 / 0.55) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / 0.4) 0%, rgb(0 0 0 / 0) 60%);
+  }
+  .hero-copy {
+    text-shadow:
+      0 1px 2px rgb(0 0 0 / 0.55),
+      0 2px 18px rgb(0 0 0 / 0.45);
   }
   .tab {
     display: flex;
