@@ -38,37 +38,46 @@ const tabs = [
 ---
 
 <section
-  class="hero on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden pt-28 pb-16 sm:pb-20 lg:pt-32 lg:pb-24"
+  class="hero on-dark relative isolate overflow-hidden bg-ink-900 pt-24 pb-12 sm:pt-28 lg:flex lg:min-h-[100svh] lg:items-end lg:bg-transparent lg:pt-32 lg:pb-24"
   aria-labelledby="hero-title"
 >
-  <video
-    class="hero-video absolute inset-0 -z-20 h-full w-full object-cover"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-    poster="/video/hero-poster.jpg"
-    aria-hidden="true"
-    data-hero-video
-  >
-    <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
-    <source src="/video/hero-1080.mp4" type="video/mp4" />
-  </video>
-  <div class="hero-scrim absolute inset-0 -z-10" aria-hidden="true"></div>
+  <div class="hero-glow absolute inset-0 -z-30 lg:hidden" aria-hidden="true"></div>
 
-  <div class="wrap grid items-end gap-12 lg:grid-cols-12 lg:gap-12">
+  <div class="wrap grid items-end gap-0 lg:grid-cols-12 lg:gap-12">
     <div class="hero-copy lg:col-span-7">
       <h1
         id="hero-title"
-        class="text-[3.25rem] leading-[0.95] font-semibold tracking-[-0.045em] sm:text-7xl lg:text-[5.75rem]"
+        class="text-[2.75rem] leading-[0.95] font-semibold tracking-[-0.045em] sm:text-7xl lg:text-[5.75rem]"
       >
         <span class="rise block font-light" style="--d: 0.18s">Bengaluru</span>
         <span class="rise block" style="--d: 0.3s">to anywhere<span class="text-gold-300">.</span></span>
       </h1>
     </div>
 
-    <div class="lg:col-span-5">
+    <!-- Phones and tablets: the video sits in a landscape card so the whole bus is in view.
+         Desktop: the same element stretches behind the whole hero. -->
+    <div
+      class="hero-media rise relative lg:[animation:none] mt-6 aspect-[4/3] overflow-hidden rounded-3xl sm:aspect-[16/10] lg:absolute lg:inset-0 lg:-z-20 lg:mt-0 lg:aspect-auto lg:rounded-none"
+      style="--d: 0.4s"
+    >
+      <video
+        class="hero-video absolute inset-0 h-full w-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="/video/hero-poster.jpg"
+        aria-hidden="true"
+        data-hero-video
+      >
+        <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
+        <source src="/video/hero-1080.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-scrim absolute inset-0" aria-hidden="true"></div>
+    </div>
+
+    <div class="relative z-10 mx-3 -mt-5 sm:mx-8 sm:-mt-8 lg:col-span-5 lg:mx-0 lg:mt-0">
       <form
         class="rise glass rounded-3xl p-5 sm:p-7"
         style="--d: 0.5s"
@@ -182,13 +191,40 @@ const tabs = [
 
 <style>
   .hero-video {
-    object-position: 30% 50%;
+    /* The bus sits on the left of the frame; anchor there so a 4:3 crop keeps all of it. */
+    object-position: 0% 50%;
+  }
+  .hero-glow {
+    background:
+      radial-gradient(120% 60% at 100% 0%, rgb(31 95 191 / 0.35) 0%, transparent 60%),
+      radial-gradient(90% 50% at 0% 100%, rgb(201 154 46 / 0.12) 0%, transparent 60%);
+  }
+  .hero-media {
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.7);
   }
   .hero-scrim {
+    /* Phones: only a soft fade at the bottom where the planner card overlaps. */
+    background: linear-gradient(180deg, rgb(0 0 0 / 0) 75%, rgb(0 0 0 / 0.25) 100%);
+  }
+  @media (max-width: 1023px) {
+    /* Solid card on phones so it reads cleanly where it overlaps the video card. */
+    .hero .glass {
+      background: var(--color-ink-800);
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero-video {
+      object-position: 30% 50%;
+    }
+    .hero-media {
+      box-shadow: none;
+    }
+    .hero-scrim {
     /* Neutral shade only where text sits, so the video keeps its own colour and light. */
     background:
       linear-gradient(180deg, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0) 22%, rgb(0 0 0 / 0) 55%, rgb(0 0 0 / 0.55) 100%),
       linear-gradient(90deg, rgb(0 0 0 / 0.4) 0%, rgb(0 0 0 / 0) 60%);
+    }
   }
   .hero-copy {
     text-shadow:
