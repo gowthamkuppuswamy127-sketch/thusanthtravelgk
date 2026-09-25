@@ -54,10 +54,10 @@ const tabs = [
       </h1>
     </div>
 
-    <!-- Phones and tablets: the video sits in a landscape card so the whole bus is in view.
+    <!-- Phones and tablets: a full-width landscape strip that fades into the background at top and bottom.
          Desktop: the same element stretches behind the whole hero. -->
     <div
-      class="hero-media rise relative lg:[animation:none] mt-6 aspect-[4/3] overflow-hidden rounded-3xl sm:aspect-[16/10] lg:absolute lg:inset-0 lg:-z-20 lg:mt-0 lg:aspect-auto lg:rounded-none"
+      class="hero-media rise relative -mx-4 mt-4 aspect-video overflow-hidden sm:-mx-6 lg:absolute lg:inset-0 lg:-z-20 lg:mx-0 lg:mt-0 lg:aspect-auto lg:[animation:none]"
       style="--d: 0.4s"
     >
       <video
@@ -191,7 +191,7 @@ const tabs = [
 
 <style>
   .hero-video {
-    /* The bus sits on the left of the frame; anchor there so a 4:3 crop keeps all of it. */
+    /* The bus sits on the left of the frame; anchor there so a narrower crop keeps all of it. */
     object-position: 0% 50%;
   }
   .hero-glow {
@@ -199,12 +199,12 @@ const tabs = [
       radial-gradient(120% 60% at 100% 0%, rgb(31 95 191 / 0.35) 0%, transparent 60%),
       radial-gradient(90% 50% at 0% 100%, rgb(201 154 46 / 0.12) 0%, transparent 60%);
   }
-  .hero-media {
-    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.7);
-  }
-  .hero-scrim {
-    /* Phones: only a soft fade at the bottom where the planner card overlaps. */
-    background: linear-gradient(180deg, rgb(0 0 0 / 0) 75%, rgb(0 0 0 / 0.25) 100%);
+  @media (max-width: 1023px) {
+    /* Phones and tablets: fade the video itself out at the top and bottom so it melts into the hero background. */
+    .hero-media {
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 62%, transparent 100%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 62%, transparent 100%);
+    }
   }
   @media (max-width: 1023px) {
     /* Solid card on phones so it reads cleanly where it overlaps the video card. */
@@ -215,9 +215,6 @@ const tabs = [
   @media (min-width: 1024px) {
     .hero-video {
       object-position: 30% 50%;
-    }
-    .hero-media {
-      box-shadow: none;
     }
     .hero-scrim {
     /* Neutral shade only where text sits, so the video keeps its own colour and light. */
