@@ -35,6 +35,9 @@ export interface Service {
   photo: PhotoKey;
   icon: 'plane' | 'bus' | 'compass' | 'hotel';
   enquiry: ServiceOption;
+  /** Page or section the card on the home page links to. */
+  href: string;
+  cta: string;
 }
 
 export const services: Service[] = [
@@ -47,6 +50,8 @@ export const services: Service[] = [
     photo: 'flight',
     icon: 'plane',
     enquiry: 'Airport transfer',
+    href: '/fleet#cars',
+    cta: 'See our cabs',
   },
   {
     id: 'coaches',
@@ -57,6 +62,8 @@ export const services: Service[] = [
     photo: 'coach',
     icon: 'bus',
     enquiry: 'Tempo Traveller / bus hire',
+    href: '/fleet#tempo-travellers',
+    cta: 'See Tempo Travellers and buses',
   },
   {
     id: 'tours',
@@ -67,6 +74,8 @@ export const services: Service[] = [
     photo: 'roadTrip',
     icon: 'compass',
     enquiry: 'Tour package',
+    href: '/tours#packages',
+    cta: 'Browse tour packages',
   },
   {
     id: 'hotels',
@@ -77,5 +86,7 @@ export const services: Service[] = [
     photo: 'resort',
     icon: 'hotel',
     enquiry: 'Hotel / resort booking',
+    href: '/tours#custom-packages',
+    cta: 'Plan a trip with stays',
   },
 ];
