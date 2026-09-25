@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Car from '@lucide/astro/icons/car';
 import CarFront from '@lucide/astro/icons/car-front';
 import BusFront from '@lucide/astro/icons/bus-front';
@@ -36,6 +38,14 @@ const rates = [
   { label: 'Driver bata', value: `${formatINR(v.driverBata)}/day`, note: 'outstation only' },
 ].filter(Boolean) as { label: string; value: string; note: string }[];
 
+// Drop a photo named after the vehicle id into public/images/fleet/
+// (e.g. innova-crysta.jpg) and the card shows it instead of the icon.
+const photo = ['jpg', 'jpeg', 'webp', 'png']
+  .map((ext) => `/images/fleet/${v.id}.${ext}`)
+  .find((src) => existsSync(join(process.cwd(), 'public', src)));
+
+const badge = 'inline-flex items-center gap-1 rounded-full bg-gold-100 px-2.5 py-0.5 text-[0.7rem] font-semibold text-gold-700';
+
 const whatsappText = `Hi, I'd like a quote for the ${v.name}. Date: , Pickup: , Drop: , Travellers: `;
 ---
 
@@ -46,14 +56,38 @@ const whatsappText = `Hi, I'd like a quote for the ${v.name}. Date: , Pickup: , 
   ]}
   aria-labelledby={`vehicle-${v.id}`}
 >
+  {
+    photo && (
+      <div class="photo relative -mx-5 -mt-5 mb-4 aspect-[16/9] rounded-t-3xl sm:-mx-6 sm:-mt-6">
+        <img
+          src={photo}
+          alt={`${v.name}, ${v.models}`}
+          width="800"
+          height="500"
+          loading="lazy"
+          decoding="async"
+          onerror="this.dataset.failed=''"
+        />
+        {v.popular && (
+          <span class:list={[badge, 'absolute top-3 left-3 shadow-sm']}>
+            <Sparkles size={12} /> Most booked
+          </span>
+        )}
+      </div>
+    )
+  }
   <div class="flex items-start gap-4">
-    <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-ocean-50 text-accent ring-1 ring-ocean-200">
-      <Icon size={28} strokeWidth={1.6} />
-    </span>
+    {
+      !photo && (
+        <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-ocean-50 text-accent ring-1 ring-ocean-200">
+          <Icon size={28} strokeWidth={1.6} />
+        </span>
+      )
+    }
     <div class="min-w-0 flex-1">
       {
-        v.popular && (
-          <span class="mb-1.5 inline-flex items-center gap-1 rounded-full bg-gold-100 px-2.5 py-0.5 text-[0.7rem] font-semibold text-gold-700">
+        v.popular && !photo && (
+          <span class:list={[badge, 'mb-1.5']}>
             <Sparkles size={12} /> Most booked
           </span>
         )
@@ -63,12 +97,12 @@ const whatsappText = `Hi, I'd like a quote for the ${v.name}. Date: , Pickup: , 
     </div>
   </div>
 
-  <ul class="mt-5 flex flex-wrap gap-2 text-[0.8rem] font-medium text-fg/80" aria-label="Capacity">
+  <ul class="mt-4 flex flex-wrap gap-2 text-[0.8rem] font-medium text-fg/80" aria-label="Capacity">
     <li class="spec"><CapacityIcon size={14} /> {capacity}</li>
     <li class="spec"><Luggage size={14} /> {v.bags}</li>
   </ul>
 
-  <div class="mt-5 rounded-2xl bg-ocean-50 p-4 ring-1 ring-ocean-100">
+  <div class="mt-4 rounded-2xl bg-ocean-50 p-4 ring-1 ring-ocean-100">
     <p class="flex items-baseline gap-1">
       <span class="text-[0.7rem] font-medium tracking-[0.12em] text-fg/55 uppercase">From</span>
       <span class="ml-1 text-3xl font-semibold tracking-tight text-fg">{formatINR(headline.amount)}</span>
@@ -76,13 +110,12 @@ const whatsappText = `Hi, I'd like a quote for the ${v.name}. Date: , Pickup: , 
     </p>
     <p class="mt-1 text-xs text-fg/60">{headline.note}</p>
 
-    <dl class="mt-4 grid gap-2.5 border-t border-ocean-200/70 pt-4 text-sm">
+    <dl class="mt-3 grid gap-2 border-t border-ocean-200/70 pt-3 text-sm">
       {
         rates.map((r) => (
           <div class="flex items-baseline justify-between gap-3">
             <dt class="text-fg/65">
-              {r.label}
-              <span class="block text-[0.72rem] text-fg/45">{r.note}</span>
+              {r.label} <span class="text-[0.72rem] text-fg/45">· {r.note}</span>
             </dt>
             <dd class="shrink-0 font-semibold text-fg">{r.value}</dd>
           </div>
@@ -91,19 +124,13 @@ const whatsappText = `Hi, I'd like a quote for the ${v.name}. Date: , Pickup: , 
     </dl>
   </div>
 
-  <p class="mt-5 text-sm leading-relaxed text-fg/70">{v.bestFor}</p>
-  <ul class="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[0.8rem] text-fg/75">
-    {
-      v.features.map((f) => (
-        <li class="flex gap-1.5">
-          <Check size={14} class="mt-0.5 shrink-0 text-accent" />
-          {f}
-        </li>
-      ))
-    }
-  </ul>
+  <p class="mt-4 text-sm leading-relaxed text-fg/70">{v.bestFor}</p>
+  <p class="mt-2 flex gap-1.5 text-[0.8rem] text-fg/60">
+    <Check size={14} class="mt-0.5 shrink-0 text-accent" />
+    {v.features.join(' · ')}
+  </p>
 
-  <div class="mt-auto grid grid-cols-[1fr_auto] gap-2 pt-6">
+  <div class="mt-auto grid grid-cols-[1fr_auto] gap-2 pt-5">
     <a
       href={`/contact?service=${encodeURIComponent(v.service)}&vehicle=${encodeURIComponent(v.vehicle)}#enquiry`}
       class="btn btn-primary"

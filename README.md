@@ -58,6 +58,8 @@ hillStay: { src: '/images/coorg-homestay.jpg', alt: 'Homestay in the coffee esta
 
 Real photos of your own vehicles, drivers and trips will do more for bookings than stock photos.
 
+**Vehicle photos on the Our fleet page:** put a photo in `public/images/fleet/`, named after the vehicle's `id` in `src/data/fleet.ts` (for example `innova-crysta.jpg`, `tt-12.jpg`, `sleeper-2-1.jpg`; `.jpg`, `.webp` or `.png`). The card picks it up on the next build and shows it above the details; vehicles without a photo keep their icon. A landscape photo about 1200 × 675 px works best.
+
 ### Logo
 
 The original logo is `src/assets/brand/logo-original.jpg`. `npm run brand` rebuilds the transparent versions, favicons and the share image (`public/og-image.jpg`) from it.
