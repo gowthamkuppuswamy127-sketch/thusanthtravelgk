@@ -5,7 +5,6 @@ import Plane from '@lucide/astro/icons/plane';
 import CarFront from '@lucide/astro/icons/car-front';
 import BusFront from '@lucide/astro/icons/bus-front';
 import Compass from '@lucide/astro/icons/compass';
-import Photo from '../Photo.astro';
 import Stars from '../Stars.astro';
 import { site, telHref } from '../../data/site';
 
@@ -45,15 +44,20 @@ const tabs = [
   class="hero on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden pt-28 pb-16 sm:pb-20 lg:items-center lg:pt-32 lg:pb-24"
   aria-labelledby="hero-title"
 >
-  <Photo
-    photo="beach"
-    alt=""
-    eager
-    widths={[800, 1280, 1920, 2560]}
-    sizes="100vw"
-    class="absolute inset-0 -z-20"
-    imgClass="hero-img"
-  />
+  <video
+    class="hero-video absolute inset-0 -z-20 h-full w-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="/video/hero-poster.jpg"
+    aria-hidden="true"
+    data-hero-video
+  >
+    <source src="/video/hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
+    <source src="/video/hero-1080.mp4" type="video/mp4" />
+  </video>
   <div class="hero-scrim absolute inset-0 -z-10" aria-hidden="true"></div>
 
   <div class="wrap grid items-end gap-12 lg:grid-cols-12 lg:gap-12">
@@ -164,6 +168,12 @@ const tabs = [
 <script>
   import { openEnquiry } from '../../scripts/enquiry';
 
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.removeAttribute('autoplay');
+    video.pause();
+  }
+
   const form = document.querySelector<HTMLFormElement>('[data-quick-planner]');
   if (form) {
     const pickup = form.querySelector<HTMLInputElement>('[name="pickup"]')!;
@@ -197,16 +207,8 @@ const tabs = [
 </script>
 
 <style>
-  .hero :global(.hero-img) {
-    animation: hero-drift 14s var(--ease-out-soft) both;
-  }
-  @keyframes hero-drift {
-    from {
-      transform: scale(1.1);
-    }
-    to {
-      transform: scale(1);
-    }
+  .hero-video {
+    object-position: 30% 50%;
   }
   .hero-scrim {
     background:
