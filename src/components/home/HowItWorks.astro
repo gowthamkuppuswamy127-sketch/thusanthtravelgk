@@ -1,0 +1,114 @@
+---
+import MessageSquare from '@lucide/astro/icons/message-square';
+import Receipt from '@lucide/astro/icons/receipt';
+import BadgeCheck from '@lucide/astro/icons/badge-check';
+import Navigation from '@lucide/astro/icons/navigation';
+import SectionHeading from '../SectionHeading.astro';
+
+const steps = [
+  {
+    title: 'Share your trip',
+    text: 'Tell us where, when and how many. Call, WhatsApp or send the enquiry form.',
+    Icon: MessageSquare,
+  },
+  {
+    title: 'Get a clear quote',
+    text: 'Vehicle, fare, tolls, parking, permits and driver bata, all listed before you decide.',
+    Icon: Receipt,
+  },
+  {
+    title: 'Confirm the booking',
+    text: 'Say yes and we block the vehicle, hotels and tickets for your dates.',
+    Icon: BadgeCheck,
+  },
+  {
+    title: 'Travel easy',
+    text: 'Your driver details reach you before pickup, and we stay a call away until you are home.',
+    Icon: Navigation,
+  },
+];
+---
+
+<section class="on-light relative overflow-hidden bg-sand-100 py-20 text-ink-800 sm:py-28" aria-labelledby="how-title">
+  <div
+    class="pointer-events-none absolute -top-24 right-[8%] size-[26rem] rounded-full bg-gold-300/35 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute -bottom-32 left-[5%] size-[24rem] rounded-full bg-lagoon-300/35 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="wrap relative">
+    <SectionHeading
+      id="how-title"
+      eyebrow="How booking works"
+      title="Four steps from enquiry to pickup"
+      intro="No app to install and no advance to get a quote. Most trips are sorted in a single phone call."
+      align="center"
+    />
+
+    <ol class="steps relative mt-14 grid gap-5 lg:grid-cols-4 lg:gap-6">
+      {
+        steps.map((step, i) => (
+          <li class="step relative pl-16 lg:pt-16 lg:pl-0" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+            <span class="step-marker" aria-hidden="true">
+              {i + 1}
+            </span>
+            <div class="glass-light h-full rounded-3xl p-6">
+              <step.Icon size={22} class="text-gold-600" />
+              <h3 class="mt-4 text-lg font-semibold">
+                <span class="sr-only">Step {i + 1}: </span>
+                {step.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-800/75">{step.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* A dashed road joins the four steps: vertical on phones, horizontal on desktop. */
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    left: 1.45rem;
+    width: 2px;
+    background: repeating-linear-gradient(180deg, rgb(163 124 31 / 0.55) 0 12px, transparent 12px 22px);
+  }
+  @media (min-width: 1024px) {
+    .steps::before {
+      top: 1.45rem;
+      bottom: auto;
+      left: 1.5rem;
+      right: 1.5rem;
+      width: auto;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, rgb(163 124 31 / 0.55) 0 14px, transparent 14px 26px);
+    }
+  }
+  .step-marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-ink-900);
+    background: linear-gradient(180deg, var(--color-gold-200), var(--color-gold-400));
+    box-shadow:
+      0 0 0 6px var(--color-sand-100),
+      0 10px 20px -8px rgb(163 124 31 / 0.6);
+  }
+</style>

@@ -1,0 +1,206 @@
+---
+import Send from '@lucide/astro/icons/send';
+import CircleCheck from '@lucide/astro/icons/circle-check';
+import Phone from '@lucide/astro/icons/phone';
+import X from '@lucide/astro/icons/x';
+import Tag from '@lucide/astro/icons/tag';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import { serviceOptions, vehicleOptions } from '../data/services';
+import { site, telHref } from '../data/site';
+
+interface Props {
+  /** Prefix for element ids, so the form can appear twice on one page. */
+  uid: string;
+  /** Read ?service=&package=... from the URL to prefill (Contact page). */
+  prefillFromUrl?: boolean;
+}
+
+const { uid, prefillFromUrl = false } = Astro.props;
+const id = (name: string) => `${uid}-${name}`;
+---
+
+<div class="enquiry" data-enquiry>
+  <form
+    class="grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-4"
+    novalidate
+    data-enquiry-form
+    data-prefill-url={prefillFromUrl ? '' : undefined}
+  >
+    <div class="package-chip col-span-2" hidden data-package-chip>
+      <span class="inline-flex min-w-0 items-center gap-2">
+        <Tag size={15} class="shrink-0 text-gold-300" />
+        <span class="truncate">Package: <strong class="font-semibold" data-package-name></strong></span>
+      </span>
+      <button type="button" class="grid size-7 shrink-0 place-items-center rounded-full hover:bg-white/10" data-package-clear>
+        <X size={15} />
+        <span class="sr-only">Remove package</span>
+      </button>
+      <input type="hidden" name="packageName" />
+    </div>
+
+    <div class="col-span-2">
+      <label class="field-label" for={id('service')}>What do you need? <span class="text-gold-300">*</span></label>
+      <select class="field" id={id('service')} name="service" required aria-describedby={id('service-error')}>
+        <option value="">Choose a service</option>
+        {serviceOptions.map((s) => <option value={s}>{s}</option>)}
+      </select>
+      <p class="field-error" id={id('service-error')} hidden></p>
+    </div>
+
+    <div class="col-span-2 sm:col-span-1">
+      <label class="field-label" for={id('name')}>Your name <span class="text-gold-300">*</span></label>
+      <input
+        class="field"
+        id={id('name')}
+        name="name"
+        autocomplete="name"
+        required
+        aria-describedby={id('name-error')}
+      />
+      <p class="field-error" id={id('name-error')} hidden></p>
+    </div>
+
+    <div class="col-span-2 sm:col-span-1">
+      <label class="field-label" for={id('phone')}>Mobile number <span class="text-gold-300">*</span></label>
+      <input
+        class="field"
+        id={id('phone')}
+        name="phone"
+        type="tel"
+        inputmode="tel"
+        autocomplete="tel"
+        placeholder="98xxx xxxxx"
+        required
+        aria-describedby={id('phone-error')}
+      />
+      <p class="field-error" id={id('phone-error')} hidden></p>
+    </div>
+
+    <div class="col-span-2 sm:col-span-1">
+      <label class="field-label" for={id('pickup')}>Pickup</label>
+      <input class="field" id={id('pickup')} name="pickup" placeholder="Area or address in Bengaluru" />
+    </div>
+
+    <div class="col-span-2 sm:col-span-1">
+      <label class="field-label" for={id('destination')}>Drop or destination</label>
+      <input class="field" id={id('destination')} name="destination" placeholder="Airport, Coorg, Bali..." />
+    </div>
+
+    <div>
+      <label class="field-label" for={id('travelDate')}>Travel date</label>
+      <input class="field" id={id('travelDate')} name="travelDate" type="date" data-min-today />
+    </div>
+
+    <div>
+      <label class="field-label" for={id('returnDate')}>Return date</label>
+      <input
+        class="field"
+        id={id('returnDate')}
+        name="returnDate"
+        type="date"
+        data-min-today
+        aria-describedby={id('returnDate-error')}
+      />
+      <p class="field-error" id={id('returnDate-error')} hidden></p>
+    </div>
+
+    <div>
+      <label class="field-label" for={id('passengers')}>Travellers</label>
+      <input
+        class="field"
+        id={id('passengers')}
+        name="passengers"
+        type="number"
+        min="1"
+        max="500"
+        inputmode="numeric"
+        placeholder="How many people?"
+      />
+    </div>
+
+    <div>
+      <label class="field-label" for={id('vehicle')}>Vehicle</label>
+      <select class="field" id={id('vehicle')} name="vehicle">
+        {vehicleOptions.map((v) => <option value={v === 'No preference' ? '' : v}>{v}</option>)}
+      </select>
+    </div>
+
+    <div class="col-span-2">
+      <label class="field-label" for={id('email')}>Email <span class="opacity-60">(optional)</span></label>
+      <input
+        class="field"
+        id={id('email')}
+        name="email"
+        type="email"
+        autocomplete="email"
+        aria-describedby={id('email-error')}
+      />
+      <p class="field-error" id={id('email-error')} hidden></p>
+    </div>
+
+    <div class="col-span-2">
+      <label class="field-label" for={id('message')}>Anything else we should know?</label>
+      <textarea
+        class="field"
+        id={id('message')}
+        name="message"
+        rows="3"
+        placeholder="Flight number, number of bags, hotel preference, places you want to see..."></textarea>
+    </div>
+
+    <div class="col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs leading-relaxed text-sand-100/60">
+        We use these details only to plan and quote your trip.
+      </p>
+      <button type="submit" class="btn btn-gold w-full sm:w-auto" data-submit>
+        <Send size={17} />
+        <span data-submit-label>Send enquiry</span>
+      </button>
+    </div>
+  </form>
+
+  <div class="py-4 text-center" hidden data-success tabindex="-1">
+    <div class="mx-auto grid size-16 place-items-center rounded-full bg-gold-300/15 text-gold-300">
+      <CircleCheck size={34} />
+    </div>
+    <h3 class="mt-5 text-2xl font-semibold" data-success-title>Enquiry saved</h3>
+    <p class="mt-2 text-sand-100/80">
+      Thanks, <span data-success-name></span>. Your reference is
+      <strong class="font-semibold text-gold-200" data-success-ref></strong>.
+    </p>
+    <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-sand-100/65" data-success-note>
+      One last step: send it to us on WhatsApp so our team sees it right away. Your trip details are already
+      filled in.
+    </p>
+    <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
+      <a class="btn btn-whatsapp" target="_blank" rel="noopener" data-success-whatsapp>
+        <WhatsAppIcon size={18} /> Send on WhatsApp
+      </a>
+      <a href={telHref} class="btn btn-glass"><Phone size={17} /> Call {site.phoneDisplay}</a>
+    </div>
+    <button
+      type="button"
+      class="mt-5 text-sm text-sand-100/70 underline decoration-white/30 underline-offset-4 hover:text-sand-50"
+      data-reset
+    >
+      Send another enquiry
+    </button>
+  </div>
+</div>
+
+<style>
+  .package-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.55rem 0.55rem 0.55rem 0.9rem;
+    border-radius: 0.9rem;
+    font-size: 0.88rem;
+    background: rgb(233 201 124 / 0.1);
+    border: 1px solid rgb(233 201 124 / 0.3);
+  }
+  .package-chip[hidden] {
+    display: none;
+  }
+</style>

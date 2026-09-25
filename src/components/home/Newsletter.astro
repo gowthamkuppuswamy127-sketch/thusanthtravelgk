@@ -1,0 +1,54 @@
+---
+import Mail from '@lucide/astro/icons/mail';
+import Photo from '../Photo.astro';
+---
+
+<section class="relative isolate overflow-hidden py-24 sm:py-32" aria-labelledby="newsletter-title">
+  <Photo
+    photo="roadTrip"
+    alt=""
+    widths={[800, 1280, 1920]}
+    sizes="100vw"
+    class="absolute inset-0 -z-20"
+  />
+  <div class="absolute inset-0 -z-10 bg-gradient-to-br from-ink-900/85 via-ink-900/55 to-ink-800/80" aria-hidden="true">
+  </div>
+
+  <div class="wrap">
+    <div class="glass-strong mx-auto max-w-3xl rounded-[2rem] p-7 text-center sm:p-12" data-reveal>
+      <p class="eyebrow justify-center">Weekend ideas</p>
+      <h2 id="newsletter-title" class="mt-4 text-3xl font-semibold sm:text-5xl">Weekend plans, sorted.</h2>
+      <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-sand-100/75">
+        Get getaway ideas from Bengaluru, long-weekend reminders and seasonal offers in your inbox. We only write when
+        there's something worth planning.
+      </p>
+      <form class="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row" novalidate data-newsletter>
+        <label for="newsletter-email" class="sr-only">Email address</label>
+        <div class="relative flex-1">
+          <Mail size={18} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sand-100/50" />
+          <input
+            id="newsletter-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            placeholder="you@example.com"
+            class="field rounded-full pl-11"
+            aria-describedby="newsletter-status"
+          />
+        </div>
+        <button type="submit" class="btn btn-gold">Subscribe</button>
+      </form>
+      <p id="newsletter-status" class="newsletter-status mt-4 min-h-6 text-sm" role="status" data-newsletter-status></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .newsletter-status[data-tone='ok'] {
+    color: var(--color-gold-200);
+  }
+  .newsletter-status[data-tone='error'] {
+    color: #f7b59f;
+  }
+</style>

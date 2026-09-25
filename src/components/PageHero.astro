@@ -1,0 +1,44 @@
+---
+import Photo from './Photo.astro';
+import type { PhotoKey } from '../data/images';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  photo: PhotoKey;
+}
+
+const { eyebrow, title, intro, photo } = Astro.props;
+---
+
+<section class="relative isolate overflow-hidden pt-36 pb-16 sm:pt-44 sm:pb-24">
+  <Photo photo={photo} alt="" eager widths={[800, 1280, 1920]} sizes="100vw" class="absolute inset-0 -z-20" />
+  <div class="page-hero-scrim absolute inset-0 -z-10" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow rise">{eyebrow}</p>
+    <h1
+      class="rise mt-5 max-w-3xl text-[2.6rem] leading-[1.02] font-semibold tracking-[-0.04em] sm:text-6xl lg:text-7xl"
+      style="--d: 0.1s"
+    >
+      {title}
+    </h1>
+    {
+      intro && (
+        <p class="rise mt-5 max-w-2xl text-base leading-relaxed text-sand-100/80 sm:text-lg" style="--d: 0.2s">
+          {intro}
+        </p>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero-scrim {
+    background:
+      linear-gradient(180deg, rgb(4 28 30 / 0.75) 0%, rgb(4 28 30 / 0.5) 45%, var(--color-ink-800) 100%),
+      linear-gradient(90deg, rgb(4 28 30 / 0.8) 0%, rgb(4 28 30 / 0.2) 100%),
+      radial-gradient(50% 60% at 90% 20%, rgb(224 182 82 / 0.18), transparent 70%);
+  }
+</style>

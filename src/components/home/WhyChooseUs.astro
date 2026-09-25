@@ -1,0 +1,98 @@
+---
+import Sparkles from '@lucide/astro/icons/sparkles';
+import Route from '@lucide/astro/icons/route';
+import IndianRupee from '@lucide/astro/icons/indian-rupee';
+import Headset from '@lucide/astro/icons/headset';
+import MapPin from '@lucide/astro/icons/map-pin';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import Phone from '@lucide/astro/icons/phone';
+import Photo from '../Photo.astro';
+import Stars from '../Stars.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { site, telHref } from '../../data/site';
+
+const benefits = [
+  {
+    title: 'Clean, well-kept vehicles',
+    text: 'Sedans to Tempo Travellers, cleaned before every trip and serviced on schedule.',
+    Icon: Sparkles,
+  },
+  {
+    title: 'Drivers who know the route',
+    text: 'Used to airport timings, city traffic and the ghat roads to Coorg, Ooty and Munnar.',
+    Icon: Route,
+  },
+  {
+    title: 'Pricing spelled out',
+    text: 'Tolls, parking, permits and driver bata are listed in your quote. No surprises at the end.',
+    Icon: IndianRupee,
+  },
+  {
+    title: 'One team for the whole trip',
+    text: 'Cab, hotel and sightseeing booked together, with one number to call if plans change.',
+    Icon: Headset,
+  },
+];
+---
+
+<section class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="why-title">
+  <div class="wrap grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="relative" data-reveal>
+      <Photo
+        photo="openRoad"
+        ratio={1.15}
+        widths={[600, 900, 1200]}
+        sizes="(min-width: 1024px) 40vw, 100vw"
+        class="aspect-[4/5] rounded-[2rem] sm:aspect-[5/5] lg:aspect-[4/5]"
+      />
+      <div class="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-ink-900/45 px-3.5 py-2 text-xs font-medium backdrop-blur-md">
+        <MapPin size={14} class="text-gold-300" /> Banashankari, Bengaluru
+      </div>
+      <a
+        href={site.reviewsUrl}
+        target="_blank"
+        rel="noopener"
+        class="glass group absolute right-4 bottom-4 left-4 flex items-center justify-between gap-4 rounded-2xl p-5 sm:right-auto sm:left-6 sm:bottom-6 sm:w-80"
+      >
+        <div>
+          <p class="flex items-baseline gap-2">
+            <span class="text-4xl font-semibold tracking-tight">{site.rating}</span>
+            <span class="text-sm text-sand-100/70">out of 5</span>
+          </p>
+          <Stars rating={site.rating} size={15} class="mt-1" />
+          <p class="mt-2 text-sm text-sand-100/75">From {site.reviewCount} reviews on Google</p>
+        </div>
+        <span class="grid size-10 shrink-0 place-items-center rounded-full bg-white/10 transition group-hover:bg-gold-300 group-hover:text-ink-900">
+          <ArrowUpRight size={18} />
+          <span class="sr-only">Read our Google reviews</span>
+        </span>
+      </a>
+    </div>
+
+    <div>
+      <SectionHeading
+        id="why-title"
+        eyebrow="Why book with us"
+        title="The small things that make a long drive easy"
+        intro="Families, college groups and companies across Bengaluru book with us for the same reasons."
+      />
+      <ul class="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+        {
+          benefits.map((b, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+              <span class="grid size-11 place-items-center rounded-2xl border border-gold-300/30 bg-gold-300/10 text-gold-300">
+                <b.Icon size={20} />
+              </span>
+              <h3 class="mt-4 text-lg font-semibold">{b.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-sand-100/70">{b.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-10 flex flex-wrap gap-3" data-reveal>
+        <a href="/contact#enquiry" class="btn btn-gold" data-enquire>Get a quote</a>
+        <a href={telHref} class="btn btn-glass"><Phone size={17} /> {site.phoneDisplay}</a>
+      </div>
+    </div>
+  </div>
+</section>

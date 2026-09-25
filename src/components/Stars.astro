@@ -1,0 +1,19 @@
+---
+import Star from '@lucide/astro/icons/star';
+
+interface Props {
+  rating?: number;
+  size?: number;
+  class?: string;
+}
+
+const { rating = 5, size = 16, class: className } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-0.5 text-gold-300', className]} aria-hidden="true">
+  {
+    Array.from({ length: 5 }, (_, i) => (
+      <Star size={size} fill={i < Math.round(rating) ? 'currentColor' : 'none'} stroke-width={1.5} />
+    ))
+  }
+</span>

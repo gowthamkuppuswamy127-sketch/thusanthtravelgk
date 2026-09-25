@@ -1,0 +1,351 @@
+---
+import Search from '@lucide/astro/icons/search';
+import RotateCcw from '@lucide/astro/icons/rotate-ccw';
+import Users from '@lucide/astro/icons/users';
+import Heart from '@lucide/astro/icons/heart';
+import Briefcase from '@lucide/astro/icons/briefcase';
+import GraduationCap from '@lucide/astro/icons/graduation-cap';
+import Factory from '@lucide/astro/icons/factory';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Compass from '@lucide/astro/icons/compass';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import TourCard from '../components/TourCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { budgetBuckets, durationBuckets, tourCategories, tours } from '../data/tours';
+
+const sorted = [...tours].sort((a, b) => b.popularity - a.popularity);
+
+const custom = [
+  { title: 'Family holidays', text: 'Room for grandparents and kids, with the right pace and stops.', Icon: Users },
+  { title: 'Honeymoons', text: 'Private stays, candle-lit dinners and zero planning for the two of you.', Icon: Heart },
+  { title: 'MICE & corporate', text: 'Meetings, incentives, conferences and offsites for teams of any size.', Icon: Briefcase },
+  { title: 'Education tours', text: 'Syllabus-linked trips for schools and colleges, with safe stays.', Icon: GraduationCap },
+  { title: 'Industrial visits', text: 'Plant visits for engineering, polytechnic and MBA groups.', Icon: Factory },
+];
+---
+
+<BaseLayout
+  title="Tours & packages"
+  description="Tour packages from Bengaluru: Coorg, Ooty, Kerala, Goa, the Golden Triangle, Dubai, Bali, Maldives and Thailand, plus custom family, honeymoon, MICE, education and industrial tours."
+>
+  <PageHero
+    eyebrow="Tours & packages"
+    title="Pick a trip. We'll handle the road."
+    intro="Weekend drives from Bengaluru, holidays across India and trips abroad. Prices are starting points per person, and every package can be changed to fit your dates and budget."
+    photo="roadTrip"
+  />
+
+  <section class="relative pb-20 sm:pb-28" aria-labelledby="packages-title" data-tour-filters>
+    <h2 id="packages-title" class="sr-only">All packages</h2>
+    <div class="wrap">
+      <div class="glass-strong relative z-10 rounded-3xl p-4 sm:p-5">
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
+          <div class="relative col-span-2 md:col-span-1">
+            <label for="tour-search" class="sr-only">Search packages</label>
+            <Search size={18} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sand-100/50" />
+            <input
+              id="tour-search"
+              type="search"
+              class="field pl-11"
+              placeholder="Search places or trips, e.g. Coorg"
+              autocomplete="off"
+              data-filter="q"
+            />
+          </div>
+          <div>
+            <label for="tour-duration" class="sr-only">Duration</label>
+            <select id="tour-duration" class="field" data-filter="duration">
+              <option value="">Any duration</option>
+              {durationBuckets.map((d) => <option value={d.id}>{d.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="tour-budget" class="sr-only">Budget per person</label>
+            <select id="tour-budget" class="field" data-filter="budget">
+              <option value="">Any budget</option>
+              {budgetBuckets.map((b) => <option value={b.id}>{b.label}</option>)}
+            </select>
+          </div>
+          <div class="col-span-2 md:col-span-1">
+            <label for="tour-sort" class="sr-only">Sort by</label>
+            <select id="tour-sort" class="field" data-filter="sort">
+              <option value="popular">Most popular</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="duration">Shortest first</option>
+            </select>
+          </div>
+        </div>
+
+        <div
+          class="no-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 sm:-mx-5 sm:px-5 lg:mx-0 lg:flex-wrap lg:px-0"
+          role="group"
+          aria-label="Trip type"
+        >
+          <button type="button" class="chip" data-category="" aria-pressed="true">All trips</button>
+          {
+            tourCategories.map((c) => (
+              <button type="button" class="chip" data-category={c.id} aria-pressed="false">
+                {c.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="mt-8 flex items-center justify-between gap-4">
+        <p class="text-sm text-sand-100/70" aria-live="polite" data-result-count>
+          Showing {tours.length} packages
+        </p>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 text-sm text-gold-200 hover:underline"
+          hidden
+          data-reset-filters
+        >
+          <RotateCcw size={15} /> Clear filters
+        </button>
+      </div>
+
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-tour-grid>
+        {sorted.map((tour, i) => <TourCard tour={tour} showHighlights delay={(i % 3) * 0.06} />)}
+      </div>
+
+      <div class="glass mx-auto mt-6 max-w-xl rounded-3xl p-8 text-center" hidden data-empty>
+        <Compass size={32} class="mx-auto text-gold-300" />
+        <h3 class="mt-4 text-xl font-semibold">No packages match these filters</h3>
+        <p class="mt-2 text-sm text-sand-100/70">
+          Try a different budget or duration, or tell us what you have in mind and we'll plan it.
+        </p>
+        <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
+          <button type="button" class="btn btn-glass" data-reset-filters>Clear filters</button>
+          <a href="/contact?service=Custom%20package#enquiry" class="btn btn-gold" data-enquire data-service="Custom package">
+            Plan a custom trip
+          </a>
+        </div>
+      </div>
+
+      <p class="mt-10 text-xs leading-relaxed text-sand-100/55">
+        Prices are indicative starting prices per person on twin sharing, from Bengaluru. Flights, visas and optional
+        activities are quoted separately where they apply. Final prices depend on dates, hotel category and vehicle.
+      </p>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden bg-ink-900 py-20 sm:py-28" aria-labelledby="custom-title">
+    <div
+      class="pointer-events-none absolute -top-32 right-0 size-[30rem] rounded-full bg-gold-400/10 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="wrap relative">
+      <SectionHeading
+        id="custom-title"
+        eyebrow="Customised packages"
+        title="Don't see your trip? We'll plan it from scratch."
+        intro="Tell us who is travelling, where and for how long. We'll come back with a day-by-day plan and a clear price."
+      />
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          custom.map((c, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 0.06}s`}>
+              <a
+                href={`/contact?service=Custom%20package&package=${encodeURIComponent(c.title)}#enquiry`}
+                class="glass group flex h-full flex-col rounded-3xl p-6 transition hover:-translate-y-1"
+                data-enquire
+                data-service="Custom package"
+                data-package={`Custom: ${c.title}`}
+              >
+                <span class="grid size-11 place-items-center rounded-2xl bg-gold-300 text-ink-900">
+                  <c.Icon size={20} />
+                </span>
+                <h3 class="mt-5 text-lg font-semibold">{c.title}</h3>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-sand-100/70">{c.text}</p>
+                <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-gold-200 transition group-hover:gap-2.5">
+                  Plan this trip <ArrowRight size={16} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .chip {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: rgb(246 239 226 / 0.8);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .chip:hover {
+    color: var(--color-sand-50);
+    border-color: rgb(255 255 255 / 0.3);
+  }
+  .chip[aria-pressed='true'] {
+    color: var(--color-ink-900);
+    background: linear-gradient(180deg, var(--color-gold-200), var(--color-gold-300));
+    border-color: transparent;
+  }
+</style>
+
+<script>
+  import { budgetBuckets, durationBuckets } from '../data/tours';
+
+  const root = document.querySelector<HTMLElement>('[data-tour-filters]');
+  if (root) {
+    const grid = root.querySelector<HTMLElement>('[data-tour-grid]')!;
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-tour]'));
+    const count = root.querySelector<HTMLElement>('[data-result-count]')!;
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const resetButtons = root.querySelectorAll<HTMLButtonElement>('[data-reset-filters]');
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-category]'));
+    const search = root.querySelector<HTMLInputElement>('[data-filter="q"]')!;
+    const duration = root.querySelector<HTMLSelectElement>('[data-filter="duration"]')!;
+    const budget = root.querySelector<HTMLSelectElement>('[data-filter="budget"]')!;
+    const sort = root.querySelector<HTMLSelectElement>('[data-filter="sort"]')!;
+
+    const state = { q: '', category: '', duration: '', budget: '', sort: 'popular' };
+
+    const hasOption = (select: HTMLSelectElement, value: string) =>
+      Array.from(select.options).some((o) => o.value === value);
+
+    function readUrl() {
+      const p = new URLSearchParams(location.search);
+      state.q = p.get('q') ?? '';
+      const cat = p.get('category') ?? '';
+      state.category = chips.some((c) => c.dataset.category === cat) ? cat : '';
+      const dur = p.get('duration') ?? '';
+      state.duration = hasOption(duration, dur) ? dur : '';
+      const bud = p.get('budget') ?? '';
+      state.budget = hasOption(budget, bud) ? bud : '';
+      const s = p.get('sort') ?? 'popular';
+      state.sort = hasOption(sort, s) ? s : 'popular';
+    }
+
+    function writeUrl() {
+      const p = new URLSearchParams();
+      if (state.q) p.set('q', state.q);
+      if (state.category) p.set('category', state.category);
+      if (state.duration) p.set('duration', state.duration);
+      if (state.budget) p.set('budget', state.budget);
+      if (state.sort !== 'popular') p.set('sort', state.sort);
+      const query = p.toString();
+      history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
+    }
+
+    function syncControls() {
+      search.value = state.q;
+      duration.value = state.duration;
+      budget.value = state.budget;
+      sort.value = state.sort;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String((c.dataset.category ?? '') === state.category)));
+    }
+
+    const price = (card: HTMLElement) => (card.dataset.price ? Number(card.dataset.price) : null);
+
+    function matches(card: HTMLElement) {
+      if (state.category && !(card.dataset.categories ?? '').split(' ').includes(state.category)) return false;
+      if (state.q) {
+        const text = card.dataset.search ?? '';
+        const terms = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+        if (!terms.every((t) => text.includes(t))) return false;
+      }
+      if (state.duration) {
+        const bucket = durationBuckets.find((d) => d.id === state.duration);
+        if (bucket && !bucket.test(Number(card.dataset.days))) return false;
+      }
+      if (state.budget) {
+        const bucket = budgetBuckets.find((b) => b.id === state.budget);
+        const p = price(card);
+        if (bucket && (p === null || p < bucket.min || p >= bucket.max)) return false;
+      }
+      return true;
+    }
+
+    function compare(a: HTMLElement, b: HTMLElement) {
+      const pa = price(a);
+      const pb = price(b);
+      switch (state.sort) {
+        case 'price-asc':
+          return (pa ?? Infinity) - (pb ?? Infinity);
+        case 'price-desc':
+          return (pb ?? -Infinity) - (pa ?? -Infinity);
+        case 'duration':
+          return Number(a.dataset.days) - Number(b.dataset.days);
+        default:
+          return Number(b.dataset.popularity) - Number(a.dataset.popularity);
+      }
+    }
+
+    function apply() {
+      const ordered = [...cards].sort(compare);
+      grid.append(...ordered);
+      let shown = 0;
+      for (const card of ordered) {
+        const visible = matches(card);
+        card.hidden = !visible;
+        if (visible) shown++;
+      }
+      const filtered = Boolean(state.q || state.category || state.duration || state.budget);
+      count.textContent = filtered
+        ? `Showing ${shown} of ${cards.length} packages`
+        : `Showing all ${cards.length} packages`;
+      empty.hidden = shown > 0;
+      grid.hidden = shown === 0;
+      resetButtons.forEach((b) => (b.hidden = !filtered));
+      writeUrl();
+    }
+
+    let timer: number | undefined;
+    search.addEventListener('input', () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        state.q = search.value.trim();
+        apply();
+      }, 150);
+    });
+    duration.addEventListener('change', () => {
+      state.duration = duration.value;
+      apply();
+    });
+    budget.addEventListener('change', () => {
+      state.budget = budget.value;
+      apply();
+    });
+    sort.addEventListener('change', () => {
+      state.sort = sort.value;
+      apply();
+    });
+    chips.forEach((chip) =>
+      chip.addEventListener('click', () => {
+        state.category = chip.dataset.category ?? '';
+        syncControls();
+        apply();
+      }),
+    );
+    resetButtons.forEach((b) =>
+      b.addEventListener('click', () => {
+        Object.assign(state, { q: '', category: '', duration: '', budget: '', sort: 'popular' });
+        syncControls();
+        apply();
+      }),
+    );
+
+    readUrl();
+    syncControls();
+    apply();
+  }
+</script>

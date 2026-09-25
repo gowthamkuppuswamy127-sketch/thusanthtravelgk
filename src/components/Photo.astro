@@ -1,0 +1,50 @@
+---
+import { photos, photoUrl, type PhotoKey } from '../data/images';
+
+interface Props {
+  photo: PhotoKey;
+  /** Candidate widths for srcset; the last one is the fallback src. */
+  widths?: number[];
+  sizes?: string;
+  /** Height / width. Crops the image server-side to this aspect ratio. */
+  ratio?: number;
+  alt?: string;
+  eager?: boolean;
+  class?: string;
+  imgClass?: string;
+}
+
+const {
+  photo,
+  widths = [480, 800, 1200],
+  sizes = '100vw',
+  ratio,
+  alt,
+  eager = false,
+  class: className,
+  imgClass,
+} = Astro.props;
+
+const { src, alt: defaultAlt } = photos[photo];
+const heightFor = (w: number) => (ratio ? Math.round(w * ratio) : undefined);
+const remote = src.startsWith('photo-');
+const largest = widths[widths.length - 1];
+const srcset = remote ? widths.map((w) => `${photoUrl(src, w, heightFor(w))} ${w}w`).join(', ') : undefined;
+---
+
+<div class:list={['photo', className]}>
+  <img
+    src={photoUrl(src, largest, heightFor(largest))}
+    srcset={srcset}
+    sizes={remote ? sizes : undefined}
+    alt={alt ?? defaultAlt}
+    width={largest}
+    height={heightFor(largest)}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    decoding="async"
+    class={imgClass}
+    onerror="this.dataset.failed=''"
+  />
+  <slot />
+</div>

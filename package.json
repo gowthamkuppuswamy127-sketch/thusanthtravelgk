@@ -1,0 +1,25 @@
+{
+  "name": "tushanth-tours-and-travels",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website for Tushanth Tours and Travels, Bengaluru: cab and bus hire, airport transfers, tour packages and hotel bookings.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "brand": "node scripts/build-brand-assets.mjs"
+  },
+  "dependencies": {
+    "@fontsource/poppins": "^5.3.0",
+    "@lucide/astro": "^1.48.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "sharp": "^0.35.4",
+    "simple-icons": "^16.32.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

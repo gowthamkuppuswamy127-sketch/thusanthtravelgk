@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import Phone from '@lucide/astro/icons/phone';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Navigation from '@lucide/astro/icons/navigation';
+import logo from '../assets/brand/logo-on-dark.png';
+import WhatsAppIcon from './WhatsAppIcon.astro';
+import Stars from './Stars.astro';
+import { nav, site, telHref, whatsappHref } from '../data/site';
+import { services } from '../data/services';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="relative overflow-hidden bg-ink-950 text-sand-100">
+  <div
+    class="pointer-events-none absolute -top-40 right-[-10%] size-[36rem] rounded-full bg-gold-400/10 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="wrap relative grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.3fr] lg:py-20">
+    <div>
+      <a href="/" aria-label={`${site.name}, home`} class="inline-block">
+        <Image src={logo} alt="" height={64} densities={[1, 2]} class="h-16 w-auto" />
+      </a>
+      <p class="mt-5 max-w-xs text-sm leading-relaxed text-sand-100/70">
+        Cabs, Tempo Travellers, buses, tour packages and hotel bookings from our office in Banashankari, Bengaluru.
+      </p>
+      <a
+        href={site.reviewsUrl}
+        target="_blank"
+        rel="noopener"
+        class="mt-5 inline-flex items-center gap-3 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm transition hover:border-white/25"
+      >
+        <Stars rating={site.rating} size={14} />
+        <span class="whitespace-nowrap"><strong class="font-semibold">{site.rating}</strong> · {site.reviewCount} Google reviews</span>
+      </a>
+    </div>
+
+    <nav aria-labelledby="footer-explore">
+      <h2 id="footer-explore" class="text-xs font-semibold tracking-[0.2em] text-gold-300 uppercase">Explore</h2>
+      <ul class="mt-5 grid gap-3 text-sm">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="text-sand-100/75 transition hover:text-sand-50">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="footer-services">
+      <h2 id="footer-services" class="text-xs font-semibold tracking-[0.2em] text-gold-300 uppercase">Services</h2>
+      <ul class="mt-5 grid gap-3 text-sm">
+        {
+          services.map((s) => (
+            <li>
+              <a
+                href={`/contact?service=${encodeURIComponent(s.enquiry)}#enquiry`}
+                class="text-sand-100/75 transition hover:text-sand-50"
+              >
+                {s.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="text-xs font-semibold tracking-[0.2em] text-gold-300 uppercase">Visit or call</h2>
+      <address class="mt-5 flex gap-3 text-sm leading-relaxed text-sand-100/75 not-italic">
+        <MapPin size={18} class="mt-0.5 shrink-0 text-gold-300" />
+        <span>
+          {site.address.line1},<br />
+          {site.address.line2},<br />
+          {site.address.city}, {site.address.region} {site.address.postalCode}
+        </span>
+      </address>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <a href={telHref} class="btn btn-glass btn-sm"><Phone size={15} /> {site.phoneDisplay}</a>
+        <a href={whatsappHref()} target="_blank" rel="noopener" class="btn btn-glass btn-sm">
+          <WhatsAppIcon size={15} /> WhatsApp
+        </a>
+        <a href={site.directionsUrl} target="_blank" rel="noopener" class="btn btn-glass btn-sm">
+          <Navigation size={15} /> Directions
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-white/8">
+    <div
+      class="wrap flex flex-col gap-2 py-6 text-xs text-sand-100/55 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p>Package prices are indicative starting prices per person and may change with dates and availability.</p>
+    </div>
+  </div>
+</footer>

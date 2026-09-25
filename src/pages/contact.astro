@@ -1,0 +1,127 @@
+---
+import Phone from '@lucide/astro/icons/phone';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Navigation from '@lucide/astro/icons/navigation';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import WhatsAppIcon from '../components/WhatsAppIcon.astro';
+import Stars from '../components/Stars.astro';
+import { site, telHref, whatsappHref } from '../data/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Contact ${site.name} in Banashankari, Bengaluru. Call or WhatsApp ${site.phoneDisplay}, or send an enquiry for cabs, Tempo Travellers, tours and hotels.`}
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Tell us about your trip."
+    intro="Call, WhatsApp or send the form. We'll reply with a clear quote, with tolls, permits and driver bata spelled out."
+    photo="flight"
+  />
+
+  <section class="relative pb-20 sm:pb-28" aria-label="Ways to reach us">
+    <div class="wrap grid gap-8 lg:grid-cols-12 lg:gap-10">
+      <div class="grid content-start gap-4 lg:col-span-5">
+        <a href={telHref} class="contact-card glass group" data-reveal>
+          <span class="contact-icon bg-gold-300 text-ink-900"><Phone size={22} /></span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-sm text-sand-100/65">Call us</span>
+            <span class="block text-xl font-semibold">{site.phoneDisplay}</span>
+          </span>
+          <ArrowUpRight size={20} class="text-sand-100/50 transition group-hover:text-gold-200" />
+        </a>
+
+        <a href={whatsappHref(`Hello ${site.name}, I'd like to plan a trip.`)} target="_blank" rel="noopener" class="contact-card glass group" data-reveal style="--reveal-delay: 0.06s">
+          <span class="contact-icon bg-whatsapp text-white"><WhatsAppIcon size={22} /></span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-sm text-sand-100/65">WhatsApp</span>
+            <span class="block text-xl font-semibold">Chat with us</span>
+          </span>
+          <ArrowUpRight size={20} class="text-sand-100/50 transition group-hover:text-gold-200" />
+        </a>
+
+        <div class="glass rounded-3xl p-6" data-reveal style="--reveal-delay: 0.12s">
+          <div class="flex gap-4">
+            <span class="contact-icon bg-white/10 text-gold-300"><MapPin size={22} /></span>
+            <div>
+              <p class="text-sm text-sand-100/65">Visit our office</p>
+              <address class="mt-1 leading-relaxed not-italic">
+                {site.address.line1},<br />
+                {site.address.line2},<br />
+                {site.address.city}, {site.address.region} {site.address.postalCode}
+              </address>
+              <a href={site.directionsUrl} target="_blank" rel="noopener" class="btn btn-glass btn-sm mt-4">
+                <Navigation size={15} /> Get directions
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <a href={site.reviewsUrl} target="_blank" rel="noopener" class="contact-card glass group" data-reveal style="--reveal-delay: 0.18s">
+          <span class="contact-icon bg-white/10 text-2xl font-semibold text-gold-200">{site.rating}</span>
+          <span class="min-w-0 flex-1">
+            <Stars rating={site.rating} size={15} />
+            <span class="mt-1 block text-sm text-sand-100/70">{site.reviewCount} reviews on Google</span>
+          </span>
+          <ArrowUpRight size={20} class="text-sand-100/50 transition group-hover:text-gold-200" />
+        </a>
+      </div>
+
+      <div id="enquiry" class="glass-strong scroll-mt-28 rounded-[2rem] p-5 sm:p-8 lg:col-span-7" data-reveal>
+        <p class="eyebrow">Enquiry form</p>
+        <h2 class="mt-3 text-2xl font-semibold sm:text-3xl">Send us your trip details</h2>
+        <p class="mt-2 mb-7 text-sm text-sand-100/70">
+          Only name, mobile number and service are required. Add whatever else you know.
+        </p>
+        <EnquiryForm uid="contact" prefillFromUrl />
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-20 sm:pb-28" aria-labelledby="map-title">
+    <div class="wrap">
+      <div class="relative overflow-hidden rounded-[2rem] border border-white/10" data-reveal>
+        <h2 id="map-title" class="sr-only">Map</h2>
+        <iframe
+          title={`Map showing ${site.name}`}
+          src={site.mapsEmbedUrl}
+          class="block h-[26rem] w-full border-0 sm:h-[30rem]"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+        <div class="glass-strong absolute right-3 bottom-3 left-3 rounded-2xl p-5 sm:right-auto sm:bottom-6 sm:left-6 sm:max-w-sm">
+          <p class="font-semibold">{site.name}</p>
+          <p class="mt-1 text-sm leading-relaxed text-sand-100/70">{site.addressOneLine}</p>
+          <a href={site.directionsUrl} target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-gold-200 hover:underline">
+            Open in Google Maps <ArrowUpRight size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 1.5rem;
+    transition: transform 0.25s var(--ease-out-soft);
+  }
+  .contact-card:hover {
+    transform: translateY(-2px);
+  }
+  .contact-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    border-radius: 1rem;
+  }
+</style>

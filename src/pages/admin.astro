@@ -1,0 +1,717 @@
+---
+import { Image } from 'astro:assets';
+import Lock from '@lucide/astro/icons/lock';
+import LogOut from '@lucide/astro/icons/log-out';
+import Download from '@lucide/astro/icons/download';
+import Search from '@lucide/astro/icons/search';
+import Inbox from '@lucide/astro/icons/inbox';
+import Sparkles from '@lucide/astro/icons/sparkles';
+import Trash from '@lucide/astro/icons/trash';
+import X from '@lucide/astro/icons/x';
+import ExternalLink from '@lucide/astro/icons/external-link';
+import Info from '@lucide/astro/icons/info';
+import logo from '../assets/brand/logo-on-dark.png';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { enquiryStatuses } from '../lib/enquiries';
+---
+
+<BaseLayout title="Enquiries admin" noindex bare>
+  <div class="admin min-h-dvh bg-ink-900">
+    <section class="grid min-h-dvh place-items-center p-4" data-gate>
+      <form class="glass-strong w-full max-w-sm rounded-3xl p-7 sm:p-8" novalidate data-gate-form>
+        <Image src={logo} alt="Tushanth Tours and Travels" height={56} densities={[1, 2]} class="h-14 w-auto" />
+        <h1 class="mt-6 flex items-center gap-2 text-2xl font-semibold"><Lock size={20} class="text-gold-300" /> Admin</h1>
+        <p class="mt-2 text-sm text-sand-100/70">Enter the passcode to see enquiries and newsletter sign-ups.</p>
+        <label for="passcode" class="field-label mt-6">Passcode</label>
+        <input
+          id="passcode"
+          name="passcode"
+          type="password"
+          class="field"
+          autocomplete="current-password"
+          aria-describedby="passcode-error"
+          required
+        />
+        <p id="passcode-error" class="field-error" hidden data-gate-error>That passcode is not right. Try again.</p>
+        <button type="submit" class="btn btn-gold mt-5 w-full">Unlock</button>
+        <p class="mt-5 text-xs leading-relaxed text-sand-100/55">
+          Demo passcode: <code class="text-gold-200">tushanth-demo</code> (change it with PUBLIC_ADMIN_PASSCODE).
+        </p>
+      </form>
+    </section>
+
+    <div hidden data-app>
+      <header class="sticky top-0 z-30 border-b border-white/10 bg-ink-900/80 backdrop-blur-xl">
+        <div class="wrap flex items-center justify-between gap-4 py-3">
+          <div class="flex items-center gap-4">
+            <a href="/" aria-label="View the website"><Image src={logo} alt="" height={40} densities={[1, 2]} class="h-10 w-auto" /></a>
+            <span class="hidden rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-sand-100/80 sm:inline">
+              Admin
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="/" class="btn btn-glass btn-sm"><ExternalLink size={15} /> <span class="hidden sm:inline">View site</span></a>
+            <button type="button" class="btn btn-glass btn-sm" data-lock><LogOut size={15} /> Lock</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="wrap py-8 sm:py-10">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1 class="mt-2 text-3xl font-semibold sm:text-4xl">Enquiries</h1>
+          </div>
+          <p class="text-sm text-sand-100/60" data-updated></p>
+        </div>
+
+        <div class="mt-6 flex gap-3 rounded-2xl border border-gold-300/25 bg-gold-300/8 p-4 text-sm leading-relaxed text-sand-100/80">
+          <Info size={18} class="mt-0.5 shrink-0 text-gold-300" />
+          <p>
+            <strong class="font-semibold text-sand-50">Demo mode.</strong> Enquiries are stored in this browser, so you see
+            the ones sent from this device. Connect a database (see the README) to collect enquiries from every visitor.
+          </p>
+        </div>
+
+        <ul class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5" aria-label="Enquiry counts">
+          <li class="stat glass"><span class="stat-label">Total</span><span class="stat-value" data-stat="total">0</span></li>
+          {
+            enquiryStatuses.map((s) => (
+              <li class="stat glass">
+                <span class="stat-label">
+                  <span class={`dot dot-${s.id}`} />
+                  {s.label}
+                </span>
+                <span class="stat-value" data-stat={s.id}>
+                  0
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="mt-8 flex gap-1 border-b border-white/10" role="tablist" aria-label="Data">
+          <button type="button" role="tab" class="tab" aria-selected="true" aria-controls="panel-enquiries" id="tab-enquiries" data-tab="enquiries">
+            Enquiries <span class="tab-count" data-count="enquiries">0</span>
+          </button>
+          <button type="button" role="tab" class="tab" aria-selected="false" aria-controls="panel-subscribers" id="tab-subscribers" data-tab="subscribers" tabindex="-1">
+            Newsletter <span class="tab-count" data-count="subscribers">0</span>
+          </button>
+        </div>
+
+        <section id="panel-enquiries" role="tabpanel" aria-labelledby="tab-enquiries" class="pt-6" data-panel="enquiries">
+          <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div class="grid gap-3 sm:grid-cols-[1fr_12rem] lg:w-[36rem]">
+              <div class="relative">
+                <label for="admin-search" class="sr-only">Search enquiries</label>
+                <Search size={17} class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sand-100/50" />
+                <input id="admin-search" type="search" class="field pl-11" placeholder="Search name, phone, reference, place" data-search />
+              </div>
+              <div>
+                <label for="admin-status" class="sr-only">Filter by status</label>
+                <select id="admin-status" class="field" data-status-filter>
+                  <option value="">All statuses</option>
+                  {enquiryStatuses.map((s) => <option value={s.id}>{s.label}</option>)}
+                </select>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" class="btn btn-glass btn-sm" data-export="enquiries"><Download size={15} /> Export CSV</button>
+              <button type="button" class="btn btn-glass btn-sm" data-seed><Sparkles size={15} /> Add demo enquiries</button>
+              <button type="button" class="btn btn-glass btn-sm text-[#f7b59f]" data-clear><Trash size={15} /> Delete all</button>
+            </div>
+          </div>
+
+          <div class="glass mt-5 overflow-x-auto rounded-3xl" data-table-wrap>
+            <table class="admin-table w-full min-w-[60rem] text-left text-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Received</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col">Service</th>
+                  <th scope="col">Trip</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody data-rows></tbody>
+            </table>
+          </div>
+
+          <div class="glass mt-5 rounded-3xl p-10 text-center" hidden data-empty>
+            <Inbox size={34} class="mx-auto text-gold-300" />
+            <h2 class="mt-4 text-xl font-semibold" data-empty-title>No enquiries yet</h2>
+            <p class="mx-auto mt-2 max-w-md text-sm text-sand-100/70" data-empty-text>
+              Send one from the Contact page or the Book now button, or add demo enquiries to see how this page works.
+            </p>
+            <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row" data-empty-actions>
+              <a href="/contact#enquiry" class="btn btn-glass">Open the Contact page</a>
+              <button type="button" class="btn btn-gold" data-seed><Sparkles size={16} /> Add demo enquiries</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="panel-subscribers" role="tabpanel" aria-labelledby="tab-subscribers" class="pt-6" hidden data-panel="subscribers">
+          <div class="flex justify-end">
+            <button type="button" class="btn btn-glass btn-sm" data-export="subscribers"><Download size={15} /> Export CSV</button>
+          </div>
+          <div class="glass mt-5 overflow-x-auto rounded-3xl">
+            <table class="admin-table w-full min-w-[32rem] text-left text-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Email</th>
+                  <th scope="col">Subscribed</th>
+                  <th scope="col"><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody data-subscriber-rows></tbody>
+            </table>
+          </div>
+          <p class="mt-5 text-center text-sm text-sand-100/60" hidden data-subscribers-empty>
+            No sign-ups yet. The newsletter form is at the bottom of the home page.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="detail-dialog" aria-labelledby="detail-title" data-detail>
+      <div class="glass-strong rounded-3xl p-6 sm:p-8">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-medium tracking-[0.18em] text-gold-300 uppercase" data-detail-ref></p>
+            <h2 id="detail-title" class="mt-2 text-2xl font-semibold" data-detail-name></h2>
+            <p class="mt-1 text-sm text-sand-100/65" data-detail-received></p>
+          </div>
+          <button type="button" class="grid size-10 shrink-0 place-items-center rounded-full border border-white/15 hover:bg-white/10" data-detail-close>
+            <X size={18} /><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <dl class="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2" data-detail-fields></dl>
+        <div class="mt-6 grid gap-4 sm:grid-cols-[12rem_1fr]">
+          <div>
+            <label for="detail-status" class="field-label">Status</label>
+            <select id="detail-status" class="field" data-detail-status>
+              {enquiryStatuses.map((s) => <option value={s.id}>{s.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="detail-notes" class="field-label">Internal notes</label>
+            <textarea id="detail-notes" class="field" rows="3" placeholder="Quote sent, vehicle assigned, follow-up date..." data-detail-notes></textarea>
+          </div>
+        </div>
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap gap-2">
+            <a class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener" data-detail-whatsapp>WhatsApp customer</a>
+            <a class="btn btn-glass btn-sm" data-detail-call>Call</a>
+            <button type="button" class="btn btn-glass btn-sm text-[#f7b59f]" data-detail-delete><Trash size={15} /> Delete</button>
+          </div>
+          <button type="button" class="btn btn-gold btn-sm" data-detail-save>Save changes</button>
+        </div>
+        <p class="mt-3 min-h-5 text-right text-xs text-gold-200" role="status" data-detail-status-msg></p>
+      </div>
+    </dialog>
+  </div>
+</BaseLayout>
+
+<style>
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.25rem;
+  }
+  .stat-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    color: rgb(246 239 226 / 0.65);
+  }
+  .stat-value {
+    font-size: 1.9rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .admin :global(.dot) {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .admin :global(.dot-new) { background: var(--color-gold-300); }
+  .admin :global(.dot-contacted) { background: var(--color-lagoon-300); }
+  .admin :global(.dot-confirmed) { background: #7ddc9a; }
+  .admin :global(.dot-closed) { background: rgb(246 239 226 / 0.35); }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: -1px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: rgb(246 239 226 / 0.65);
+    border-bottom: 2px solid transparent;
+  }
+  .tab[aria-selected='true'] {
+    color: var(--color-sand-50);
+    border-color: var(--color-gold-300);
+  }
+  .tab-count {
+    min-width: 1.5rem;
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    text-align: center;
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  .admin-table :global(th) {
+    padding: 0.9rem 1rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(246 239 226 / 0.55);
+    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .admin-table :global(td) {
+    padding: 0.95rem 1rem;
+    vertical-align: top;
+    border-bottom: 1px solid rgb(255 255 255 / 0.06);
+  }
+  .admin-table :global(tbody tr:last-child td) {
+    border-bottom: 0;
+  }
+  .admin-table :global(tbody tr:hover) {
+    background: rgb(255 255 255 / 0.03);
+  }
+  .admin :global(.muted) {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    color: rgb(246 239 226 / 0.6);
+  }
+  .admin :global(.ref) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    color: var(--color-gold-200);
+  }
+  .admin :global(.status-select) {
+    min-height: 2.25rem;
+    padding: 0.35rem 2rem 0.35rem 0.7rem;
+    font-size: 0.82rem;
+    border-radius: 999px;
+  }
+  .admin :global(.row-actions) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.4rem;
+  }
+  .admin :global(.icon-btn) {
+    display: inline-grid;
+    place-items: center;
+    height: 2.25rem;
+    padding-inline: 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    background: rgb(255 255 255 / 0.05);
+    white-space: nowrap;
+  }
+  .admin :global(.icon-btn:hover) {
+    background: rgb(255 255 255 / 0.12);
+  }
+  .admin :global(.new-badge) {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--color-ink-900);
+    background: var(--color-gold-300);
+    vertical-align: middle;
+  }
+
+  .detail-dialog {
+    width: min(46rem, calc(100% - 1.5rem));
+    max-height: calc(100dvh - 1.5rem);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-sand-100);
+    overflow: auto;
+  }
+  .detail-dialog::backdrop {
+    background: rgb(3 21 23 / 0.65);
+    backdrop-filter: blur(6px);
+  }
+  .detail-dialog :global(dt) {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(246 239 226 / 0.5);
+  }
+  .detail-dialog :global(dd) {
+    margin-top: 0.25rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+</style>
+
+<script>
+  import {
+    enquiryStatuses,
+    enquiryStore,
+    formatDate,
+    formatDateTime,
+    formatMobile,
+    STORAGE_KEYS,
+    subscriberStore,
+    type Enquiry,
+    type EnquiryInput,
+    type EnquiryStatus,
+  } from '../lib/enquiries';
+  import { site } from '../data/site';
+
+  const PASSCODE = import.meta.env.PUBLIC_ADMIN_PASSCODE || 'tushanth-demo';
+  const SESSION_KEY = 'tt.admin.unlocked';
+
+  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
+  const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) =>
+    Array.from(root.querySelectorAll<T>(sel));
+
+  const gate = $('[data-gate]');
+  const app = $('[data-app]');
+  const gateForm = $<HTMLFormElement>('[data-gate-form]');
+  const gateError = $('[data-gate-error]');
+  const passInput = $<HTMLInputElement>('#passcode');
+
+  const rows = $('[data-rows]');
+  const tableWrap = $('[data-table-wrap]');
+  const empty = $('[data-empty]');
+  const searchInput = $<HTMLInputElement>('[data-search]');
+  const statusFilter = $<HTMLSelectElement>('[data-status-filter]');
+  const subscriberRows = $('[data-subscriber-rows]');
+  const subscribersEmpty = $('[data-subscribers-empty]');
+  const updated = $('[data-updated]');
+
+  const detail = $<HTMLDialogElement>('[data-detail]');
+  let current: Enquiry | undefined;
+
+  const statusLabel = (id: EnquiryStatus) => enquiryStatuses.find((s) => s.id === id)?.label ?? id;
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> & { className?: string } = {}, ...children: (Node | string | undefined | false)[]) {
+    const node = document.createElement(tag);
+    Object.assign(node, props);
+    for (const child of children) if (child) node.append(child);
+    return node;
+  }
+
+  function customerWhatsApp(e: Enquiry) {
+    const text = `Hello ${e.name}, this is ${site.name} about your enquiry ${e.id} (${e.service}).`;
+    return `https://wa.me/91${e.phone}?text=${encodeURIComponent(text)}`;
+  }
+
+  /* ----------------------------------------------------------- gate ---- */
+  function unlock() {
+    gate.hidden = true;
+    app.hidden = false;
+    render();
+  }
+
+  gateForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (passInput.value === PASSCODE) {
+      try {
+        sessionStorage.setItem(SESSION_KEY, '1');
+      } catch {}
+      gateError.hidden = true;
+      passInput.removeAttribute('aria-invalid');
+      unlock();
+    } else {
+      gateError.hidden = false;
+      passInput.setAttribute('aria-invalid', 'true');
+      passInput.select();
+    }
+  });
+
+  $('[data-lock]').addEventListener('click', () => {
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+    } catch {}
+    app.hidden = true;
+    gate.hidden = false;
+    passInput.value = '';
+    passInput.focus();
+  });
+
+  /* ---------------------------------------------------------- render ---- */
+  function matches(e: Enquiry, q: string, status: string) {
+    if (status && e.status !== status) return false;
+    if (!q) return true;
+    const hay = [e.id, e.name, e.phone, e.email, e.service, e.packageName, e.pickup, e.destination, e.message, e.notes]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return q
+      .toLowerCase()
+      .split(/\s+/)
+      .every((t) => hay.includes(t));
+  }
+
+  function statusSelect(e: Enquiry) {
+    const select = el('select', { className: 'field status-select' });
+    select.setAttribute('aria-label', `Status for ${e.name}`);
+    for (const s of enquiryStatuses) select.append(el('option', { value: s.id, textContent: s.label, selected: s.id === e.status }));
+    select.addEventListener('change', async () => {
+      await enquiryStore.update(e.id, { status: select.value as EnquiryStatus });
+      render();
+    });
+    return select;
+  }
+
+  function row(e: Enquiry) {
+    const tripBits = [
+      [e.pickup, e.destination].filter(Boolean).join(' → '),
+      [e.travelDate && formatDate(e.travelDate), e.returnDate && `to ${formatDate(e.returnDate)}`].filter(Boolean).join(' '),
+      [e.passengers && `${e.passengers} travellers`, e.vehicle].filter(Boolean).join(' · '),
+    ].filter(Boolean);
+
+    const view = el('button', { type: 'button', className: 'icon-btn', textContent: 'View' });
+    view.addEventListener('click', () => openDetail(e.id));
+    const wa = el('a', { className: 'icon-btn', href: customerWhatsApp(e), target: '_blank', rel: 'noopener', textContent: 'WhatsApp' });
+
+    return el(
+      'tr',
+      {},
+      el('td', {}, el('span', { className: 'ref', textContent: e.id }), el('span', { className: 'muted', textContent: formatDateTime(e.createdAt) })),
+      el(
+        'td',
+        {},
+        el('span', { className: 'font-medium', textContent: e.name }),
+        e.status === 'new' && el('span', { className: 'new-badge', textContent: 'New' }),
+        el('a', { className: 'muted hover:text-gold-200', href: `tel:+91${e.phone}`, textContent: formatMobile(e.phone) }),
+      ),
+      el('td', {}, e.service, e.packageName && el('span', { className: 'muted', textContent: e.packageName })),
+      el('td', {}, ...(tripBits.length ? tripBits.map((t, i) => (i === 0 ? t : el('span', { className: 'muted', textContent: t }))) : [el('span', { className: 'muted', textContent: 'No trip details' })])),
+      el('td', {}, statusSelect(e)),
+      el('td', {}, el('div', { className: 'row-actions' }, view, wa)),
+    );
+  }
+
+  async function render() {
+    const all = await enquiryStore.list();
+    const subs = await subscriberStore.list();
+
+    $('[data-stat="total"]').textContent = String(all.length);
+    for (const s of enquiryStatuses) $(`[data-stat="${s.id}"]`).textContent = String(all.filter((e) => e.status === s.id).length);
+    $('[data-count="enquiries"]').textContent = String(all.length);
+    $('[data-count="subscribers"]').textContent = String(subs.length);
+    updated.textContent = `Updated ${new Date().toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}`;
+
+    const q = searchInput.value.trim();
+    const status = statusFilter.value;
+    const shown = all.filter((e) => matches(e, q, status));
+    rows.replaceChildren(...shown.map(row));
+
+    const filtered = Boolean(q || status);
+    tableWrap.hidden = shown.length === 0;
+    empty.hidden = shown.length > 0;
+    $('[data-empty-title]', empty).textContent = filtered && all.length ? 'No enquiries match' : 'No enquiries yet';
+    $('[data-empty-text]', empty).textContent =
+      filtered && all.length
+        ? 'Try a different search or status.'
+        : 'Send one from the Contact page or the Book now button, or add demo enquiries to see how this page works.';
+    $('[data-empty-actions]', empty).hidden = filtered && all.length > 0;
+
+    subscriberRows.replaceChildren(
+      ...subs.map((s) => {
+        const remove = el('button', { type: 'button', className: 'icon-btn', textContent: 'Remove' });
+        remove.addEventListener('click', async () => {
+          if (!confirm(`Remove ${s.email} from the newsletter list?`)) return;
+          await subscriberStore.remove(s.email);
+          render();
+        });
+        return el(
+          'tr',
+          {},
+          el('td', { textContent: s.email }),
+          el('td', { textContent: formatDateTime(s.createdAt) }),
+          el('td', {}, el('div', { className: 'row-actions' }, remove)),
+        );
+      }),
+    );
+    subscribersEmpty.hidden = subs.length > 0;
+  }
+
+  let searchTimer: number | undefined;
+  searchInput.addEventListener('input', () => {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(render, 120);
+  });
+  statusFilter.addEventListener('change', render);
+
+  // Another tab (for example the public site) saved an enquiry: refresh.
+  window.addEventListener('storage', (e) => {
+    if (!app.hidden && (e.key === STORAGE_KEYS.enquiries || e.key === STORAGE_KEYS.subscribers)) render();
+  });
+
+  /* ------------------------------------------------------------ tabs ---- */
+  const tabs = $$<HTMLButtonElement>('[data-tab]');
+  function selectTab(tab: HTMLButtonElement) {
+    for (const t of tabs) {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      $(`[data-panel="${t.dataset.tab}"]`).hidden = !on;
+    }
+  }
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => selectTab(tab));
+    tab.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      selectTab(next);
+      next.focus();
+    });
+  });
+
+  /* ---------------------------------------------------------- detail ---- */
+  async function openDetail(id: string) {
+    const all = await enquiryStore.list();
+    current = all.find((e) => e.id === id);
+    if (!current) return;
+    const e = current;
+    $('[data-detail-ref]', detail).textContent = e.id;
+    $('[data-detail-name]', detail).textContent = e.name;
+    $('[data-detail-received]', detail).textContent = `Received ${formatDateTime(e.createdAt)}${e.source ? ` from ${e.source}` : ''}`;
+
+    const fields: [string, string | undefined][] = [
+      ['Mobile', formatMobile(e.phone)],
+      ['Email', e.email],
+      ['Service', e.service],
+      ['Package', e.packageName],
+      ['Pickup', e.pickup],
+      ['Drop / destination', e.destination],
+      ['Travel date', formatDate(e.travelDate)],
+      ['Return date', formatDate(e.returnDate)],
+      ['Travellers', e.passengers],
+      ['Vehicle', e.vehicle],
+      ['Message', e.message],
+    ];
+    $('[data-detail-fields]', detail).replaceChildren(
+      ...fields
+        .filter(([, v]) => v)
+        .map(([k, v]) => el('div', { className: k === 'Message' ? 'sm:col-span-2' : '' }, el('dt', { textContent: k }), el('dd', { textContent: v }))),
+    );
+    $<HTMLSelectElement>('[data-detail-status]', detail).value = e.status;
+    $<HTMLTextAreaElement>('[data-detail-notes]', detail).value = e.notes ?? '';
+    $<HTMLAnchorElement>('[data-detail-whatsapp]', detail).href = customerWhatsApp(e);
+    $<HTMLAnchorElement>('[data-detail-call]', detail).href = `tel:+91${e.phone}`;
+    $('[data-detail-status-msg]', detail).textContent = '';
+    detail.showModal();
+  }
+
+  $('[data-detail-close]', detail).addEventListener('click', () => detail.close());
+  detail.addEventListener('click', (e) => {
+    if (e.target === detail) detail.close();
+  });
+  $('[data-detail-save]', detail).addEventListener('click', async () => {
+    if (!current) return;
+    await enquiryStore.update(current.id, {
+      status: $<HTMLSelectElement>('[data-detail-status]', detail).value as EnquiryStatus,
+      notes: $<HTMLTextAreaElement>('[data-detail-notes]', detail).value.trim() || undefined,
+    });
+    $('[data-detail-status-msg]', detail).textContent = `Saved. Status is ${statusLabel($<HTMLSelectElement>('[data-detail-status]', detail).value as EnquiryStatus)}.`;
+    render();
+  });
+  $('[data-detail-delete]', detail).addEventListener('click', async () => {
+    if (!current || !confirm(`Delete enquiry ${current.id} from ${current.name}? This can't be undone.`)) return;
+    await enquiryStore.remove(current.id);
+    detail.close();
+    render();
+  });
+
+  /* --------------------------------------------------- bulk actions ---- */
+  $('[data-clear]').addEventListener('click', async () => {
+    const count = (await enquiryStore.list()).length;
+    if (!count || !confirm(`Delete all ${count} enquiries stored in this browser? This can't be undone.`)) return;
+    await enquiryStore.clear();
+    render();
+  });
+
+  const demo: (EnquiryInput & { status: EnquiryStatus })[] = [
+    { name: 'Meera Iyer', phone: '9845012345', service: 'Airport transfer', pickup: 'JP Nagar 6th Phase', destination: 'Kempegowda International Airport', passengers: '3', vehicle: 'Toyota Innova Crysta (up to 7)', message: 'Flight 6E 5321 at 6:10 a.m. Three large bags.', status: 'new' },
+    { name: 'Rohit Shetty', phone: '9886123456', email: 'rohit@example.com', service: 'Tour package', packageName: 'Coorg & Mysuru hill weekend', pickup: 'Banashankari', passengers: '4', status: 'contacted' },
+    { name: 'Greenfield Public School', phone: '8050123456', service: 'Custom package', packageName: 'Custom: Education tours', destination: 'Mysuru and Srirangapatna', passengers: '85', vehicle: 'Bus (20+)', message: 'Class 8 trip, need two buses and lunch stops.', status: 'confirmed' },
+    { name: 'Ananya Rao', phone: '9900112233', service: 'Tour package', packageName: 'Bali honeymoon', passengers: '2', message: 'Flexible on dates in December.', status: 'new' },
+    { name: 'Suresh Kumar', phone: '9731122334', service: 'Tempo Traveller / bus hire', pickup: 'Kumaraswamy Layout', destination: 'Tirupati', passengers: '14', vehicle: 'Tempo Traveller (12 to 17)', status: 'closed' },
+  ];
+
+  $$('[data-seed]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      const soon = (days: number) => {
+        const d = new Date();
+        d.setDate(d.getDate() + days);
+        return d.toISOString().slice(0, 10);
+      };
+      for (const [i, { status, ...input }] of demo.entries()) {
+        const saved = await enquiryStore.add({ ...input, travelDate: soon(5 + i * 6), source: '/admin (demo data)' });
+        if (status !== 'new') await enquiryStore.update(saved.id, { status });
+      }
+      searchInput.value = '';
+      statusFilter.value = '';
+      render();
+    }),
+  );
+
+  /* ------------------------------------------------------------ CSV ---- */
+  function csvCell(value: unknown) {
+    let text = value == null ? '' : String(value);
+    if (/^[=+\-@]/.test(text)) text = `'${text}`;
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+
+  function download(name: string, header: string[], data: unknown[][]) {
+    const csv = [header, ...data].map((r) => r.map(csvCell).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+    const a = el('a', { href: url, download: name });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  $$<HTMLButtonElement>('[data-export]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      const stamp = new Date().toISOString().slice(0, 10);
+      if (btn.dataset.export === 'subscribers') {
+        const subs = await subscriberStore.list();
+        download(`newsletter-${stamp}.csv`, ['Email', 'Subscribed'], subs.map((s) => [s.email, s.createdAt]));
+        return;
+      }
+      const all = await enquiryStore.list();
+      download(
+        `enquiries-${stamp}.csv`,
+        ['Reference', 'Received', 'Status', 'Name', 'Mobile', 'Email', 'Service', 'Package', 'Pickup', 'Destination', 'Travel date', 'Return date', 'Travellers', 'Vehicle', 'Message', 'Notes', 'Source'],
+        all.map((e) => [e.id, e.createdAt, statusLabel(e.status), e.name, formatMobile(e.phone), e.email, e.service, e.packageName, e.pickup, e.destination, e.travelDate, e.returnDate, e.passengers, e.vehicle, e.message, e.notes, e.source]),
+      );
+    }),
+  );
+
+  /* ------------------------------------------------------------ start ---- */
+  let unlocked = false;
+  try {
+    unlocked = sessionStorage.getItem(SESSION_KEY) === '1';
+  } catch {}
+  if (unlocked) unlock();
+  else passInput.focus();
+</script>

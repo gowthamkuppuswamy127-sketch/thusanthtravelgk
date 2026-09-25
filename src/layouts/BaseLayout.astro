@@ -1,0 +1,101 @@
+---
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '../styles/global.css';
+
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import FloatingContact from '../components/FloatingContact.astro';
+import EnquiryModal from '../components/EnquiryModal.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  /** Hide the public site chrome (used by the admin page). */
+  bare?: boolean;
+}
+
+const { title, description = site.description, noindex = false, bare = false } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Cabs, Tempo Travellers & Tours in Bengaluru`;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const ogImage = Astro.site ? new URL('/og-image.jpg', Astro.site).href : '/og-image.jpg';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TravelAgency',
+  name: site.name,
+  description: site.description,
+  telephone: site.phoneE164,
+  image: ogImage,
+  url: Astro.site ? new URL('/', Astro.site).href : undefined,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${site.address.line1}, ${site.address.line2}`,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  },
+  areaServed: 'Bengaluru',
+};
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta name="theme-color" content="#062a2e" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="min-h-dvh">
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <>
+          <a
+            href="#main"
+            class="sr-only z-[60] rounded-full bg-gold-300 px-4 py-2 font-medium text-ink-900 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          >
+            Skip to content
+          </a>
+          <Navbar />
+          <main id="main">
+            <slot />
+          </main>
+          <Footer />
+          <FloatingContact />
+          <EnquiryModal />
+        </>
+      )
+    }
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

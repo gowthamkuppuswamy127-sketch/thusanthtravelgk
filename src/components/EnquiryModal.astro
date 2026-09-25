@@ -1,0 +1,60 @@
+---
+import X from '@lucide/astro/icons/x';
+import Phone from '@lucide/astro/icons/phone';
+import EnquiryForm from './EnquiryForm.astro';
+import { site, telHref } from '../data/site';
+---
+
+<dialog id="enquiry-dialog" class="enquiry-dialog" aria-labelledby="enquiry-dialog-title" data-enquiry-dialog>
+  <div class="glass-strong relative rounded-3xl p-5 sm:p-8">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <p class="eyebrow">Booking enquiry</p>
+        <h2 id="enquiry-dialog-title" class="mt-3 text-2xl font-semibold sm:text-3xl">Tell us about your trip</h2>
+        <p class="mt-2 text-sm text-sand-100/70">
+          Fill in what you know. Or call us on
+          <a href={telHref} class="inline-flex items-center gap-1 font-medium text-gold-200 hover:underline">
+            <Phone size={13} />{site.phoneDisplay}
+          </a>
+        </p>
+      </div>
+      <button
+        type="button"
+        class="grid size-11 shrink-0 place-items-center rounded-full border border-white/15 bg-white/5 transition hover:bg-white/15"
+        data-dialog-close
+      >
+        <X size={20} />
+        <span class="sr-only">Close</span>
+      </button>
+    </div>
+    <EnquiryForm uid="modal" />
+  </div>
+</dialog>
+
+<style>
+  .enquiry-dialog {
+    width: min(44rem, calc(100% - 1.5rem));
+    max-height: calc(100dvh - 1.5rem);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-sand-100);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .enquiry-dialog::backdrop {
+    background: rgb(3 21 23 / 0.62);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .enquiry-dialog[open] {
+    animation: dialog-in 0.4s var(--ease-out-soft);
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+</style>

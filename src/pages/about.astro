@@ -1,0 +1,217 @@
+---
+import Car from '@lucide/astro/icons/car';
+import CarFront from '@lucide/astro/icons/car-front';
+import BusFront from '@lucide/astro/icons/bus-front';
+import Bus from '@lucide/astro/icons/bus';
+import Users from '@lucide/astro/icons/users';
+import Snowflake from '@lucide/astro/icons/snowflake';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Navigation from '@lucide/astro/icons/navigation';
+import Phone from '@lucide/astro/icons/phone';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import Heart from '@lucide/astro/icons/heart';
+import Briefcase from '@lucide/astro/icons/briefcase';
+import GraduationCap from '@lucide/astro/icons/graduation-cap';
+import Landmark from '@lucide/astro/icons/landmark';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Stars from '../components/Stars.astro';
+import Milestone from '../components/Milestone.astro';
+import { fleet } from '../data/services';
+import { heroMilestones, site, telHref } from '../data/site';
+
+const fleetIcons = { car: Car, 'car-front': CarFront, 'bus-front': BusFront, bus: Bus };
+
+const travellers = [
+  { title: 'Families', text: 'Airport runs, weekend drives and holidays with room for everyone.', Icon: Users, href: '/tours?category=family' },
+  { title: 'Couples', text: 'Honeymoons and anniversary trips in India and abroad.', Icon: Heart, href: '/tours?category=honeymoon' },
+  { title: 'Companies', text: 'Staff transport, offsites, conferences and incentive trips.', Icon: Briefcase, href: '/tours?category=mice' },
+  { title: 'Schools & colleges', text: 'Educational tours and industrial visits with safe group transport.', Icon: GraduationCap, href: '/tours?category=education' },
+  { title: 'Pilgrim groups', text: 'Tempo Travellers and buses for temple circuits and group yatras.', Icon: Landmark, href: `/contact?service=${encodeURIComponent('Tempo Traveller / bus hire')}#enquiry` },
+];
+
+const stats = [
+  { value: String(site.rating), label: 'Google rating', stars: true },
+  { value: String(site.reviewCount), label: 'Google reviews' },
+  { value: '4', label: 'Vehicle types, sedan to Tempo Traveller' },
+  { value: 'India + abroad', label: 'Tour packages', small: true },
+];
+---
+
+<BaseLayout
+  title="About us"
+  description="Tushanth Tours and Travels is a Bengaluru travel company in Kumaraswamy Layout, Banashankari, running cabs, Tempo Travellers and buses and planning tours across India and abroad."
+>
+  <PageHero
+    eyebrow="About us"
+    title="Local roots, long roads."
+    intro={`${site.name} is a Bengaluru travel company in Kumaraswamy Layout, Banashankari. We run cabs, Tempo Travellers and buses, and plan tours across India and abroad.`}
+    photo="openRoad"
+  />
+
+  <section class="relative py-16 sm:py-24" aria-labelledby="story-title">
+    <div class="wrap grid gap-12 lg:grid-cols-2 lg:gap-20">
+      <div>
+        <SectionHeading id="story-title" eyebrow="What we do" title="A travel desk that also drives you there" />
+        <div class="mt-6 grid gap-4 text-base leading-relaxed text-sand-100/75" data-reveal>
+          <p>
+            Most of our work starts with a phone call from someone in Bengaluru: an early flight to catch, a family
+            wedding in Mysuru, a college trip that needs two buses. We sort out the vehicle, the route and the stays, so
+            the people travelling can simply travel.
+          </p>
+          <p>
+            We also plan complete holidays: hill weekends in Coorg and Ooty, family trips across India, honeymoons in Bali
+            and the Maldives, and corporate, education and industrial tours for groups.
+          </p>
+          <p>
+            Whatever the trip, the promise is the same. A clean vehicle, a driver who knows the road, and a quote with
+            nothing hidden in it.
+          </p>
+        </div>
+      </div>
+
+      <ul class="grid grid-cols-2 gap-4 self-start" aria-label="At a glance">
+        {
+          stats.map((s, i) => (
+            <li class="glass rounded-3xl p-6" data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
+              <p class:list={['font-semibold tracking-tight text-sand-50', s.small ? 'text-2xl' : 'text-4xl sm:text-5xl']}>
+                {s.value}
+              </p>
+              {s.stars && <Stars rating={site.rating} size={14} class="mt-2" />}
+              <p class="mt-2 text-sm text-sand-100/65">{s.label}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden bg-ink-900 py-20 sm:py-28" aria-labelledby="fleet-title">
+    <div
+      class="pointer-events-none absolute -bottom-40 left-1/3 size-[32rem] rounded-full bg-lagoon-500/15 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="wrap relative">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          id="fleet-title"
+          eyebrow="Our fleet"
+          title="The right vehicle for the group"
+          intro="Every vehicle is air-conditioned and comes with a driver. For groups over 17 we arrange buses."
+        />
+        <a href="/contact#enquiry" class="btn btn-gold shrink-0 self-start lg:self-auto" data-enquire data-reveal>
+          Check availability <ArrowRight size={17} />
+        </a>
+      </div>
+
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          fleet.map((v, i) => {
+            const Icon = fleetIcons[v.icon];
+            const service = v.name === 'Tempo Traveller' ? 'Tempo Traveller / bus hire' : 'Outstation cab';
+            return (
+              <li class="glass flex flex-col rounded-3xl p-6" data-reveal style={`--reveal-delay: ${i * 0.07}s`}>
+                <div class="flex items-start justify-between">
+                  <span class="grid size-12 place-items-center rounded-2xl bg-gold-300/12 text-gold-300 ring-1 ring-gold-300/30">
+                    <Icon size={24} />
+                  </span>
+                  <span class="rounded-full bg-white/8 px-3 py-1 text-xs font-medium text-sand-100/80">
+                    <Snowflake size={12} class="mr-1 inline -translate-y-px" />
+                    AC
+                  </span>
+                </div>
+                <h3 class="mt-6 text-xl font-semibold">{v.name}</h3>
+                <p class="mt-1 text-sm text-sand-100/60">{v.examples}</p>
+                <p class="mt-5 flex items-baseline gap-2 border-t border-white/10 pt-5">
+                  <span class="text-2xl font-semibold text-gold-200">{v.passengers}</span>
+                  <span class="text-sm text-sand-100/65">passengers</span>
+                </p>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-sand-100/70">{v.bestFor}</p>
+                <a
+                  href={`/contact?service=${encodeURIComponent(service)}#enquiry`}
+                  class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-gold-200 transition hover:gap-2.5"
+                  data-enquire
+                  data-service={service}
+                >
+                  Book a {v.name} <ArrowRight size={15} />
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="relative py-20 sm:py-28" aria-labelledby="who-title">
+    <div class="wrap">
+      <SectionHeading
+        id="who-title"
+        eyebrow="Who we travel with"
+        title="From solo airport runs to whole-school tours"
+        intro="Different trips need different planning. Here's who we plan for most often."
+      />
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          travellers.map((t, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 0.06}s`}>
+              <a href={t.href} class="glass group flex h-full flex-col rounded-3xl p-6 transition hover:-translate-y-1">
+                <t.Icon size={24} class="text-gold-300" />
+                <h3 class="mt-5 text-lg font-semibold">{t.title}</h3>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-sand-100/70">{t.text}</p>
+                <ArrowRight size={18} class="mt-5 text-gold-200 transition group-hover:translate-x-1" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="on-light relative overflow-hidden bg-sand-100 py-20 text-ink-800 sm:py-28" aria-labelledby="visit-title">
+    <div
+      class="pointer-events-none absolute -top-20 -right-20 size-[26rem] rounded-full bg-gold-300/35 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="wrap relative grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading
+          id="visit-title"
+          eyebrow="Visit us"
+          title="Find us in Banashankari"
+          intro="Drop by to plan a trip in person, or call ahead and we'll have options ready."
+        />
+        <address class="mt-8 flex gap-3 text-base leading-relaxed text-ink-800/80 not-italic" data-reveal>
+          <MapPin size={22} class="mt-0.5 shrink-0 text-gold-600" />
+          <span>{site.addressOneLine}</span>
+        </address>
+        <div class="mt-8 flex flex-wrap gap-3" data-reveal>
+          <a href={site.directionsUrl} target="_blank" rel="noopener" class="btn btn-ink">
+            <Navigation size={17} /> Get directions
+          </a>
+          <a href={telHref} class="btn btn-gold"><Phone size={17} /> {site.phoneDisplay}</a>
+        </div>
+        <div class="mt-10" data-reveal>
+          <p class="text-[0.68rem] font-semibold tracking-[0.2em] text-gold-700 uppercase">
+            From our door, approx. road km
+          </p>
+          <div class="mt-4 flex flex-wrap gap-4">
+            {heroMilestones.map((m) => <Milestone place={m.place} km={m.km} from="Banashankari" size="sm" />)}
+          </div>
+        </div>
+      </div>
+      <div class="glass-light overflow-hidden rounded-[2rem] p-2" data-reveal>
+        <iframe
+          title={`Map showing ${site.name}`}
+          src={site.mapsEmbedUrl}
+          class="h-[22rem] w-full rounded-[1.6rem] border-0 sm:h-[28rem]"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
