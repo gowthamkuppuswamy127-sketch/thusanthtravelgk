@@ -160,7 +160,7 @@ const tabs = [
   // Phones and tablets show a square crop of the 16:9 clip. The Tempo
   // Traveller drifts right as the clip plays, so pan the crop with it to keep
   // it centred. Points are [seconds, bus centre as a fraction of frame width],
-  // measured from the clip; update them if the video is replaced.
+  // measured from the source clip; update them if the video is replaced.
   const busPath: [number, number][] = [
     [0, 0.289],
     [2, 0.313],
@@ -180,6 +180,17 @@ const tabs = [
     }
     return busPath[busPath.length - 1][1];
   };
+  // The served clip starts 1.25s into the source and dissolves back into the
+  // source's first 1.25s over its last 1.25s, so it loops without a jump.
+  // Map playback time onto the source path, blending across the dissolve.
+  const loopTrim = 1.25;
+  const fadeStart = 7.625;
+  const busOnScreen = (t: number) => {
+    const x = busAt(t + loopTrim);
+    if (t <= fadeStart) return x;
+    const a = Math.min((t - fadeStart) / loopTrim, 1);
+    return x + (busAt(t - fadeStart) - x) * a;
+  };
   const mobile = window.matchMedia('(max-width: 1023px)');
   if (video) {
     const pan = () => {
@@ -188,7 +199,7 @@ const tabs = [
         return;
       }
       // Left edge of the crop, as a fraction of the frame, clamped to the frame.
-      const left = Math.min(Math.max(busAt(video.currentTime) - cropWidth / 2, 0), 1 - cropWidth);
+      const left = Math.min(Math.max(busOnScreen(video.currentTime) - cropWidth / 2, 0), 1 - cropWidth);
       video.style.transform = `translate3d(${(-left * 100).toFixed(3)}%, 0, 0)`;
     };
     const rvfc = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
