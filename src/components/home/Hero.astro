@@ -157,6 +157,52 @@ const tabs = [
     video.pause();
   }
 
+  // Phones and tablets show a square crop of the 16:9 clip. The Tempo
+  // Traveller drifts right as the clip plays, so pan the crop with it to keep
+  // it centred. Points are [seconds, bus centre as a fraction of frame width],
+  // measured from the clip; update them if the video is replaced.
+  const busPath: [number, number][] = [
+    [0, 0.289],
+    [2, 0.313],
+    [4, 0.341],
+    [6, 0.367],
+    [7, 0.373],
+    [8, 0.381],
+    [10, 0.406],
+    [10.2, 0.406],
+  ];
+  const cropWidth = 9 / 16; // a square crop of a 16:9 frame
+  const busAt = (t: number) => {
+    for (let i = 1; i < busPath.length; i++) {
+      const [t1, x1] = busPath[i];
+      const [t0, x0] = busPath[i - 1];
+      if (t <= t1) return x0 + ((x1 - x0) * (t - t0)) / (t1 - t0);
+    }
+    return busPath[busPath.length - 1][1];
+  };
+  const mobile = window.matchMedia('(max-width: 1023px)');
+  if (video) {
+    const pan = () => {
+      if (!mobile.matches) {
+        video.style.transform = '';
+        return;
+      }
+      // Left edge of the crop, as a fraction of the frame, clamped to the frame.
+      const left = Math.min(Math.max(busAt(video.currentTime) - cropWidth / 2, 0), 1 - cropWidth);
+      video.style.transform = `translate3d(${(-left * 100).toFixed(3)}%, 0, 0)`;
+    };
+    const rvfc = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+    const loop = () => {
+      pan();
+      if (rvfc) video.requestVideoFrameCallback(loop);
+      else if (!video.paused) requestAnimationFrame(loop);
+    };
+    loop();
+    if (!rvfc) video.addEventListener('play', () => requestAnimationFrame(loop));
+    video.addEventListener('seeked', pan);
+    mobile.addEventListener('change', pan);
+  }
+
   const form = document.querySelector<HTMLFormElement>('[data-quick-planner]');
   if (form) {
     const pickup = form.querySelector<HTMLInputElement>('[name="pickup"]')!;
@@ -190,9 +236,17 @@ const tabs = [
 </script>
 
 <style>
-  .hero-video {
-    /* The bus sits on the left of the frame; anchor there so a narrower crop keeps all of it. */
-    object-position: 0% 50%;
+  @media (max-width: 1023px) {
+    /* The square crop is made by sizing the video to its full 16:9 width and
+       sliding it with a transform (see busPath above), which keeps the
+       Tempo Traveller centred and runs on the GPU. The default matches the
+       first frame so the poster lines up before the script runs. */
+    .hero-video {
+      width: calc(100% * 16 / 9);
+      max-width: none;
+      transform: translate3d(-0.8%, 0, 0);
+      will-change: transform;
+    }
   }
   .hero-glow {
     background:
@@ -210,6 +264,8 @@ const tabs = [
     /* Solid card on phones so it reads cleanly where it overlaps the video card. */
     .hero .glass {
       background: var(--color-ink-800);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
     }
   }
   @media (min-width: 1024px) {

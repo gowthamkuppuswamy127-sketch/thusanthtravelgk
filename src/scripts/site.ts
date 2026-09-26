@@ -8,12 +8,28 @@ function initHeader() {
   // The header is dark glass over the hero photo and white everywhere else.
   const updateTheme = () =>
     header.classList.toggle('on-dark', !header.hasAttribute('data-scrolled') && !header.hasAttribute('data-menu-open'));
-  const onScroll = () => {
-    header.toggleAttribute('data-scrolled', window.scrollY > 24);
+  // Only touch the DOM when the scrolled state actually flips, and at most
+  // once per frame, so scrolling on phones stays smooth.
+  let scrolled: boolean | undefined;
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const next = window.scrollY > 24;
+    if (next === scrolled) return;
+    scrolled = next;
+    header.toggleAttribute('data-scrolled', next);
     updateTheme();
   };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  update();
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
 
   const toggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = header.querySelector<HTMLElement>('[data-mobile-menu]');
