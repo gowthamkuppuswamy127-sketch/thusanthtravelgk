@@ -272,11 +272,49 @@ const tabs = [
     }
   }
   @media (max-width: 1023px) {
-    /* Solid card on phones so it reads cleanly where it overlaps the video card. */
+    /* Phones and tablets: a light card that stands out against the dark hero.
+       It switches the dark-theme tokens back to their light values for everything inside. */
     .hero .glass {
-      background: var(--color-ink-800);
+      --color-fg: var(--color-ink-900);
+      --color-accent: var(--color-ocean-500);
+      --color-line: rgb(255 255 255 / 0.9);
+      --field-bg: #ffffff;
+      --field-bg-focus: #ffffff;
+      --field-border: transparent;
+      --field-border-hover: var(--color-ocean-200);
+      --field-scheme: light;
+      color: var(--color-fg);
+      background: #d9e1ec;
+      border-color: rgb(255 255 255 / 0.85);
+      box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.7);
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
+    }
+    [data-quick-planner] fieldset > div {
+      background: #eef2f8;
+      border-color: #ffffff;
+    }
+    [data-quick-planner] .tab {
+      color: rgb(15 29 51 / 0.72);
+    }
+    [data-quick-planner] .tab:hover {
+      color: var(--color-ink-900);
+      background: rgb(15 29 51 / 0.05);
+    }
+    [data-quick-planner] .tab:has(input:checked) {
+      color: #ffffff;
+      background: var(--color-ocean-500);
+    }
+    [data-quick-planner] .field-label {
+      color: var(--color-ocean-700);
+      font-weight: 600;
+    }
+    [data-quick-planner] .field {
+      box-shadow: 0 1px 2px rgb(15 29 51 / 0.06);
+    }
+    [data-quick-planner] .field:focus {
+      border-color: var(--color-ocean-400);
+      box-shadow: 0 0 0 3px rgb(75 134 217 / 0.22);
     }
   }
   @media (min-width: 1024px) {
@@ -335,7 +373,7 @@ const tabs = [
     .tab {
       gap: 0.2rem;
       padding: 0.4rem 0.2rem;
-      font-size: 0.64rem;
+      font-size: 0.68rem;
     }
     .tab :global(svg) {
       width: 16px;
@@ -343,8 +381,8 @@ const tabs = [
       flex-shrink: 0;
     }
     [data-quick-planner] .field-label {
-      margin-bottom: 0.2rem;
-      font-size: 0.7rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.78rem;
     }
     [data-quick-planner] .field {
       min-height: 2.4rem;
