@@ -82,34 +82,8 @@ function initReveal() {
   items.forEach((el) => observer.observe(el));
 }
 
-// Sideways-scrolling card rows with prev/next buttons (reviews, services).
-function initCarousels() {
-  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
-    const track = root.querySelector<HTMLElement>('[data-track]');
-    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
-    const next = root.querySelector<HTMLButtonElement>('[data-next]');
-    if (!track || !prev || !next) return;
-
-    const step = () => {
-      const card = track.querySelector<HTMLElement>(':scope > li');
-      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-      return card ? card.offsetWidth + gap : track.clientWidth * 0.8;
-    };
-    const update = () => {
-      prev.disabled = track.scrollLeft <= 4;
-      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-    };
-    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
-    track.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  });
-}
-
 initHeader();
 initReveal();
-initCarousels();
 initEnquiryForms();
 initEnquiryDialog();
 initNewsletter();

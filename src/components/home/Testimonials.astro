@@ -1,7 +1,5 @@
 ---
 import Quote from '@lucide/astro/icons/quote';
-import ChevronLeft from '@lucide/astro/icons/chevron-left';
-import ChevronRight from '@lucide/astro/icons/chevron-right';
 import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
 import SectionHeading from '../SectionHeading.astro';
 import Stars from '../Stars.astro';
@@ -9,7 +7,7 @@ import { testimonials } from '../../data/testimonials';
 import { site } from '../../data/site';
 ---
 
-<section class="relative overflow-hidden bg-ocean-50 py-20 sm:py-28" aria-labelledby="reviews-title" data-carousel>
+<section class="relative overflow-hidden bg-ocean-50 py-20 sm:py-28" aria-labelledby="reviews-title">
   <div
     class="pointer-events-none absolute top-0 left-1/2 h-72 w-[60rem] -translate-x-1/2 rounded-full bg-ocean-200/40 blur-3xl"
     aria-hidden="true"
@@ -32,43 +30,80 @@ import { site } from '../../data/site';
         >
           Read reviews on Google <ArrowUpRight size={16} />
         </a>
-        <button type="button" class="carousel-btn" data-prev aria-label="Previous reviews">
-          <ChevronLeft size={20} />
-        </button>
-        <button type="button" class="carousel-btn" data-next aria-label="Next reviews">
-          <ChevronRight size={20} />
-        </button>
       </div>
     </div>
 
-    <ul
-      class="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory scroll-px-4 gap-5 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:mx-0 lg:scroll-px-0 lg:px-0"
-      data-track
-      tabindex="0"
-      aria-label="Reviews, scroll sideways for more"
-    >
+  </div>
+
+  <!-- Reviews drift slowly from left to right. The list is rendered twice so the loop is seamless;
+       the copy is hidden from screen readers. Hovering or focusing pauses it. -->
+  <div class="marquee relative mt-10 -mb-10" aria-label="Traveller reviews" role="region">
+    <div class="marquee-track flex w-max">
       {
-        testimonials.map((t) => (
-          <li class="glass flex w-[86%] shrink-0 snap-start flex-col rounded-3xl p-6 sm:w-[46%] sm:p-7 lg:w-[calc((100%-2.5rem)/3)]">
-            <div class="flex items-center justify-between">
-              <Stars rating={t.rating} size={16} />
-              <Quote size={30} class="text-accent/40" />
-            </div>
-            <blockquote class="mt-5 flex-1 text-[0.98rem] leading-relaxed text-fg/90">
-              <p>{t.quote}</p>
-            </blockquote>
-            <div class="mt-6 flex items-center gap-3 border-t border-line pt-5">
-              <span class="grid size-11 place-items-center rounded-full bg-gradient-to-br from-ocean-400 to-ocean-600 font-semibold text-white">
-                {t.name.charAt(0)}
-              </span>
-              <div>
-                <p class="font-medium">{t.name}</p>
-                <p class="text-xs text-fg/60">{t.trip}</p>
-              </div>
-            </div>
-          </li>
+        [0, 1].map((copy) => (
+          <ul class="flex shrink-0 gap-5 pt-2 pr-5 pb-12" aria-hidden={copy === 1 ? 'true' : undefined}>
+            {testimonials.map((t) => (
+              <li class="glass flex w-[18.5rem] shrink-0 flex-col rounded-3xl p-6 sm:w-[23rem] sm:p-7">
+                <div class="flex items-center justify-between">
+                  <Stars rating={t.rating} size={16} />
+                  <Quote size={30} class="text-accent/40" />
+                </div>
+                <blockquote class="mt-5 flex-1 text-[0.98rem] leading-relaxed text-fg/90">
+                  <p>{t.quote}</p>
+                </blockquote>
+                <div class="mt-6 flex items-center gap-3 border-t border-line pt-5">
+                  <span class="grid size-11 place-items-center rounded-full bg-gradient-to-br from-ocean-400 to-ocean-600 font-semibold text-white">
+                    {t.name.charAt(0)}
+                  </span>
+                  <div>
+                    <p class="font-medium">{t.name}</p>
+                    <p class="text-xs text-fg/60">{t.trip}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         ))
       }
-    </ul>
+    </div>
   </div>
 </section>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    /* Soft fade at both edges so cards slide in and out of view. */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .marquee-track {
+    animation: marquee-right 70s linear infinite;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+  /* Starting shifted left by one full copy and sliding to zero moves the cards left to right. */
+  @keyframes marquee-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .marquee-track {
+      animation: none;
+      padding-inline: 1rem;
+    }
+    .marquee-track > ul[aria-hidden] {
+      display: none;
+    }
+  }
+</style>
