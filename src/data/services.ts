@@ -47,7 +47,7 @@ export const services: Service[] = [
     title: 'Cabs & airport transfers',
     blurb: 'Sedan, Ertiga and Innova Crysta for Kempegowda Airport runs, city errands and outstation trips.',
     points: ['Kempegowda Airport pickup and drop', 'One-way and round trips', 'Hourly local rentals'],
-    photo: 'flight',
+    photo: 'airportCab',
     icon: 'plane',
     enquiry: 'Airport transfer',
     href: '/fleet#cars',

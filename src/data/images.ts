@@ -21,6 +21,7 @@ export const photos = {
   maldives: { src: 'photo-1514282401047-d79a71a590e8', alt: 'Aerial view of an island resort in the Maldives' },
   thailand: { src: 'photo-1552465011-b4e21bf6e79a', alt: 'Longtail boats moored off a beach in Thailand' },
   flight: { src: 'photo-1436491865332-7a61a109cc05', alt: 'A passenger jet in flight' },
+  airportCab: { src: '/images/airport-cab.webp', alt: 'A white Tushanth Tours and Travels cab waiting outside Terminal 3 at the airport' },
   openRoad: { src: 'photo-1449965408869-eaa3f722e40d', alt: 'Driving on an open highway' },
   roadTrip: { src: 'photo-1469854523086-cc02fe5d8800', alt: 'A van on a road trip through open country' },
   coach: { src: 'photo-1544620347-c4fd4a3d5957', alt: 'A coach bus on the road' },
