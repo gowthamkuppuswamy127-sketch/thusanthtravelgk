@@ -55,7 +55,7 @@ export const fleetCategories: FleetCategory[] = [
     title: 'Cars for airport runs and city trips',
     intro:
       'Kempegowda Airport pickups and drops at any hour, local hourly hire and outstation drives. Your driver tracks your flight and waits if it is late.',
-    photo: 'flight',
+    photo: 'airportCab',
     icon: 'car',
     capacity: '4 to 7 passengers',
     vehicles: [
