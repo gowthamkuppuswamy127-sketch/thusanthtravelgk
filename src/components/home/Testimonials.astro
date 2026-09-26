@@ -35,9 +35,15 @@ import { site } from '../../data/site';
 
   </div>
 
-  <!-- Reviews drift slowly from left to right. The list is rendered twice so the loop is seamless;
-       the copy is hidden from screen readers. Hovering or focusing pauses it. -->
-  <div class="marquee relative mt-10 -mb-10" aria-label="Traveller reviews" role="region">
+  <!-- Reviews drift slowly from left to right, and visitors can also swipe or drag them. The list is
+       rendered twice so the loop is seamless; the copy is hidden from screen readers. -->
+  <div
+    class="marquee no-scrollbar relative mt-10 -mb-10"
+    aria-label="Traveller reviews, swipe or drag to see more"
+    role="region"
+    tabindex="0"
+    data-marquee
+  >
     <div class="marquee-track flex w-max">
       {
         [0, 1].map((copy) => (
@@ -71,35 +77,27 @@ import { site } from '../../data/site';
 
 <style>
   .marquee {
-    overflow: hidden;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-behavior: auto;
+    cursor: grab;
     /* Soft fade at both edges so cards slide in and out of view. */
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
-  .marquee-track {
-    animation: marquee-right 70s linear infinite;
+  .marquee.is-dragging {
+    cursor: grabbing;
+    user-select: none;
   }
-  .marquee:hover .marquee-track,
-  .marquee:focus-within .marquee-track {
-    animation-play-state: paused;
-  }
-  /* Starting shifted left by one full copy and sliding to zero moves the cards left to right. */
-  @keyframes marquee-right {
-    from {
-      transform: translateX(-50%);
-    }
-    to {
-      transform: translateX(0);
-    }
+  .marquee:focus-visible {
+    outline-offset: -3px;
   }
   @media (prefers-reduced-motion: reduce) {
     .marquee {
-      overflow-x: auto;
       -webkit-mask-image: none;
       mask-image: none;
     }
     .marquee-track {
-      animation: none;
       padding-inline: 1rem;
     }
     .marquee-track > ul[aria-hidden] {
@@ -107,3 +105,94 @@ import { site } from '../../data/site';
     }
   }
 </style>
+
+<script>
+  // Auto-scrolls the reviews to the right, lets people swipe (touch), drag (mouse), scroll or use
+  // the arrow keys, and picks the automatic movement back up a moment after they let go.
+  const root = document.querySelector<HTMLElement>('[data-marquee]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (root && !reduceMotion) {
+    const SPEED = 25; // pixels per second
+    const RESUME_AFTER = 2500; // ms after the visitor stops interacting
+
+    // One copy of the list is exactly half the scroll width. Keeping scrollLeft inside
+    // (0, half] and jumping by one copy at the ends makes the strip endless in both directions.
+    const half = () => root.scrollWidth / 2;
+    const wrap = () => {
+      const h = half();
+      const shift = root.scrollLeft <= 1 ? h : root.scrollLeft > h + 1 ? -h : 0;
+      if (!shift) return;
+      root.scrollLeft += shift;
+      dragStart += shift; // keep an in-progress mouse drag in step with the jump
+    };
+
+    let dragX = 0;
+    let dragStart = 0;
+    let hovering = false;
+    let holding = false;
+    let idleUntil = 0;
+    let visible = true;
+    let pos = (root.scrollLeft = half());
+    let last = performance.now();
+
+    const nudge = () => {
+      idleUntil = performance.now() + RESUME_AFTER;
+    };
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 100) / 1000;
+      last = now;
+      if (visible && !hovering && !holding && now > idleUntil) {
+        // Pick up wherever the visitor left it, then move left-to-right by lowering scrollLeft.
+        if (Math.abs(root.scrollLeft - pos) > 2) pos = root.scrollLeft;
+        pos -= SPEED * dt;
+        root.scrollLeft = pos;
+        if (pos <= 1) {
+          pos += half();
+          root.scrollLeft = pos;
+        }
+      } else {
+        pos = root.scrollLeft;
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    root.addEventListener('scroll', wrap, { passive: true });
+    new IntersectionObserver(([entry]) => (visible = entry.isIntersecting)).observe(root);
+
+    // Mouse: pause on hover, drag to slide. Touch and trackpads use the browser's own scrolling.
+    root.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') hovering = true;
+    });
+    root.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') hovering = false;
+    });
+
+    root.addEventListener('pointerdown', (e) => {
+      holding = true;
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      dragX = e.clientX;
+      dragStart = root.scrollLeft;
+      root.setPointerCapture(e.pointerId);
+      root.classList.add('is-dragging');
+    });
+    root.addEventListener('pointermove', (e) => {
+      if (!root.classList.contains('is-dragging')) return;
+      root.scrollLeft = dragStart - (e.clientX - dragX);
+    });
+    const release = () => {
+      holding = false;
+      root.classList.remove('is-dragging');
+      nudge();
+    };
+    root.addEventListener('pointerup', release);
+    root.addEventListener('pointercancel', release);
+    root.addEventListener('touchend', release, { passive: true });
+    root.addEventListener('wheel', nudge, { passive: true });
+    root.addEventListener('keydown', nudge);
+    root.addEventListener('focusin', () => (holding = true));
+    root.addEventListener('focusout', release);
+  }
+</script>
